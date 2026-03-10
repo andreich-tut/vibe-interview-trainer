@@ -15,6 +15,7 @@ interface TheorySection {
   content: string;
 }
 
+/* eslint-disable no-control-regex -- \x01 placeholders prevent double-replacement in regex chain */
 function highlightCode(escaped: string): string {
   return escaped
     .replace(/(\/\/[^\n]*)/g, '\x01cm\x01$1\x01/cm\x01')
@@ -33,6 +34,7 @@ function highlightCode(escaped: string): string {
     .replace(/\x01bi\x01([\s\S]*?)\x01\/bi\x01/g, '<span class="hl-builtin">$1</span>')
     .replace(/\x01num\x01([\s\S]*?)\x01\/num\x01/g, '<span class="hl-num">$1</span>');
 }
+/* eslint-enable no-control-regex */
 
 function processContent(html: string): string {
   return html.replace(/<pre>([\s\S]*?)<\/pre>/g, (_match, rawCode: string) => {

@@ -1,6 +1,7 @@
 import { Layout } from "~/components/Layout";
 import { TopicCard } from "~/components/TopicCard";
 import { topics } from "~/data/topics";
+import { useProgress } from "~/hooks/useProgress";
 import { Link } from "react-router";
 
 export function meta() {
@@ -11,6 +12,8 @@ export function meta() {
 }
 
 export default function Home() {
+  const { getTopicProgress } = useProgress();
+
   return (
     <Layout>
       <div className="text-center mb-12">
@@ -24,15 +27,19 @@ export default function Home() {
 
       {/* Topic Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-12">
-        {topics.map((topic) => (
-          <TopicCard
-            key={topic.id}
-            id={topic.id}
-            icon={topic.icon}
-            title={topic.title}
-            description={topic.description}
-          />
-        ))}
+        {topics.map((topic) => {
+          const progress = getTopicProgress(topic.id);
+          return (
+            <TopicCard
+              key={topic.id}
+              id={topic.id}
+              icon={topic.icon}
+              title={topic.title}
+              description={topic.description}
+              progress={progress.total > 0 ? { mastered: progress.mastered, total: progress.total } : undefined}
+            />
+          );
+        })}
       </div>
 
       {/* Event Loop Trainer */}

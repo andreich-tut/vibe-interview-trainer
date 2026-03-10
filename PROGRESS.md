@@ -135,6 +135,43 @@
 
 **Verified:** TypeScript passes, production build succeeds, Playwright tested (desktop + mobile)
 
+### Phase 9: Knowledge Testing Overhaul (Gemini Flash + Typed Recall)
+- [x] Created `app/lib/gemini.ts` — Gemini 2.0 Flash API client
+  - System prompt with 0-3 scoring rubric + JSON output
+  - Temperature 0.1 for deterministic scoring
+  - `responseMimeType: "application/json"` for reliable parsing
+  - Error handling: NO_API_KEY, RATE_LIMITED, GEMINI_ERROR_*
+  - API key stored in localStorage (user enters once)
+- [x] Created `app/hooks/useProgress.ts` — cross-session persistence
+  - `useSyncExternalStore` for reactive localStorage reads
+  - `saveCardResult(topicId, cardId, score)` — saves per-card history
+  - `getTopicProgress(topicId)` — returns { total, mastered, pct }
+  - `incrementSessions()` — tracks completed sessions
+- [x] Created `app/components/ApiKeyInput.tsx` — API key management UI
+  - Masked key display, save/remove, link to Google AI Studio
+  - Inline on practice setup when typed mode selected
+- [x] Rewrote `app/components/FlashCard.tsx` — core card component
+  - Two modes: `quick` (mental recall) and `typed` (textarea)
+  - 4-point scoring: Точно знал (3) / Примерно (2) / С трудом (1) / Не знал (0)
+  - Gemini AI check fires on reveal in typed mode (background)
+  - AI score shown as colored badge with feedback text
+  - AI-suggested score highlighted with pulsing border
+  - Keyboard: 1/2/3/4 for scores, Space to reveal, Ctrl+Enter to check
+  - Graceful fallback: works 100% without API key
+- [x] Rewrote `app/routes/topic-practice.tsx` — practice flow
+  - Setup phase: mode toggle (quick/typed) + API key input
+  - Wrong-card queue: cards rated 0-1 replay after main deck (max 2 rounds)
+  - Round indicator: "Раунд повтора 1/2" badge
+  - Results screen: 5-column grid (Точно/Примерно/С трудом/Не знал/Итого %)
+  - "Повторить ошибки" button: restart with only failed cards
+  - localStorage: saves each card result + session count via useProgress
+- [x] Updated `app/components/TopicCard.tsx` — progress indicator
+  - Mini progress bar (green-to-cyan gradient)
+  - "mastered/total" text below bar
+- [x] Updated `app/routes/home.tsx` — reads progress and passes to TopicCards
+- [x] Updated `TESTING-IMPROVEMENT.md` — documented Gemini Flash decision
+- [x] TypeScript typecheck passes, production build succeeds
+
 ## 🚀 Next Steps (Optional Enhancements)
 
 If you want to extend further:

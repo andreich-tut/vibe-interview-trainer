@@ -199,9 +199,98 @@ All verified with Playwright screenshots + typecheck + production build.
 
 ---
 
+### Prompt 8
+> suggest plan to improve knowledge process testing. i guess a variant with "know/didn't know" is not effective
+
+**Result:** ⚠️ Partial — Explored codebase, designed 3 approaches (confidence-calibrated, keyword matching + spaced repetition, hybrid mode). Recommended hybrid: typed recall + 4-point scale + wrong-card replay + localStorage. Decision pending on validation approach.
+
+---
+
+### Prompt 9
+> save conversation of tests improvement in md file at project root
+
+**Result:** ✅ Success — Created `TESTING-IMPROVEMENT.md` with full conversation: problem statement, 3 approaches considered, recommended approach details, side-by-side mockups, data model, files to modify.
+
+---
+
+### Prompt 10
+> Implement the following plan: # Plan: Improve Knowledge Testing Process (Hybrid Mode with Gemini Flash AI validation)
+
+**Result:** ✅ Success — Implemented complete knowledge testing overhaul:
+- Created `app/lib/gemini.ts` — Gemini 2.0 Flash API client (free tier)
+- Created `app/hooks/useProgress.ts` — localStorage persistence with useSyncExternalStore
+- Created `app/components/ApiKeyInput.tsx` — API key input/manage UI
+- Rewrote `app/components/FlashCard.tsx` — typed mode, 4-point scale (0-3), Gemini AI scoring, keyboard shortcuts
+- Rewrote `app/routes/topic-practice.tsx` — setup phase with mode toggle, wrong-card replay queue (max 2 rounds), 5-column results grid, "Повторить ошибки" button
+- Updated `app/components/TopicCard.tsx` — progress bar from localStorage
+- Updated `app/routes/home.tsx` — passes progress data to TopicCards
+- Updated `TESTING-IMPROVEMENT.md` — documented Gemini Flash decision
+- TypeScript typecheck: passes. Production build: passes.
+
+---
+
+### Prompt 11
+> gemeni usage requires payment method. suggest few analog llms
+
+**Result:** ✅ Success — Suggested Groq (Llama 3.3 70B), OpenRouter, and Hugging Face as free alternatives. Recommended Groq.
+
+---
+
+### Prompt 12
+> give me groq dashboard pane url
+
+**Result:** ✅ Success — Provided https://console.groq.com
+
+---
+
+### Prompt 13
+> replace gemini implementation with groq usage
+
+**Result:** ✅ Success — Replaced Gemini Flash with Groq (Llama 3.3 70B):
+- Renamed `app/lib/gemini.ts` → `app/lib/llm.ts` (provider-neutral name)
+- Switched to OpenAI-compatible API (`api.groq.com/openai/v1/chat/completions`)
+- Updated localStorage key from `gemini-api-key` to `groq-api-key`
+- Updated `ApiKeyInput.tsx`: Groq branding, link to `console.groq.com/keys`, `gsk_...` placeholder
+- Updated all imports in FlashCard.tsx, ApiKeyInput.tsx, topic-practice.tsx
+- Renamed `GeminiResult` → `LLMResult`
+- Deleted old `gemini.ts`
+- TypeScript typecheck: passes. Production build: passes.
+
+---
+
+### Prompt 14
+> remove self-assignment mechanic. app should use only ai checking for test answers
+
+**Result:** ✅ Success — Removed all self-assessment, now AI-only:
+- FlashCard: removed mode prop, 4-point manual buttons, SCORE_BUTTONS array. Always shows textarea → user types → clicks "Проверить" → AI scores → "Далее" button. On error: "Повторить проверку" + "Пропустить".
+- topic-practice: removed mode toggle (quick/typed), removed PracticeMode type. Setup requires API key before starting. Renamed `onRate` → `onScore`.
+- Exported `Score` type from FlashCard for shared use.
+- TypeScript typecheck: passes. Production build: passes.
+
+---
+
+### Prompt 15
+> check project with linter for errors
+
+**Result:** ✅ Success — Fixed all 6 ESLint errors:
+- FlashCard.tsx: removed `useEffect` that called `setState` to reset on card change — replaced with `key={card.id}` on parent mount (React remounts component, naturally resetting state)
+- topic-theory.tsx: added `/* eslint-disable/enable no-control-regex */` block around `highlightCode()` — the `\x01` control chars are intentional placeholders, not bugs
+
+---
+
+### Prompt 16
+> run javascript section tests and check flow manually via browser
+
+**Result:** ✅ Success — Full Playwright walkthrough of JavaScript practice (10 cards + 1 replay):
+- Found and fixed critical bug: `useProgress` hook caused infinite re-render loop (`useSyncExternalStore` + `JSON.parse` on every render creating new references). Fixed by caching raw string + parsed result.
+- Verified: API key save/mask, Начать gating, textarea input, Ctrl+Enter check, AI scoring (0/3, 2/3, 3/3), Enter for Далее, replay round for failed cards, results screen (73%, 5-column grid), home page progress bar (10/10).
+- All keyboard shortcuts work. No console errors.
+
+---
+
 ## Current Status
 
-✅ **COMPLETE** — App is fully functional with improved UX
+✅ **COMPLETE** — App is fully functional with AI-only knowledge testing (Groq)
 
 ### Running
 ```bash
