@@ -1,4 +1,5 @@
 import type { Route } from "./+types/topic-theory";
+import { Link } from "react-router";
 import { Layout } from "~/components/Layout";
 import { javascriptTheory } from "~/data/theory/javascript";
 import { reactTheory } from "~/data/theory/react";
@@ -15,11 +16,9 @@ interface TheorySection {
 }
 
 function highlightCode(escaped: string): string {
-  // Order matters: comments → strings → keywords → numbers
-  // Use placeholder markers to avoid double-replacing
   return escaped
     .replace(/(\/\/[^\n]*)/g, '\x01cm\x01$1\x01/cm\x01')
-    .replace(/((?:&quot;|&#039;|`)(?:(?!\x01cm\x01)(?:(?!(?:&quot;|&#039;|`)).|\\.))*)(?:&quot;|&#039;|`)/g, '\x01str\x01$&\x01/str\x01')
+    .replace(/((['"`])(?:(?!\2)[^\n\\]|\\.)*\2)/g, '\x01str\x01$1\x01/str\x01')
     .replace(
       /\b(const|let|var|function|async|await|return|new|import|export|from|default|class|extends|if|else|for|while|do|try|catch|finally|throw|typeof|instanceof|of|in|true|false|null|undefined|void|this|super|static|get|set|type|interface|enum)\b/g,
       '\x01kw\x01$1\x01/kw\x01'
@@ -37,14 +36,12 @@ function highlightCode(escaped: string): string {
 
 function processContent(html: string): string {
   return html.replace(/<pre>([\s\S]*?)<\/pre>/g, (_match, rawCode: string) => {
-    // Escape HTML entities so JSX/HTML in code renders as text
+    // Only escape chars that break HTML structure; ' and " are safe in element content
     const escaped = rawCode
       .trim()
       .replace(/&/g, '&amp;')
       .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;')
-      .replace(/'/g, '&#039;');
+      .replace(/>/g, '&gt;');
 
     const highlighted = highlightCode(escaped);
 
@@ -84,7 +81,7 @@ export default function TopicTheory({ params }: Route.ComponentProps) {
 
   return (
     <Layout showBack backTo="/">
-      <div className="space-y-8">
+      <div className="space-y-8 pb-20">
         {/* Header */}
         <div className="text-center mb-8">
           <div className="text-4xl mb-3">{topic.icon}</div>
@@ -93,10 +90,44 @@ export default function TopicTheory({ params }: Route.ComponentProps) {
           </h1>
         </div>
 
+        {/* Table of contents */}
+        {theory.length > 2 && (
+          <nav className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg p-5">
+            <div className="text-[0.625rem] font-bold text-[var(--color-muted)] uppercase tracking-widest mb-3">
+              Содержание
+            </div>
+            <ol className="space-y-1.5 list-none p-0 m-0">
+              {theory.map((section, idx) => (
+                <li key={idx}>
+                  <a
+                    href={`#section-${idx}`}
+                    className="text-sm text-[var(--color-accent)] hover:text-[var(--color-accent2)] transition-colors flex items-baseline gap-2"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      document.getElementById(`section-${idx}`)?.scrollIntoView({ behavior: "smooth" });
+                    }}
+                  >
+                    <span className="text-[var(--color-muted)] text-xs">
+                      {String(idx + 1).padStart(2, "0")}
+                    </span>
+                    {section.title}
+                  </a>
+                </li>
+              ))}
+            </ol>
+          </nav>
+        )}
+
         {/* Theory sections */}
         {theory.map((section, idx) => (
-          <div key={idx} className="space-y-4">
-            <h2 className="font-display text-lg font-bold text-[var(--color-accent2)]">
+          <div key={idx} id={`section-${idx}`} className="scroll-mt-6">
+            {idx > 0 && (
+              <div className="border-t border-[var(--color-border)] mb-8" />
+            )}
+            <h2 className="font-display text-xl font-bold text-[var(--color-accent2)] mb-4 flex items-baseline gap-3">
+              <span className="text-sm text-[var(--color-muted)] font-mono">
+                {String(idx + 1).padStart(2, "0")}
+              </span>
               {section.title}
             </h2>
             <div
@@ -105,16 +136,20 @@ export default function TopicTheory({ params }: Route.ComponentProps) {
             />
           </div>
         ))}
+      </div>
 
-        {/* CTA */}
-        <div className="mt-12 p-6 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg text-center space-y-3">
-          <p className="text-sm text-[var(--color-muted)]">Теория понята? Переходи к практике!</p>
-          <a
-            href={`/${topic.id}/practice`}
-            className="inline-block py-2 px-6 bg-[var(--color-accent2)] text-white text-sm font-semibold rounded hover:bg-opacity-90 transition"
+      {/* Sticky bottom CTA */}
+      <div className="fixed bottom-0 left-0 right-0 bg-[var(--color-bg)]/95 backdrop-blur-sm border-t border-[var(--color-border)] py-3 px-5 z-50">
+        <div className="max-w-2xl mx-auto flex items-center justify-between gap-4">
+          <span className="text-xs text-[var(--color-muted)] hidden sm:block">
+            Готов к практике?
+          </span>
+          <Link
+            to={`/${topic.id}/practice`}
+            className="inline-block py-2 px-6 bg-[var(--color-accent2)] text-white text-sm font-semibold rounded hover:bg-[#3ab0db] transition ml-auto"
           >
             Начать практику →
-          </a>
+          </Link>
         </div>
       </div>
     </Layout>

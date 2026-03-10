@@ -98,6 +98,43 @@
   - Wraps each block in editor chrome div with macOS traffic light dots
 - [x] Verified `npm run typecheck` passes
 
+### Phase 8: UI/UX Improvements ✅
+
+**Flashcard self-assessment & keyboard (B1, B7, B2):**
+- [x] Replaced single "Следующая" button with "Знал ✓" (green) / "Не знал ✗" (red) self-assessment
+- [x] Disabled Next button until answer is revealed — prevents skipping
+- [x] Added keyboard shortcuts: Space/Enter to reveal, ArrowRight for "Знал", ArrowLeft for "Не знал"
+- [x] Keyboard hint text shown below card
+- [x] `aria-expanded` on reveal button for accessibility
+- [x] Category badge now a colored pill (purple bg) instead of faint muted text
+
+**Completion screen with score stats:**
+- [x] 3-column score grid: Знал (green) / Не знал (red) / Результат % (cyan)
+- [x] Dynamic emoji + title based on score (🏆 100%, 🎉 ≥80%, 👍 ≥50%, 📚 <50%)
+- [x] Three action buttons: Повторить / К теории / На главную
+- [x] Fixed bug: "Next" on last card never triggered completion (off-by-one in handleNext)
+
+**Theory page navigation & visual hierarchy (A1, A2, A6, B5):**
+- [x] Added Table of Contents at top with numbered section links + smooth scroll
+- [x] Added section dividers (border-top) between theory sections
+- [x] Added numbered prefixes ("01", "02") on section headers — H2 now text-xl
+- [x] Added sticky bottom CTA bar ("Готов к практике? Начать практику →")
+- [x] Fixed `<a href>` → `<Link to>` for practice CTA — no more full page reloads
+
+**Navigation improvements (B3):**
+- [x] Added "← Вернуться к теории" link on practice page
+- [x] Fixed `<a href="/">` → `<Link to="/">` on completion screen
+
+**Bug fix — code block string rendering:**
+- [x] Removed unnecessary HTML escaping of `'` and `"` in processContent
+- [x] Simplified string highlight regex to clean `((['"\`])...\2)` pattern
+- [x] Fixed `&#039;` showing as literal text in code blocks
+
+**Theme fix (D1):**
+- [x] Fixed `hover:bg-blue-600` → `hover:bg-[#6a56f0]` in TopicCard
+
+**Verified:** TypeScript passes, production build succeeds, Playwright tested (desktop + mobile)
+
 ## 🚀 Next Steps (Optional Enhancements)
 
 If you want to extend further:

@@ -1,5 +1,6 @@
 import type { Route } from "./+types/topic-practice";
 import { useState, useMemo } from "react";
+import { Link } from "react-router";
 import { Layout } from "~/components/Layout";
 import { FlashCard, type Card } from "~/components/FlashCard";
 import { javascriptCards } from "~/data/cards/javascript";
@@ -33,6 +34,7 @@ export default function TopicPractice({ params }: Route.ComponentProps) {
   const topic = topics.find((t) => t.id === params.topicId);
 
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [knewCount, setKnewCount] = useState(0);
 
   const cards = useMemo(() => {
     const shuffled = [...(cardsMap[params.topicId] ?? [])];
@@ -52,22 +54,26 @@ export default function TopicPractice({ params }: Route.ComponentProps) {
     );
   }
 
-  const currentCard = cards[currentIndex];
   const isFinished = currentIndex >= cards.length;
+  const currentCard = !isFinished ? cards[currentIndex] : null;
+  const didntKnowCount = isFinished ? cards.length - knewCount : 0;
+  const pct = isFinished
+    ? Math.round((knewCount / cards.length) * 100)
+    : 0;
 
-  const handleNext = () => {
-    if (currentIndex < cards.length - 1) {
-      setCurrentIndex(currentIndex + 1);
-    }
+  const handleNext = (knew: boolean) => {
+    if (knew) setKnewCount((c) => c + 1);
+    setCurrentIndex((i) => i + 1);
   };
 
   const handleRestart = () => {
     setCurrentIndex(0);
+    setKnewCount(0);
   };
 
   return (
     <Layout showBack backTo="/">
-      {!isFinished ? (
+      {!isFinished && currentCard ? (
         <div className="space-y-8">
           {/* Header */}
           <div className="text-center mb-8">
@@ -84,29 +90,83 @@ export default function TopicPractice({ params }: Route.ComponentProps) {
             current={currentIndex}
             total={cards.length}
           />
+
+          {/* Back to theory link */}
+          <div className="text-center">
+            <Link
+              to={`/${topic.id}/theory`}
+              className="text-xs text-[var(--color-muted)] hover:text-[var(--color-accent)] transition-colors"
+            >
+              ← Вернуться к теории
+            </Link>
+          </div>
         </div>
       ) : (
-        <div className="text-center space-y-6">
-          <div className="text-6xl mb-4">🎉</div>
+        <div className="text-center space-y-8 pt-12">
+          <div className="text-6xl mb-4">
+            {pct === 100 ? "🏆" : pct >= 80 ? "🎉" : pct >= 50 ? "👍" : "📚"}
+          </div>
           <h2 className="font-display text-2xl font-bold text-[var(--color-accent2)]">
-            Поздравляем!
+            {pct === 100
+              ? "Идеально!"
+              : pct >= 80
+                ? "Отлично!"
+                : pct >= 50
+                  ? "Неплохо!"
+                  : "Есть над чем поработать"}
           </h2>
-          <p className="text-[var(--color-text)]">
-            Ты прошёл все {cards.length} карточек по теме {topic.title}.
+          <p className="text-sm text-[var(--color-text)]">
+            Тема: {topic.title} · {cards.length} карточек
           </p>
+
+          {/* Score grid */}
+          <div className="grid grid-cols-3 gap-4 max-w-sm mx-auto">
+            <div className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg p-4">
+              <div className="text-2xl font-bold text-[var(--color-green)]">
+                {knewCount}
+              </div>
+              <div className="text-[0.625rem] text-[var(--color-muted)] uppercase tracking-wider mt-1">
+                Знал
+              </div>
+            </div>
+            <div className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg p-4">
+              <div className="text-2xl font-bold text-[var(--color-red)]">
+                {didntKnowCount}
+              </div>
+              <div className="text-[0.625rem] text-[var(--color-muted)] uppercase tracking-wider mt-1">
+                Не знал
+              </div>
+            </div>
+            <div className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg p-4">
+              <div className="text-2xl font-bold text-[var(--color-accent2)]">
+                {pct}%
+              </div>
+              <div className="text-[0.625rem] text-[var(--color-muted)] uppercase tracking-wider mt-1">
+                Результат
+              </div>
+            </div>
+          </div>
+
+          {/* Actions */}
           <div className="flex gap-3 justify-center">
             <button
               onClick={handleRestart}
-              className="py-2 px-6 bg-[var(--color-accent)] text-white rounded font-semibold hover:bg-opacity-90 transition"
+              className="py-2 px-6 bg-[var(--color-accent)] text-white rounded font-semibold hover:bg-[#6a56f0] transition"
             >
               Повторить
             </button>
-            <a
-              href="/"
+            <Link
+              to={`/${topic.id}/theory`}
+              className="py-2 px-6 bg-[var(--color-surface)] border border-[var(--color-border)] text-[var(--color-text)] rounded font-semibold hover:border-[var(--color-accent)] transition"
+            >
+              К теории
+            </Link>
+            <Link
+              to="/"
               className="py-2 px-6 bg-[var(--color-surface)] border border-[var(--color-border)] text-[var(--color-text)] rounded font-semibold hover:border-[var(--color-accent)] transition"
             >
               На главную
-            </a>
+            </Link>
           </div>
         </div>
       )}

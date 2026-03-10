@@ -16,7 +16,7 @@ export function TopicCard({ id, icon, title, description }: TopicCardProps) {
       <div className="flex gap-2">
         <Link
           to={`/${id}/theory`}
-          className="flex-1 text-center py-2 px-3 bg-[var(--color-accent)] text-white rounded text-xs font-semibold hover:bg-blue-600 transition"
+          className="flex-1 text-center py-2 px-3 bg-[var(--color-accent)] text-white rounded text-xs font-semibold hover:bg-[#6a56f0] transition"
         >
           Теория
         </Link>
