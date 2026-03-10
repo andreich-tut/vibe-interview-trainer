@@ -34,6 +34,16 @@ npm run typecheck  # Run react-router typegen + tsc
 
 ## Rules
 
+### Rules Go in CLAUDE.md
+When the user asks to add, change, or remove a rule, always persist it in this file (`CLAUDE.md`). Do not store rules only in auto-memory — `CLAUDE.md` is the single source of truth for project rules.
+
+### HISTORY.md — Persist Every User Prompt
+Every user prompt/request must be logged in `HISTORY.md` at the project root:
+- Log each prompt as `> quoted text` under a numbered heading
+- After accomplishment, rate success: `✅ Success` / `⚠️ Partial` / `❌ Failed`
+- Include brief outcome description with the rating
+- This applies to ALL prompts, even small ones — do not skip
+
 ### PROGRESS.md — Always Update After Completed Tasks
 After every completed task or work session, update `PROGRESS.md` at the project root:
 - Add a new Phase/section under `## ✅ COMPLETED` with `[x]` checkboxes
