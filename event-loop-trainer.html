@@ -1,0 +1,1116 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>Event Loop Trainer</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,600;0,700;1,400&family=Unbounded:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #080810;
+  --surface: #0d0d1a;
+  --surface2: #121220;
+  --border: #1a1a2e;
+  --accent: #7c6aff;
+  --accent2: #4fc3f7;
+  --micro: #a78bfa;
+  --macro: #fb923c;
+  --green: #34d399;
+  --red: #f87171;
+  --text: #e0e0f0;
+  --muted: #4a4a6a;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'JetBrains Mono', monospace;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ── HEADER ── */
+header {
+  padding: 28px 32px 20px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.logo {
+  font-family: 'Unbounded', sans-serif;
+  font-size: 1rem;
+  font-weight: 900;
+  color: var(--accent);
+  letter-spacing: -0.02em;
+}
+
+.logo span { color: var(--accent2); }
+
+.stats {
+  margin-left: auto;
+  display: flex;
+  gap: 20px;
+  font-size: 0.7rem;
+  color: var(--muted);
+}
+
+.stat-val {
+  color: var(--text);
+  font-weight: 700;
+}
+
+/* ── MAIN ── */
+main {
+  max-width: 820px;
+  margin: 0 auto;
+  padding: 32px 20px;
+}
+
+/* ── SCREEN STATES ── */
+.screen { display: none; }
+.screen.active { display: block; }
+
+/* ── PROGRESS ── */
+.progress-bar {
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  margin-bottom: 32px;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 2px;
+  transition: width 0.5s ease;
+}
+
+/* ── QUESTION HEADER ── */
+.q-meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.q-num {
+  font-family: 'Unbounded', sans-serif;
+  font-size: 0.6rem;
+  color: var(--muted);
+  letter-spacing: 0.1em;
+}
+
+.q-badge {
+  font-size: 0.58rem;
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.badge-easy { background: rgba(52,211,153,0.15); color: var(--green); }
+.badge-medium { background: rgba(251,146,60,0.15); color: var(--macro); }
+.badge-hard { background: rgba(248,113,113,0.15); color: var(--red); }
+
+/* ── CODE BLOCK ── */
+.code-wrap {
+  background: #07070f;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 24px;
+}
+
+.code-bar {
+  background: var(--surface2);
+  padding: 8px 16px;
+  font-size: 0.6rem;
+  color: var(--muted);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.dot { width: 8px; height: 8px; border-radius: 50%; }
+.dot-r { background: #ff5f57; }
+.dot-y { background: #febc2e; }
+.dot-g { background: #28c840; }
+
+pre {
+  padding: 20px 24px;
+  font-size: 0.8rem;
+  line-height: 2;
+  overflow-x: auto;
+  color: #8888aa;
+}
+
+.kw { color: #7c6aff; }
+.fn { color: #4fc3f7; }
+.num { color: #fb923c; }
+.cm { color: #333355; font-style: italic; }
+.str { color: #34d399; }
+
+/* ── INPUT AREA ── */
+.input-label {
+  font-size: 0.7rem;
+  color: var(--muted);
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.input-label::before {
+  content: '';
+  display: block;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+.answer-input {
+  width: 100%;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px 18px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.82rem;
+  color: var(--text);
+  outline: none;
+  transition: border-color 0.2s;
+  margin-bottom: 16px;
+}
+
+.answer-input:focus { border-color: var(--accent); }
+.answer-input.correct { border-color: var(--green); background: rgba(52,211,153,0.05); }
+.answer-input.wrong { border-color: var(--red); background: rgba(248,113,113,0.05); }
+
+.hint-text {
+  font-size: 0.65rem;
+  color: var(--muted);
+  margin-bottom: 16px;
+}
+
+/* ── BUTTONS ── */
+.btn-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.btn {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.78rem;
+  padding: 11px 24px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.18s;
+  font-weight: 600;
+}
+
+.btn-primary {
+  background: var(--accent);
+  color: white;
+}
+.btn-primary:hover { background: #6a56f0; transform: translateY(-1px); }
+.btn-primary:disabled { background: #1a1a30; color: var(--muted); cursor: default; transform: none; }
+
+.btn-ghost {
+  background: transparent;
+  color: var(--muted);
+  border: 1px solid var(--border);
+}
+.btn-ghost:hover { color: var(--text); border-color: #333; }
+
+/* ── FEEDBACK ── */
+.feedback {
+  margin-top: 20px;
+  border-radius: 12px;
+  padding: 18px 20px;
+  font-size: 0.78rem;
+  line-height: 1.8;
+  display: none;
+  animation: fadeIn 0.3s ease;
+}
+
+.feedback.correct-fb {
+  display: block;
+  background: rgba(52,211,153,0.08);
+  border: 1px solid rgba(52,211,153,0.2);
+  color: var(--green);
+}
+
+.feedback.wrong-fb {
+  display: block;
+  background: rgba(248,113,113,0.08);
+  border: 1px solid rgba(248,113,113,0.2);
+  color: var(--red);
+}
+
+.feedback-title {
+  font-family: 'Unbounded', sans-serif;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.feedback-body { color: var(--text); opacity: 0.85; }
+
+.correct-answer {
+  display: inline-block;
+  background: var(--surface2);
+  padding: 2px 10px;
+  border-radius: 4px;
+  color: var(--green);
+  font-weight: 700;
+}
+
+/* ── STEP VISUALIZER in feedback ── */
+.steps-viz {
+  margin-top: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.step-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.7rem;
+  padding: 5px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.step-row:last-child { border-bottom: none; }
+
+.step-idx {
+  color: var(--muted);
+  min-width: 20px;
+}
+
+.step-tag {
+  font-size: 0.58rem;
+  padding: 2px 7px;
+  border-radius: 4px;
+  font-weight: 700;
+  min-width: 62px;
+  text-align: center;
+}
+
+.tag-sync { background: rgba(79,195,247,0.15); color: var(--accent2); }
+.tag-micro { background: rgba(167,139,250,0.15); color: var(--micro); }
+.tag-macro { background: rgba(251,146,60,0.15); color: var(--macro); }
+
+.step-desc { color: var(--text); opacity: 0.7; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ── RESULTS SCREEN ── */
+.results-screen {
+  text-align: center;
+  padding: 20px 0;
+}
+
+.trophy {
+  font-size: 4rem;
+  margin-bottom: 16px;
+  animation: bounce 1s ease infinite alternate;
+}
+
+@keyframes bounce {
+  from { transform: translateY(0); }
+  to { transform: translateY(-10px); }
+}
+
+.result-title {
+  font-family: 'Unbounded', sans-serif;
+  font-size: 1.6rem;
+  font-weight: 900;
+  margin-bottom: 8px;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.result-sub {
+  color: var(--muted);
+  font-size: 0.78rem;
+  margin-bottom: 32px;
+}
+
+.score-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  max-width: 420px;
+  margin: 0 auto 32px;
+}
+
+.score-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px 12px;
+}
+
+.score-big {
+  font-family: 'Unbounded', sans-serif;
+  font-size: 2rem;
+  font-weight: 900;
+  margin-bottom: 4px;
+}
+
+.score-lbl {
+  font-size: 0.6rem;
+  color: var(--muted);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* ── SPLASH SCREEN ── */
+.splash {
+  text-align: center;
+  padding: 40px 0;
+}
+
+.splash-title {
+  font-family: 'Unbounded', sans-serif;
+  font-size: 2.2rem;
+  font-weight: 900;
+  line-height: 1.2;
+  margin-bottom: 12px;
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.splash-sub {
+  color: var(--muted);
+  font-size: 0.8rem;
+  max-width: 480px;
+  margin: 0 auto 36px;
+  line-height: 1.7;
+}
+
+.level-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  max-width: 480px;
+  margin: 0 auto 32px;
+}
+
+.level-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.level-card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+}
+
+.level-card.selected {
+  border-color: var(--accent);
+  background: rgba(124,106,255,0.1);
+}
+
+.level-icon { font-size: 1.8rem; margin-bottom: 8px; }
+.level-name {
+  font-family: 'Unbounded', sans-serif;
+  font-size: 0.6rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+.level-desc { font-size: 0.62rem; color: var(--muted); }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">event<span>loop</span>.train</div>
+  <div class="stats">
+    <div>правильно: <span class="stat-val" id="statCorrect">0</span></div>
+    <div>всего: <span class="stat-val" id="statTotal">0</span></div>
+    <div>серия: <span class="stat-val" id="statStreak">0</span> 🔥</div>
+  </div>
+</header>
+
+<main>
+
+<!-- SPLASH -->
+<div class="screen active" id="splashScreen">
+  <div class="splash">
+    <div class="splash-title">Event Loop<br>Тренажёр</div>
+    <p class="splash-sub">Предугадай порядок вывода в консоль. Тренируй интуицию на реальных задачах по микро- и макрозадачам.</p>
+
+    <div class="level-grid">
+      <div class="level-card selected" data-level="easy" onclick="selectLevel(this)">
+        <div class="level-icon">🌱</div>
+        <div class="level-name">Easy</div>
+        <div class="level-desc">Базовые промисы и таймеры</div>
+      </div>
+      <div class="level-card" data-level="medium" onclick="selectLevel(this)">
+        <div class="level-icon">⚡</div>
+        <div class="level-name">Medium</div>
+        <div class="level-desc">Вложенность и цепочки</div>
+      </div>
+      <div class="level-card" data-level="hard" onclick="selectLevel(this)">
+        <div class="level-icon">🔥</div>
+        <div class="level-name">Hard</div>
+        <div class="level-desc">return Promise, async/await</div>
+      </div>
+    </div>
+
+    <button class="btn btn-primary" onclick="startGame()">начать →</button>
+  </div>
+</div>
+
+<!-- QUIZ -->
+<div class="screen" id="quizScreen">
+  <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+
+  <div class="q-meta">
+    <span class="q-num" id="qNum">ЗАДАЧА 1 / 5</span>
+    <span class="q-badge" id="qBadge"></span>
+  </div>
+
+  <div class="code-wrap">
+    <div class="code-bar">
+      <div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div>
+      <span style="margin-left:8px">script.js</span>
+    </div>
+    <pre id="codeDisplay"></pre>
+  </div>
+
+  <div class="input-label">Что выведет консоль? Напиши числа через запятую</div>
+  <input class="answer-input" id="answerInput" type="text" placeholder="например: 1, 2, 3" autocomplete="off" spellcheck="false" />
+  <div class="hint-text" id="hintText"></div>
+
+  <div class="btn-row">
+    <button class="btn btn-primary" id="checkBtn" onclick="checkAnswer()">проверить</button>
+    <button class="btn btn-ghost" id="skipBtn" onclick="skipQuestion()">пропустить</button>
+    <button class="btn btn-ghost" id="nextBtn" style="display:none" onclick="nextQuestion()">следующая →</button>
+  </div>
+
+  <div class="feedback" id="feedback">
+    <div class="feedback-title" id="feedbackTitle"></div>
+    <div class="feedback-body" id="feedbackBody"></div>
+    <div class="steps-viz" id="stepsViz"></div>
+  </div>
+</div>
+
+<!-- RESULTS -->
+<div class="screen" id="resultsScreen">
+  <div class="results-screen">
+    <div class="trophy" id="trophyEmoji">🏆</div>
+    <div class="result-title" id="resultTitle">Результат</div>
+    <div class="result-sub" id="resultSub"></div>
+    <div class="score-grid">
+      <div class="score-card">
+        <div class="score-big" id="resCorrect" style="color:var(--green)">0</div>
+        <div class="score-lbl">правильно</div>
+      </div>
+      <div class="score-card">
+        <div class="score-big" id="resTotal" style="color:var(--accent2)">0</div>
+        <div class="score-lbl">всего</div>
+      </div>
+      <div class="score-card">
+        <div class="score-big" id="resPct" style="color:var(--accent)">0%</div>
+        <div class="score-lbl">точность</div>
+      </div>
+    </div>
+    <div class="btn-row" style="justify-content:center; gap:12px">
+      <button class="btn btn-primary" onclick="restartGame()">ещё раз</button>
+      <button class="btn btn-ghost" onclick="showSplash()">сменить уровень</button>
+    </div>
+  </div>
+</div>
+
+</main>
+
+<script>
+// ─────────────────────────────────────────
+// QUESTIONS DATABASE
+// ─────────────────────────────────────────
+const questions = {
+  easy: [
+    {
+      code: `<span class="fn">console</span>.<span class="fn">log</span>(<span class="num">1</span>);
+
+<span class="fn">setTimeout</span>(() => <span class="fn">console</span>.<span class="fn">log</span>(<span class="num">2</span>), <span class="num">0</span>);
+
+<span class="fn">console</span>.<span class="fn">log</span>(<span class="num">3</span>);`,
+      answer: '1, 3, 2',
+      hint: 'setTimeout — макрозадача, выполнится после синхронного кода',
+      difficulty: 'easy',
+      steps: [
+        { tag: 'sync', label: 'синхронно', desc: 'log(1) → выводит 1' },
+        { tag: 'macro', label: 'макрозадача', desc: 'setTimeout ставится в очередь' },
+        { tag: 'sync', label: 'синхронно', desc: 'log(3) → выводит 3' },
+        { tag: 'macro', label: 'макрозадача', desc: 'стек пуст → берём setTimeout → выводит 2' },
+      ],
+      explanation: 'Синхронный код выполняется сразу. setTimeout(fn, 0) — это макрозадача, она выполнится только после того как стек и все микрозадачи опустеют.'
+    },
+    {
+      code: `<span class="fn">console</span>.<span class="fn">log</span>(<span class="num">1</span>);
+
+<span class="kw">Promise</span>.<span class="fn">resolve</span>().<span class="fn">then</span>(() => <span class="fn">console</span>.<span class="fn">log</span>(<span class="num">2</span>));
+
+<span class="fn">console</span>.<span class="fn">log</span>(<span class="num">3</span>);`,
+      answer: '1, 3, 2',
+      hint: 'Promise.then — микрозадача, но всё равно после синхронного кода',
+      difficulty: 'easy',
+      steps: [
+        { tag: 'sync', label: 'синхронно', desc: 'log(1) → выводит 1' },
+        { tag: 'micro', label: 'микрозадача', desc: 'Promise.then → коллбэк в Microtask Queue' },
+        { tag: 'sync', label: 'синхронно', desc: 'log(3) → выводит 3' },
+        { tag: 'micro', label: 'микрозадача', desc: 'стек пуст → берём then → выводит 2' },
+      ],
+      explanation: 'Коллбэк Promise.then никогда не вызывается синхронно — он всегда идёт в Microtask Queue. Но очередь проверяется только когда стек пуст.'
+    },
+    {
+      code: `<span class="fn">setTimeout</span>(() => <span class="fn">console</span>.<span class="fn">log</span>(<span class="num">1</span>), <span class="num">0</span>);
+<span class="fn">setTimeout</span>(() => <span class="fn">console</span>.<span class="fn">log</span>(<span class="num">2</span>), <span class="num">0</span>);
+<span class="fn">setTimeout</span>(() => <span class="fn">console</span>.<span class="fn">log</span>(<span class="num">3</span>), <span class="num">0</span>);`,
+      answer: '1, 2, 3',
+      hint: 'Несколько setTimeout с одинаковым временем — в каком порядке они выполнятся?',
+      difficulty: 'easy',
+      steps: [
+        { tag: 'macro', label: 'макрозадача', desc: 'setTimeout(1) → в очередь' },
+        { tag: 'macro', label: 'макрозадача', desc: 'setTimeout(2) → в очередь' },
+        { tag: 'macro', label: 'макрозадача', desc: 'setTimeout(3) → в очередь' },
+        { tag: 'macro', label: 'макрозадача', desc: 'стек пуст → FIFO: 1, 2, 3' },
+      ],
+      explanation: 'Macrotask Queue работает как обычная очередь — FIFO (первым вошёл, первым вышел). Задачи с одинаковым временем выполняются в порядке добавления.'
+    },
+    {
+      code: `<span class="fn">console</span>.<span class="fn">log</span>(<span class="num">1</span>);
+
+<span class="fn">setTimeout</span>(() => <span class="fn">console</span>.<span class="fn">log</span>(<span class="num">2</span>), <span class="num">0</span>);
+
+<span class="kw">Promise</span>.<span class="fn">resolve</span>().<span class="fn">then</span>(() => <span class="fn">console</span>.<span class="fn">log</span>(<span class="num">3</span>));
+
+<span class="fn">console</span>.<span class="fn">log</span>(<span class="num">4</span>);`,
+      answer: '1, 4, 3, 2',
+      hint: 'Микрозадачи всегда выполняются раньше макрозадач',
+      difficulty: 'easy',
+      steps: [
+        { tag: 'sync', label: 'синхронно', desc: 'log(1) → выводит 1' },
+        { tag: 'macro', label: 'макрозадача', desc: 'setTimeout → в Macrotask Queue' },
+        { tag: 'micro', label: 'микрозадача', desc: 'Promise.then → в Microtask Queue' },
+        { tag: 'sync', label: 'синхронно', desc: 'log(4) → выводит 4' },
+        { tag: 'micro', label: 'микрозадача', desc: 'стек пуст → сначала микрозадачи → log(3)' },
+        { tag: 'macro', label: 'макрозадача', desc: 'микрозадачи пусты → берём setTimeout → log(2)' },
+      ],
+      explanation: 'Ключевое правило: после каждой макрозадачи и после синхронного кода event loop полностью опустошает Microtask Queue, прежде чем брать следующую макрозадачу.'
+    },
+    {
+      code: `<span class="kw">Promise</span>.<span class="fn">resolve</span>()
+  .<span class="fn">then</span>(() => <span class="fn">console</span>.<span class="fn">log</span>(<span class="num">1</span>))
+  .<span class="fn">then</span>(() => <span class="fn">console</span>.<span class="fn">log</span>(<span class="num">2</span>))
+  .<span class="fn">then</span>(() => <span class="fn">console</span>.<span class="fn">log</span>(<span class="num">3</span>));`,
+      answer: '1, 2, 3',
+      hint: 'Цепочка .then() — каждый следующий встаёт в очередь только после предыдущего',
+      difficulty: 'easy',
+      steps: [
+        { tag: 'micro', label: 'микрозадача', desc: 'первый .then → в очередь: [A]' },
+        { tag: 'micro', label: 'микрозадача', desc: 'A выполняется → log(1), B встаёт в очередь: [B]' },
+        { tag: 'micro', label: 'микрозадача', desc: 'B выполняется → log(2), C встаёт в очередь: [C]' },
+        { tag: 'micro', label: 'микрозадача', desc: 'C выполняется → log(3)' },
+      ],
+      explanation: 'В цепочке .then() каждый следующий коллбэк встаёт в Microtask Queue только после выполнения предыдущего. Поэтому порядок всегда последовательный.'
+    },
+  ],
+
+  medium: [
+    {
+      code: `<span class="fn">console</span>.<span class="fn">log</span>(<span class="num">1</span>);
+
+<span class="fn">setTimeout</span>(() => {
+  <span class="fn">console</span>.<span class="fn">log</span>(<span class="num">2</span>);
+  <span class="kw">Promise</span>.<span class="fn">resolve</span>().<span class="fn">then</span>(() => <span class="fn">console</span>.<span class="fn">log</span>(<span class="num">3</span>));
+}, <span class="num">0</span>);
+
+<span class="kw">Promise</span>.<span class="fn">resolve</span>()
+  .<span class="fn">then</span>(() => <span class="fn">console</span>.<span class="fn">log</span>(<span class="num">4</span>))
+  .<span class="fn">then</span>(() => <span class="fn">console</span>.<span class="fn">log</span>(<span class="num">5</span>));
+
+<span class="fn">console</span>.<span class="fn">log</span>(<span class="num">6</span>);`,
+      answer: '1, 6, 4, 5, 2, 3',
+      hint: 'Promise внутри setTimeout выполняется как микрозадача — но внутри своей макрозадачи',
+      difficulty: 'medium',
+      steps: [
+        { tag: 'sync', label: 'синхронно', desc: 'log(1) и log(6)' },
+        { tag: 'micro', label: 'микрозадача', desc: 'Promise.then(4) → очередь: [A]' },
+        { tag: 'micro', label: 'микрозадача', desc: 'A: log(4), ставит B → log(5)' },
+        { tag: 'macro', label: 'макрозадача', desc: 'setTimeout: log(2), ставит Promise.then(3)' },
+        { tag: 'micro', label: 'микрозадача', desc: 'после макрозадачи → Promise.then(3): log(3)' },
+      ],
+      explanation: 'После выполнения каждой макрозадачи event loop проверяет и опустошает Microtask Queue. Поэтому Promise внутри setTimeout выполняется сразу после него — до следующей макрозадачи.'
+    },
+    {
+      code: `<span class="kw">Promise</span>.<span class="fn">resolve</span>()
+  .<span class="fn">then</span>(() => <span class="fn">console</span>.<span class="fn">log</span>(<span class="num">1</span>))
+  .<span class="fn">then</span>(() => <span class="fn">console</span>.<span class="fn">log</span>(<span class="num">2</span>));
+
+<span class="kw">Promise</span>.<span class="fn">resolve</span>()
+  .<span class="fn">then</span>(() => <span class="fn">console</span>.<span class="fn">log</span>(<span class="num">3</span>))
+  .<span class="fn">then</span>(() => <span class="fn">console</span>.<span class="fn">log</span>(<span class="num">4</span>));`,
+      answer: '1, 3, 2, 4',
+      hint: 'Два промиса стартуют одновременно — их первые .then() оба в очереди сразу',
+      difficulty: 'medium',
+      steps: [
+        { tag: 'micro', label: 'микрозадача', desc: 'очередь: [A(1), B(3)] — оба сразу' },
+        { tag: 'micro', label: 'микрозадача', desc: 'A: log(1), ставит C(2) → очередь: [B, C]' },
+        { tag: 'micro', label: 'микрозадача', desc: 'B: log(3), ставит D(4) → очередь: [C, D]' },
+        { tag: 'micro', label: 'микрозадача', desc: 'C: log(2), D: log(4)' },
+      ],
+      explanation: 'Обе цепочки запускаются одновременно, поэтому A и B сразу в очереди. Каждый ставит свой следующий .then() в конец. Чередование по "слоям": сначала все первые .then(), потом все вторые.'
+    },
+    {
+      code: `<span class="fn">setTimeout</span>(() => <span class="fn">console</span>.<span class="fn">log</span>(<span class="num">1</span>), <span class="num">0</span>);
+
+<span class="kw">Promise</span>.<span class="fn">resolve</span>()
+  .<span class="fn">then</span>(() => {
+    <span class="fn">console</span>.<span class="fn">log</span>(<span class="num">2</span>);
+    <span class="fn">setTimeout</span>(() => <span class="fn">console</span>.<span class="fn">log</span>(<span class="num">3</span>), <span class="num">0</span>);
+  })
+  .<span class="fn">then</span>(() => <span class="fn">console</span>.<span class="fn">log</span>(<span class="num">4</span>));
+
+<span class="fn">setTimeout</span>(() => <span class="fn">console</span>.<span class="fn">log</span>(<span class="num">5</span>), <span class="num">0</span>);`,
+      answer: '2, 4, 1, 5, 3',
+      hint: 'setTimeout внутри Promise встаёт в конец Macrotask Queue',
+      difficulty: 'medium',
+      steps: [
+        { tag: 'macro', label: 'макрозадача', desc: 'setTimeout(1) и setTimeout(5) в очереди: [ST1, ST5]' },
+        { tag: 'micro', label: 'микрозадача', desc: 'Promise.then(A) в очереди: [A]' },
+        { tag: 'micro', label: 'микрозадача', desc: 'A: log(2), setTimeout(3) → Macrotask: [ST1, ST5, ST3], ставит B' },
+        { tag: 'micro', label: 'микрозадача', desc: 'B: log(4)' },
+        { tag: 'macro', label: 'макрозадача', desc: 'ST1: log(1), ST5: log(5), ST3: log(3)' },
+      ],
+      explanation: 'setTimeout внутри Promise.then встаёт в конец Macrotask Queue — после уже ожидающих там задач. Поэтому 3 выводится последним, хотя его промис отработал раньше.'
+    },
+    {
+      code: `<span class="fn">console</span>.<span class="fn">log</span>(<span class="num">1</span>);
+
+<span class="fn">setTimeout</span>(() => <span class="fn">console</span>.<span class="fn">log</span>(<span class="num">2</span>), <span class="num">100</span>);
+<span class="fn">setTimeout</span>(() => <span class="fn">console</span>.<span class="fn">log</span>(<span class="num">3</span>), <span class="num">0</span>);
+
+<span class="kw">Promise</span>.<span class="fn">resolve</span>()
+  .<span class="fn">then</span>(() => <span class="fn">console</span>.<span class="fn">log</span>(<span class="num">4</span>));
+
+<span class="fn">console</span>.<span class="fn">log</span>(<span class="num">5</span>);`,
+      answer: '1, 5, 4, 3, 2',
+      hint: 'setTimeout с 100ms выполнится позже чем с 0ms',
+      difficulty: 'medium',
+      steps: [
+        { tag: 'sync', label: 'синхронно', desc: 'log(1), log(5)' },
+        { tag: 'micro', label: 'микрозадача', desc: 'Promise.then → log(4)' },
+        { tag: 'macro', label: 'макрозадача', desc: 'setTimeout(0ms) → log(3)' },
+        { tag: 'macro', label: 'макрозадача', desc: 'setTimeout(100ms) → log(2) — позже всех' },
+      ],
+      explanation: 'setTimeout(fn, 100) выполнится через ~100мс — позже чем setTimeout(fn, 0). Время задержки определяет порядок в Macrotask Queue.'
+    },
+    {
+      code: `<span class="kw">new</span> <span class="kw">Promise</span>((resolve) => {
+  <span class="fn">console</span>.<span class="fn">log</span>(<span class="num">1</span>);
+  resolve();
+  <span class="fn">console</span>.<span class="fn">log</span>(<span class="num">2</span>);
+}).<span class="fn">then</span>(() => <span class="fn">console</span>.<span class="fn">log</span>(<span class="num">3</span>));
+
+<span class="fn">console</span>.<span class="fn">log</span>(<span class="num">4</span>);`,
+      answer: '1, 2, 4, 3',
+      hint: 'Executor (функция внутри new Promise) выполняется синхронно',
+      difficulty: 'medium',
+      steps: [
+        { tag: 'sync', label: 'синхронно', desc: 'executor запускается сразу: log(1)' },
+        { tag: 'sync', label: 'синхронно', desc: 'resolve() вызван, но .then ещё не выполняется' },
+        { tag: 'sync', label: 'синхронно', desc: 'log(2) — всё ещё синхронно внутри executor' },
+        { tag: 'micro', label: 'микрозадача', desc: '.then → в Microtask Queue' },
+        { tag: 'sync', label: 'синхронно', desc: 'log(4)' },
+        { tag: 'micro', label: 'микрозадача', desc: 'стек пуст → .then: log(3)' },
+      ],
+      explanation: 'Функция-executor в new Promise выполняется синхронно и немедленно. resolve() только помечает промис как выполненный, но сам .then() попадёт в Microtask Queue.'
+    },
+  ],
+
+  hard: [
+    {
+      code: `<span class="kw">Promise</span>.<span class="fn">resolve</span>()
+  .<span class="fn">then</span>(() => {
+    <span class="fn">console</span>.<span class="fn">log</span>(<span class="num">1</span>);
+    <span class="kw">return</span> <span class="kw">Promise</span>.<span class="fn">resolve</span>();
+  })
+  .<span class="fn">then</span>(() => <span class="fn">console</span>.<span class="fn">log</span>(<span class="num">2</span>));
+
+<span class="kw">Promise</span>.<span class="fn">resolve</span>()
+  .<span class="fn">then</span>(() => <span class="fn">console</span>.<span class="fn">log</span>(<span class="num">3</span>))
+  .<span class="fn">then</span>(() => <span class="fn">console</span>.<span class="fn">log</span>(<span class="num">4</span>));`,
+      answer: '1, 3, 4, 2',
+      hint: 'return Promise.resolve() добавляет 2 лишних микротика перед следующим .then()',
+      difficulty: 'hard',
+      steps: [
+        { tag: 'micro', label: 'микрозадача', desc: 'очередь: [A(лог 1), B(лог 3)]' },
+        { tag: 'micro', label: 'микрозадача', desc: 'A: log(1), return Promise → +2 тика задержка для C, очередь: [B, тик1]' },
+        { tag: 'micro', label: 'микрозадача', desc: 'B: log(3), ставит D(лог 4), очередь: [тик1, D]' },
+        { tag: 'micro', label: 'микрозадача', desc: 'тик1: служебный, ставит тик2, очередь: [D, тик2]' },
+        { tag: 'micro', label: 'микрозадача', desc: 'D: log(4), очередь: [тик2]' },
+        { tag: 'micro', label: 'микрозадача', desc: 'тик2: служебный, ставит C, очередь: [C]' },
+        { tag: 'micro', label: 'микрозадача', desc: 'C: log(2)' },
+      ],
+      explanation: 'Когда .then() возвращает другой промис, движку нужно его "развернуть" через 2 служебных микротика (PromiseResolveThenableJob). Это задерживает следующий .then() на 2 позиции.'
+    },
+    {
+      code: `<span class="kw">async function</span> <span class="fn">foo</span>() {
+  <span class="fn">console</span>.<span class="fn">log</span>(<span class="num">1</span>);
+  <span class="kw">await</span> <span class="kw">Promise</span>.<span class="fn">resolve</span>();
+  <span class="fn">console</span>.<span class="fn">log</span>(<span class="num">2</span>);
+}
+
+<span class="fn">foo</span>();
+<span class="fn">console</span>.<span class="fn">log</span>(<span class="num">3</span>);`,
+      answer: '1, 3, 2',
+      hint: 'await приостанавливает async-функцию — всё после await это микрозадача',
+      difficulty: 'hard',
+      steps: [
+        { tag: 'sync', label: 'синхронно', desc: 'foo() вызвана: log(1)' },
+        { tag: 'micro', label: 'микрозадача', desc: 'await → функция приостановлена, log(2) в Microtask Queue' },
+        { tag: 'sync', label: 'синхронно', desc: 'log(3) — стек продолжается' },
+        { tag: 'micro', label: 'микрозадача', desc: 'стек пуст → возобновляем foo: log(2)' },
+      ],
+      explanation: 'await — это синтаксический сахар над Promise.then. Всё что после await выполняется как микрозадача. До await — синхронно. Поэтому log(3) успевает раньше log(2).'
+    },
+    {
+      code: `<span class="kw">async function</span> <span class="fn">foo</span>() {
+  <span class="fn">console</span>.<span class="fn">log</span>(<span class="num">2</span>);
+  <span class="kw">await</span> <span class="kw">Promise</span>.<span class="fn">resolve</span>();
+  <span class="fn">console</span>.<span class="fn">log</span>(<span class="num">4</span>);
+}
+
+<span class="fn">console</span>.<span class="fn">log</span>(<span class="num">1</span>);
+<span class="fn">foo</span>();
+<span class="fn">console</span>.<span class="fn">log</span>(<span class="num">3</span>);
+<span class="fn">setTimeout</span>(() => <span class="fn">console</span>.<span class="fn">log</span>(<span class="num">5</span>), <span class="num">0</span>);`,
+      answer: '1, 2, 3, 4, 5',
+      hint: 'Что выполняется до await — синхронно. После await — микрозадача. setTimeout — макрозадача.',
+      difficulty: 'hard',
+      steps: [
+        { tag: 'sync', label: 'синхронно', desc: 'log(1)' },
+        { tag: 'sync', label: 'синхронно', desc: 'foo(): log(2), await → пауза' },
+        { tag: 'sync', label: 'синхронно', desc: 'log(3), setTimeout → Macrotask Queue' },
+        { tag: 'micro', label: 'микрозадача', desc: 'стек пуст → возобновляем foo: log(4)' },
+        { tag: 'macro', label: 'макрозадача', desc: 'setTimeout: log(5)' },
+      ],
+      explanation: 'async-функция до await выполняется синхронно. await приостанавливает её и "продолжение" (log(4)) встаёт как микрозадача. setTimeout — макрозадача, выполняется последней.'
+    },
+    {
+      code: `<span class="kw">async function</span> <span class="fn">bar</span>() {
+  <span class="kw">await</span> <span class="fn">setTimeout</span>(() => {}, <span class="num">0</span>);
+  <span class="fn">console</span>.<span class="fn">log</span>(<span class="num">1</span>);
+}
+
+<span class="kw">async function</span> <span class="fn">foo</span>() {
+  <span class="kw">await</span> <span class="kw">Promise</span>.<span class="fn">resolve</span>();
+  <span class="fn">console</span>.<span class="fn">log</span>(<span class="num">2</span>);
+}
+
+<span class="fn">bar</span>();
+<span class="fn">foo</span>();
+<span class="fn">console</span>.<span class="fn">log</span>(<span class="num">3</span>);`,
+      answer: '3, 2, 1',
+      hint: 'await setTimeout — что именно await-ится? setTimeout возвращает числовой ID, не промис.',
+      difficulty: 'hard',
+      steps: [
+        { tag: 'sync', label: 'синхронно', desc: 'bar(): await setTimeout → setTimeout возвращает число (не промис), await оборачивает в Promise.resolve(число)' },
+        { tag: 'sync', label: 'синхронно', desc: 'foo(): await Promise.resolve()' },
+        { tag: 'sync', label: 'синхронно', desc: 'log(3)' },
+        { tag: 'micro', label: 'микрозадача', desc: 'обе await завершаются как микрозадачи: сначала bar → log(1), потом foo → log(2)' },
+      ],
+      explanation: 'setTimeout возвращает числовой ID таймера. await оборачивает его в Promise.resolve(ID) — то есть уже выполненный промис. Поэтому обе функции ведут себя одинаково и log(1) выводится раньше log(2).',
+      answer: '3, 1, 2',
+    },
+    {
+      code: `<span class="kw">Promise</span>.<span class="fn">resolve</span>()
+  .<span class="fn">then</span>(() => <span class="fn">console</span>.<span class="fn">log</span>(<span class="num">1</span>))
+  .<span class="fn">then</span>(() => <span class="fn">console</span>.<span class="fn">log</span>(<span class="num">2</span>))
+  .<span class="fn">then</span>(() => <span class="fn">console</span>.<span class="fn">log</span>(<span class="num">3</span>));
+
+<span class="kw">Promise</span>.<span class="fn">resolve</span>()
+  .<span class="fn">then</span>(() => <span class="fn">console</span>.<span class="fn">log</span>(<span class="num">4</span>))
+  .<span class="fn">then</span>(() => <span class="fn">console</span>.<span class="fn">log</span>(<span class="num">5</span>))
+  .<span class="fn">then</span>(() => <span class="fn">console</span>.<span class="fn">log</span>(<span class="num">6</span>));`,
+      answer: '1, 4, 2, 5, 3, 6',
+      hint: 'Два промиса с тремя уровнями .then() каждый — они чередуются',
+      difficulty: 'hard',
+      steps: [
+        { tag: 'micro', label: 'микрозадача', desc: 'очередь: [A(1), B(4)]' },
+        { tag: 'micro', label: 'микрозадача', desc: 'A: log(1), ставит C(2) → [B, C]' },
+        { tag: 'micro', label: 'микрозадача', desc: 'B: log(4), ставит D(5) → [C, D]' },
+        { tag: 'micro', label: 'микрозадача', desc: 'C: log(2), ставит E(3) → [D, E]' },
+        { tag: 'micro', label: 'микрозадача', desc: 'D: log(5), ставит F(6) → [E, F]' },
+        { tag: 'micro', label: 'микрозадача', desc: 'E: log(3), F: log(6)' },
+      ],
+      explanation: 'Классическое "слоёное" чередование. Оба промиса стартуют одновременно, и каждый следующий .then() встаёт в конец очереди. Результат: сначала все первые .then(), потом вторые, потом третьи.'
+    },
+  ]
+};
+
+// ─────────────────────────────────────────
+// STATE
+// ─────────────────────────────────────────
+let state = {
+  level: 'easy',
+  queue: [],
+  current: 0,
+  correct: 0,
+  total: 0,
+  streak: 0,
+  answered: false,
+};
+
+// ─────────────────────────────────────────
+// LEVEL SELECT
+// ─────────────────────────────────────────
+function selectLevel(el) {
+  document.querySelectorAll('.level-card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  state.level = el.dataset.level;
+}
+
+function startGame() {
+  const pool = [...questions[state.level]];
+  // shuffle
+  for (let i = pool.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [pool[i], pool[j]] = [pool[j], pool[i]];
+  }
+  state.queue = pool;
+  state.current = 0;
+  state.correct = 0;
+  state.total = 0;
+  state.streak = 0;
+  state.answered = false;
+
+  showScreen('quizScreen');
+  renderQuestion();
+}
+
+// ─────────────────────────────────────────
+// QUIZ
+// ─────────────────────────────────────────
+function renderQuestion() {
+  const q = state.queue[state.current];
+  const total = state.queue.length;
+
+  document.getElementById('qNum').textContent = `ЗАДАЧА ${state.current + 1} / ${total}`;
+
+  const badge = document.getElementById('qBadge');
+  const labels = { easy: 'Easy', medium: 'Medium', hard: 'Hard' };
+  badge.textContent = labels[q.difficulty];
+  badge.className = 'q-badge badge-' + q.difficulty;
+
+  document.getElementById('codeDisplay').innerHTML = q.code;
+  document.getElementById('hintText').textContent = '💡 ' + q.hint;
+
+  const input = document.getElementById('answerInput');
+  input.value = '';
+  input.className = 'answer-input';
+  input.disabled = false;
+  input.focus();
+
+  document.getElementById('feedback').className = 'feedback';
+  document.getElementById('checkBtn').style.display = '';
+  document.getElementById('skipBtn').style.display = '';
+  document.getElementById('nextBtn').style.display = 'none';
+
+  const fill = ((state.current) / total) * 100;
+  document.getElementById('progressFill').style.width = fill + '%';
+
+  state.answered = false;
+}
+
+function normalizeAnswer(s) {
+  return s.replace(/\s+/g, '').replace(/،/g, ',').toLowerCase();
+}
+
+function checkAnswer() {
+  if (state.answered) return;
+  const q = state.queue[state.current];
+  const input = document.getElementById('answerInput');
+  const raw = input.value.trim();
+  if (!raw) return;
+
+  state.answered = true;
+  state.total++;
+
+  const userNorm = normalizeAnswer(raw);
+  const correctNorm = normalizeAnswer(q.answer);
+  const isCorrect = userNorm === correctNorm;
+
+  if (isCorrect) {
+    state.correct++;
+    state.streak++;
+  } else {
+    state.streak = 0;
+  }
+
+  updateStats();
+
+  input.disabled = true;
+  input.className = 'answer-input ' + (isCorrect ? 'correct' : 'wrong');
+
+  showFeedback(q, isCorrect);
+
+  document.getElementById('checkBtn').style.display = 'none';
+  document.getElementById('skipBtn').style.display = 'none';
+  document.getElementById('nextBtn').style.display = '';
+}
+
+function skipQuestion() {
+  if (state.answered) return;
+  state.answered = true;
+  state.total++;
+  state.streak = 0;
+  updateStats();
+
+  const q = state.queue[state.current];
+  const input = document.getElementById('answerInput');
+  input.disabled = true;
+  input.className = 'answer-input wrong';
+  input.value = '?';
+
+  showFeedback(q, false, true);
+
+  document.getElementById('checkBtn').style.display = 'none';
+  document.getElementById('skipBtn').style.display = 'none';
+  document.getElementById('nextBtn').style.display = '';
+}
+
+function showFeedback(q, isCorrect, skipped = false) {
+  const fb = document.getElementById('feedback');
+  const title = document.getElementById('feedbackTitle');
+  const body = document.getElementById('feedbackBody');
+  const viz = document.getElementById('stepsViz');
+
+  if (isCorrect) {
+    fb.className = 'feedback correct-fb';
+    const msgs = ['Точно! 🎯', 'Верно! ✅', 'Отлично! 🔥', 'Правильно! ⚡'];
+    title.textContent = msgs[Math.floor(Math.random() * msgs.length)];
+  } else {
+    fb.className = 'feedback wrong-fb';
+    title.textContent = skipped ? 'Правильный ответ:' : 'Не совсем 🤔';
+  }
+
+  body.innerHTML = (!isCorrect ? `Правильный ответ: <span class="correct-answer">${q.answer}</span><br><br>` : '') + q.explanation;
+
+  // steps
+  viz.innerHTML = '';
+  if (q.steps) {
+    const tagMap = { sync: 'tag-sync', micro: 'tag-micro', macro: 'tag-macro' };
+    const labelMap = { sync: 'Sync', micro: 'Microtask', macro: 'Macrotask' };
+    q.steps.forEach((s, i) => {
+      const row = document.createElement('div');
+      row.className = 'step-row';
+      row.innerHTML = `
+        <span class="step-idx">${i + 1}</span>
+        <span class="step-tag ${tagMap[s.tag]}">${labelMap[s.tag]}</span>
+        <span class="step-desc">${s.desc}</span>
+      `;
+      viz.appendChild(row);
+    });
+  }
+}
+
+function nextQuestion() {
+  state.current++;
+  if (state.current >= state.queue.length) {
+    showResults();
+  } else {
+    renderQuestion();
+  }
+}
+
+// ─────────────────────────────────────────
+// RESULTS
+// ─────────────────────────────────────────
+function showResults() {
+  showScreen('resultsScreen');
+
+  const pct = state.total > 0 ? Math.round((state.correct / state.total) * 100) : 0;
+
+  document.getElementById('resCorrect').textContent = state.correct;
+  document.getElementById('resTotal').textContent = state.total;
+  document.getElementById('resPct').textContent = pct + '%';
+
+  const trophies = {
+    100: ['🏆', 'Идеально!', 'Ты знаешь Event Loop лучше V8'],
+    80:  ['🥇', 'Отлично!', 'Осталось совсем чуть-чуть до совершенства'],
+    60:  ['🥈', 'Неплохо!', 'Хорошая база, продолжай тренироваться'],
+    0:   ['📚', 'Учимся!', 'Event Loop непрост — просто продолжай практиковаться'],
+  };
+
+  let t = trophies[0];
+  for (const [k, v] of Object.entries(trophies)) {
+    if (pct >= +k) t = v;
+  }
+
+  document.getElementById('trophyEmoji').textContent = t[0];
+  document.getElementById('resultTitle').textContent = t[1];
+  document.getElementById('resultSub').textContent = t[2];
+
+  document.getElementById('progressFill').style.width = '100%';
+}
+
+// ─────────────────────────────────────────
+// UTILS
+// ─────────────────────────────────────────
+function updateStats() {
+  document.getElementById('statCorrect').textContent = state.correct;
+  document.getElementById('statTotal').textContent = state.total;
+  document.getElementById('statStreak').textContent = state.streak;
+}
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function restartGame() { startGame(); }
+function showSplash() { showScreen('splashScreen'); }
+
+// Enter key support
+document.addEventListener('keydown', e => {
+  if (e.key === 'Enter') {
+    const nextBtn = document.getElementById('nextBtn');
+    if (nextBtn.style.display !== 'none') {
+      nextQuestion();
+    } else if (!state.answered) {
+      checkAnswer();
+    }
+  }
+});
+</script>
+</body>
+</html>

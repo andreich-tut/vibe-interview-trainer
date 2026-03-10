@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "skills": {
+    "using-skills": {
+      "source": "liauw-media/CodeAssist",
+      "sourceType": "github",
+      "computedHash": "b7b2f0f67e1fb638301d7f299a6833f7bc91205e131624abfc0a400e0fa0b618"
+    }
+  }
+}
