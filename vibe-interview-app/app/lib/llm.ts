@@ -1,16 +1,28 @@
 const GROQ_API_URL = "https://api.groq.com/openai/v1/chat/completions";
 const GROQ_MODEL = "llama-3.3-70b-versatile";
 
-const SYSTEM_PROMPT = `Ты — ассистент для проверки знаний по программированию.
-Тебе дают вопрос, эталонный ответ и ответ пользователя.
-Оцени ответ пользователя по шкале 0-3:
-3 — точно знал (все ключевые моменты раскрыты)
-2 — примерно знал (основная идея верна, упущены детали)
-1 — с трудом (частично верно, много пробелов)
-0 — не знал (ответ неверный или пустой)
+const SYSTEM_PROMPT = `Ты — строгий экзаменатор по программированию.
+
+Тебе дают:
+- Вопрос
+- Эталонный ответ
+- Ключевые моменты (checklist) — то, что ДОЛЖНО быть в хорошем ответе
+- Ответ пользователя
+
+Оцени ответ пользователя по ключевым моментам:
+3 — раскрыты все или почти все ключевые моменты
+2 — раскрыта основная идея, но упущены важные моменты
+1 — упомянуто что-то верное, но большая часть ключевых моментов не раскрыта
+0 — ответ неверный, не по теме или пустой
+
+Правила оценки:
+- Оценивай СМЫСЛ, а не точность формулировки. Пользователь может выражаться своими словами.
+- Если пользователь упоминает концепцию другими словами — это засчитывается.
+- Не снижай оценку за отсутствие примеров кода, если смысл передан.
+- Будь строгим к фактическим ошибкам — они снижают оценку.
 
 Ответь строго в формате JSON:
-{"score": <0-3>, "feedback": "<краткий комментарий на русском, 1-2 предложения>"}`;
+{"score": <0-3>, "feedback": "<на русском: что раскрыто хорошо + какие ключевые моменты упущены, 1-3 предложения>"}`;
 
 export interface LLMResult {
   score: 0 | 1 | 2 | 3;
@@ -21,11 +33,18 @@ export async function checkAnswer(
   question: string,
   referenceAnswer: string,
   userAnswer: string,
+  keyPoints?: string[],
 ): Promise<LLMResult> {
   const apiKey = getApiKey();
   if (!apiKey) throw new Error("NO_API_KEY");
 
-  const userPrompt = `Вопрос: ${question}\n\nЭталонный ответ: ${referenceAnswer}\n\nОтвет пользователя: ${userAnswer}`;
+  let userPrompt = `Вопрос: ${question}\n\nЭталонный ответ: ${referenceAnswer}`;
+
+  if (keyPoints?.length) {
+    userPrompt += `\n\nКлючевые моменты:\n${keyPoints.map((p, i) => `${i + 1}. ${p}`).join("\n")}`;
+  }
+
+  userPrompt += `\n\nОтвет пользователя: ${userAnswer}`;
 
   const res = await fetch(GROQ_API_URL, {
     method: "POST",
@@ -40,7 +59,7 @@ export async function checkAnswer(
         { role: "user", content: userPrompt },
       ],
       temperature: 0.1,
-      max_tokens: 200,
+      max_tokens: 300,
       response_format: { type: "json_object" },
     }),
   });

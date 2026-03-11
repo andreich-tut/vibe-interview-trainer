@@ -172,6 +172,28 @@
 - [x] Updated `TESTING-IMPROVEMENT.md` — documented Gemini Flash decision
 - [x] TypeScript typecheck passes, production build succeeds
 
+### Phase 10: Answer Evaluation Quality Improvement ✅
+- [x] Fixed factual errors in card data:
+  - Rewrote all 10 Next.js cards for App Router (was Pages Router — 3 years outdated)
+  - Fixed CSS specificity: tuple (inline, ID, class, element), not point system
+  - Fixed CSS media query: `prefers-color-scheme: dark` (was `prefers-dark-scheme`)
+  - Fixed JS modules: import is statically analyzed, not "asynchronous"
+- [x] Replaced 3 irrelevant Node.js questions:
+  - Telegram bot → Streams (Readable/Writable/Duplex/Transform)
+  - Discord bot → Error handling patterns (uncaughtException, unhandledRejection)
+  - node-cron → Worker Threads vs child_process
+- [x] Added `keyPoints: string[]` to Card interface (3-5 points per card, all 70 cards)
+- [x] Rewrote LLM system prompt (`llm.ts`):
+  - Key-point based evaluation (checklist approach)
+  - Scores based on key points coverage, not exact wording
+  - Feedback must mention which key points were missed
+  - Rules: evaluate meaning not wording, accept different phrasings, be strict on factual errors
+- [x] Updated `checkAnswer()` with optional `keyPoints` parameter
+- [x] Updated `FlashCard.tsx` to pass `keyPoints` to `checkAnswer()`
+- [x] Increased max_tokens 200→300 for richer feedback
+- [x] TypeScript typecheck passes, production build succeeds
+- [x] Saved plan in `IMPROVEMENT-PLAN.md`
+
 ## 🚀 Next Steps (Optional Enhancements)
 
 If you want to extend further:

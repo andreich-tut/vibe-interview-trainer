@@ -5,6 +5,12 @@ export const cicdCards = [
     question: "Что такое CI/CD и зачем это нужно?",
     answer:
       "CI (Continuous Integration) — автоматическая интеграция кода в репозиторий, тесты при каждом коммите. CD (Continuous Deployment/Delivery) — автоматический деплой в продакшн или подготовка к деплою. Результат: быстрая обратная связь, раннее обнаружение ошибок, частые релизы.",
+    keyPoints: [
+      "CI — автоматическая сборка и тестирование при каждом коммите/PR",
+      "CD (Delivery) — автоматическая подготовка к деплою",
+      "CD (Deployment) — автоматический деплой в продакшн",
+      "Раннее обнаружение ошибок, быстрая обратная связь",
+    ],
   },
   {
     id: "2",
@@ -12,6 +18,12 @@ export const cicdCards = [
     question: "Какой типичный CI pipeline для фронтенда?",
     answer:
       "1. Коммит → 2. Запуск тестов (npm test) → 3. Linting (eslint) → 4. Build (npm run build) → 5. Проверка типов (TypeScript) → 6. Результат (pass/fail). Все автоматически при pull request. Если что-то упадёт, PR не мержится.",
+    keyPoints: [
+      "Триггер: push или pull request",
+      "Шаги: install → lint → typecheck → test → build",
+      "Блокировка мержа PR при неуспешном pipeline",
+      "Всё автоматически, без ручного вмешательства",
+    ],
   },
   {
     id: "3",
@@ -19,6 +31,12 @@ export const cicdCards = [
     question: "Какие инструменты CI/CD существуют?",
     answer:
       "GitHub Actions — встроенный в GitHub (бесплатный, удобный). GitLab CI — встроенный в GitLab. Jenkins — самостоятельный (мощный, сложный). CircleCI — облачный сервис. Travis CI — облачный. Выбор зависит от платформы и требований.",
+    keyPoints: [
+      "GitHub Actions — встроенный, бесплатный для публичных репозиториев",
+      "GitLab CI — встроенный в GitLab, YAML конфигурация",
+      "Jenkins — self-hosted, мощный, сложная настройка",
+      "Облачные: CircleCI, Travis CI — минимальная инфраструктура",
+    ],
   },
   {
     id: "4",
@@ -26,6 +44,12 @@ export const cicdCards = [
     question: "Как настроить простой GitHub Actions workflow?",
     answer:
       ".github/workflows/test.yml: name: Test, on: [push, pull_request], jobs: { test: { runs-on: ubuntu-latest, steps: [checkout, setup-node, npm install, npm test] } }. YAML конфиг определяет когда и что запускать. Очень просто, не нужна отдельная инфраструктура.",
+    keyPoints: [
+      "Файл .github/workflows/*.yml в YAML формате",
+      "on: определяет триггеры (push, pull_request, schedule)",
+      "jobs с steps: checkout → setup-node → install → test",
+      "runs-on: выбор runner (ubuntu-latest, windows, macos)",
+    ],
   },
   {
     id: "5",
@@ -33,6 +57,12 @@ export const cicdCards = [
     question: "Что должно быть в CI pipeline для тестирования?",
     answer:
       "Unit тесты (Jest, Mocha) — быстро. Integration тесты — умеренно. Код кавереж (покрытие кодом) — минимум 80%. Linting (ESLint) — стиль кода. Type checking (TypeScript) — статические ошибки. Если что-то упадёт, деплой блокируется.",
+    keyPoints: [
+      "Unit тесты — быстрые, проверяют отдельные функции",
+      "Integration тесты — проверяют взаимодействие компонентов",
+      "Code coverage — порог покрытия (обычно 80%+)",
+      "Linting + type checking как обязательные шаги",
+    ],
   },
   {
     id: "6",
@@ -40,6 +70,12 @@ export const cicdCards = [
     question: "Что такое Semantic Versioning (Semver)?",
     answer:
       "Версия: MAJOR.MINOR.PATCH (1.2.3). MAJOR — несовместимые изменения. MINOR — обратно совместимые функции. PATCH — баг-фиксы. Для зависимостей: ^1.2.3 (MINOR и PATCH), ~1.2.3 (только PATCH). Коммуникирует изменения пользователям.",
+    keyPoints: [
+      "Формат MAJOR.MINOR.PATCH (например 1.2.3)",
+      "MAJOR — breaking changes, MINOR — новые фичи, PATCH — баг-фиксы",
+      "^ (caret) — совместимые обновления (MINOR + PATCH)",
+      "~ (tilde) — только PATCH обновления",
+    ],
   },
   {
     id: "7",
@@ -47,6 +83,12 @@ export const cicdCards = [
     question: "Какие стратегии деплоя существуют?",
     answer:
       "Blue-Green: две среды, переключение трафика (быстрое откатывание). Canary: 5% трафика на новую версию, постепенно увеличиваем. Rolling: обновляем инстансы по одному. Feature flags: новую функцию включают без деплоя. Стратегия зависит от риска.",
+    keyPoints: [
+      "Blue-Green — две среды, мгновенное переключение трафика",
+      "Canary — постепенный рост трафика на новую версию (5% → 100%)",
+      "Rolling — обновление инстансов по одному без простоя",
+      "Feature flags — включение/выключение функций без деплоя",
+    ],
   },
   {
     id: "8",
@@ -54,6 +96,12 @@ export const cicdCards = [
     question: "Какие среды разработки используются?",
     answer:
       "Development (dev) — локальная разработка. Staging (stage) — тестирование перед продакшном (идентична продакшену). Production (prod) — боевой сервер, пользователи. Каждая среда имеет свои переменные окружения (.env). Деплой: dev → stage → prod (с одобрением).",
+    keyPoints: [
+      "Development — локальная разработка и отладка",
+      "Staging — копия production для тестирования перед релизом",
+      "Production — боевая среда для пользователей",
+      "Каждая среда — свои переменные окружения (.env)",
+    ],
   },
   {
     id: "9",
@@ -61,6 +109,12 @@ export const cicdCards = [
     question: "Зачем нужно логирование и как его организовать?",
     answer:
       "Логи помогают отследить что происходит в приложении. Уровни: debug, info, warn, error. Логируй важные события, ошибки, запросы. Хранили в файлы или сервис (ELK, DataDog). Не логируй чувствительные данные (пароли, токены). Структурированные логи (JSON) удобнее анализировать.",
+    keyPoints: [
+      "Уровни: debug, info, warn, error — фильтрация по важности",
+      "Структурированные логи (JSON) для автоматического анализа",
+      "Никогда не логировать чувствительные данные (пароли, токены)",
+      "Агрегация: ELK Stack, DataDog, CloudWatch",
+    ],
   },
   {
     id: "10",
@@ -68,5 +122,11 @@ export const cicdCards = [
     question: "Как мониторить приложение в продакшене?",
     answer:
       "Метрики: CPU, память, запросы/сек, ошибки. Инструменты: Prometheus + Grafana (метрики), DataDog (полный стек), New Relic (APM). Алёрты при проблемах (Slack, PagerDuty). Логирование ошибок (Sentry). Постоянный мониторинг == стабильность.",
+    keyPoints: [
+      "Ключевые метрики: CPU, память, RPS, error rate, latency",
+      "Инструменты: Prometheus + Grafana, DataDog, New Relic",
+      "Sentry для отслеживания и агрегации ошибок",
+      "Алерты при превышении порогов (Slack, PagerDuty)",
+    ],
   },
 ];

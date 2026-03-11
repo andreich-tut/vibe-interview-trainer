@@ -6,6 +6,7 @@ export interface Card {
   question: string;
   answer: string;
   category: string;
+  keyPoints?: string[];
 }
 
 export type Score = 0 | 1 | 2 | 3;
@@ -43,7 +44,7 @@ export function FlashCard({ card, onScore, current, total }: FlashCardProps) {
     setAiLoading(true);
     setAiError(null);
 
-    checkAnswer(card.question, card.answer, userAnswer.trim())
+    checkAnswer(card.question, card.answer, userAnswer.trim(), card.keyPoints)
       .then((result) => {
         setAiResult(result);
         setAiLoading(false);
@@ -52,7 +53,7 @@ export function FlashCard({ card, onScore, current, total }: FlashCardProps) {
         setAiError(err instanceof Error ? err.message : "Unknown error");
         setAiLoading(false);
       });
-  }, [userAnswer, aiLoading, card.question, card.answer]);
+  }, [userAnswer, aiLoading, card.question, card.answer, card.keyPoints]);
 
   const handleNext = useCallback(() => {
     if (aiResult) onScore(aiResult.score);

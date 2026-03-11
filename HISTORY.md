@@ -303,3 +303,34 @@ npm run dev  # localhost:5173
 npm run typecheck  # TypeScript check
 npm run build      # Production build
 ```
+
+---
+
+## Session 3: LLM Answer Quality Improvements (2026-03-11)
+
+### Prompt 17
+> i want to improve quality of test user's answers with using llm. but your previous version told me that better use it with custom RAG and own base. analyze this request and suggest variants
+
+**Result:** ✅ Success — Analyzed current setup, suggested 5 variants. User chose variant 5 (structured key points + better prompt + model upgrade).
+
+---
+
+### Prompt 18
+> i go with your recommendation. at first make a plan how to implement this. then suggest me how to improve quality of questions in test. i think that this questions are not always correct. maybe vector db and embeddings based on datasets is the way?
+
+**Result:** ✅ Success — Analyzed question quality, found 4 factual errors + 3 irrelevant questions. Recommended against vector DB/embeddings (overkill for 70 cards). Provided plan.
+
+---
+
+### Prompt 19
+> save plan and follow it
+
+**Result:** ✅ Success — Saved plan to IMPROVEMENT-PLAN.md and executed all steps:
+- Fixed 4 factual errors: rewrote all 10 Next.js cards for App Router, fixed CSS specificity tuple misconception, fixed prefers-color-scheme typo, fixed JS import "async" description
+- Replaced 3 irrelevant Node.js questions (Telegram/Discord bots, cron) with Streams, Error handling, Worker Threads
+- Added keyPoints (3-5 per card) to all 70 cards across 7 topics
+- Rewrote LLM system prompt: key-point based evaluation, meaning-over-wording rules, explicit feedback on missed points
+- Updated checkAnswer() signature with optional keyPoints parameter
+- Updated FlashCard component to pass keyPoints
+- Increased max_tokens from 200→300 for richer feedback
+- TypeScript typecheck: passes. Production build: passes.
