@@ -1,6 +1,8 @@
+import { useEffect, useState } from "react";
 import type { Route } from "./+types/topic-theory";
 import { Link } from "react-router";
 import { Layout } from "~/components/Layout";
+import { TheoryCard } from "~/components/TheoryCard";
 import { javascriptTheory } from "~/data/theory/javascript";
 import { reactTheory } from "~/data/theory/react";
 import { nextjsTheory } from "~/data/theory/nextjs";
@@ -69,9 +71,63 @@ export function meta({ params }: Route.MetaArgs) {
   ];
 }
 
+function TocLink({
+  idx,
+  title,
+  active,
+}: {
+  idx: number;
+  title: string;
+  active: boolean;
+}) {
+  return (
+    <li>
+      <a
+        href={`#section-${idx}`}
+        className={`text-sm transition-colors flex items-baseline gap-2 ${
+          active
+            ? "text-[var(--color-accent2)] font-semibold"
+            : "text-[var(--color-accent)] hover:text-[var(--color-accent2)]"
+        }`}
+        onClick={(e) => {
+          e.preventDefault();
+          document.getElementById(`section-${idx}`)?.scrollIntoView({ behavior: "smooth" });
+        }}
+      >
+        <span className="text-[var(--color-muted)] text-xs">
+          {String(idx + 1).padStart(2, "0")}
+        </span>
+        {title}
+      </a>
+    </li>
+  );
+}
+
 export default function TopicTheory({ params }: Route.ComponentProps) {
   const topic = topics.find((t) => t.id === params.topicId);
   const theory = theoryMap[params.topicId] || [];
+  const [activeSection, setActiveSection] = useState(0);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            const idx = Number(entry.target.id.replace("section-", ""));
+            if (!Number.isNaN(idx)) setActiveSection(idx);
+          }
+        }
+      },
+      { rootMargin: "-80px 0px -60% 0px" },
+    );
+
+    theory.forEach((_, idx) => {
+      const el = document.getElementById(`section-${idx}`);
+      if (el) observer.observe(el);
+    });
+
+    return () => observer.disconnect();
+  }, [theory]);
 
   if (!topic) {
     return (
@@ -81,9 +137,13 @@ export default function TopicTheory({ params }: Route.ComponentProps) {
     );
   }
 
+  const tocItems = theory.map((section, idx) => (
+    <TocLink key={idx} idx={idx} title={section.title} active={activeSection === idx} />
+  ));
+
   return (
-    <Layout showBack backTo="/">
-      <div className="space-y-8 pb-20">
+    <Layout wide showBack backTo="/">
+      <div className="pb-20">
         {/* Header */}
         <div className="text-center mb-8">
           <div className="text-4xl mb-3">{topic.icon}</div>
@@ -92,57 +152,53 @@ export default function TopicTheory({ params }: Route.ComponentProps) {
           </h1>
         </div>
 
-        {/* Table of contents */}
-        {theory.length > 2 && (
-          <nav className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg p-5">
-            <div className="text-[0.625rem] font-bold text-[var(--color-muted)] uppercase tracking-widest mb-3">
-              Содержание
-            </div>
-            <ol className="space-y-1.5 list-none p-0 m-0">
-              {theory.map((section, idx) => (
-                <li key={idx}>
-                  <a
-                    href={`#section-${idx}`}
-                    className="text-sm text-[var(--color-accent)] hover:text-[var(--color-accent2)] transition-colors flex items-baseline gap-2"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      document.getElementById(`section-${idx}`)?.scrollIntoView({ behavior: "smooth" });
-                    }}
-                  >
-                    <span className="text-[var(--color-muted)] text-xs">
-                      {String(idx + 1).padStart(2, "0")}
-                    </span>
-                    {section.title}
-                  </a>
-                </li>
-              ))}
-            </ol>
-          </nav>
-        )}
+        {/* Two-column layout on desktop */}
+        <div className="lg:flex lg:gap-8 lg:items-start">
+          {/* Sticky sidebar TOC — desktop only */}
+          {theory.length > 2 && (
+            <aside className="hidden lg:block lg:w-64 lg:shrink-0 lg:sticky lg:top-8 lg:self-start">
+              <nav className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-xl p-5">
+                <div className="text-[0.625rem] font-bold text-[var(--color-muted)] uppercase tracking-widest mb-3">
+                  Содержание
+                </div>
+                <ol className="space-y-1.5 list-none p-0 m-0">
+                  {tocItems}
+                </ol>
+              </nav>
+            </aside>
+          )}
 
-        {/* Theory sections */}
-        {theory.map((section, idx) => (
-          <div key={idx} id={`section-${idx}`} className="scroll-mt-6">
-            {idx > 0 && (
-              <div className="border-t border-[var(--color-border)] mb-8" />
+          {/* Main content column */}
+          <div className="flex-1 min-w-0 space-y-6">
+            {/* Mobile TOC — collapsible */}
+            {theory.length > 2 && (
+              <details className="lg:hidden bg-[var(--color-surface)] border border-[var(--color-border)] rounded-xl">
+                <summary className="px-5 py-4 cursor-pointer text-sm font-semibold text-[var(--color-accent)]">
+                  Содержание ({theory.length} разделов)
+                </summary>
+                <ol className="space-y-1.5 list-none p-0 m-0 px-5 pb-4">
+                  {tocItems}
+                </ol>
+              </details>
             )}
-            <h2 className="font-display text-xl font-bold text-[var(--color-accent2)] mb-4 flex items-baseline gap-3">
-              <span className="text-sm text-[var(--color-muted)] font-mono">
-                {String(idx + 1).padStart(2, "0")}
-              </span>
-              {section.title}
-            </h2>
-            <div
-              className="text-sm text-[var(--color-text)] leading-relaxed prose-dark"
-              dangerouslySetInnerHTML={{ __html: processContent(section.content) }}
-            />
+
+            {/* Theory section cards */}
+            {theory.map((section, idx) => (
+              <TheoryCard
+                key={idx}
+                id={`section-${idx}`}
+                index={idx}
+                title={section.title}
+                content={processContent(section.content)}
+              />
+            ))}
           </div>
-        ))}
+        </div>
       </div>
 
       {/* Sticky bottom CTA */}
       <div className="fixed bottom-0 left-0 right-0 bg-[var(--color-bg)]/95 backdrop-blur-sm border-t border-[var(--color-border)] py-3 px-5 z-50">
-        <div className="max-w-2xl mx-auto flex items-center justify-between gap-4">
+        <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
           <span className="text-xs text-[var(--color-muted)] hidden sm:block">
             Готов к практике?
           </span>

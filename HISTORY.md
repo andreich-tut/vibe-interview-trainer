@@ -334,3 +334,18 @@ npm run build      # Production build
 - Updated FlashCard component to pass keyPoints
 - Increased max_tokens from 200→300 for richer feedback
 - TypeScript typecheck: passes. Production build: passes.
+
+---
+
+## Session 4: UI Design Improvements (2026-03-11)
+
+### Prompt 20
+> i want to improve app design. i think all cards should be spaced in all width of screen. also i think nav in theory blocks and info should be aligned in sub-cards. also theory should be more understandable and clearly. suggest variants to implement this tasks. maybe decompose it. make a plan (or plans) and implementation.
+
+**Result:** ✅ Success — Implemented 5 design improvements:
+- Layout.tsx: added `wide` prop (max-w-7xl vs max-w-2xl)
+- Home page: 3-column grid on lg+ screens, cards span full width
+- Created TheoryCard component: each theory section wrapped in a distinct card with header strip
+- Theory page: sticky sidebar TOC on desktop (with active section tracking via IntersectionObserver), collapsible TOC on mobile via `<details>/<summary>`
+- CSS: h3 left border accent, sub-section dividers, increased spacing for readability
+- TypeScript typecheck passes, production build succeeds

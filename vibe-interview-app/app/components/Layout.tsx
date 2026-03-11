@@ -5,9 +5,10 @@ interface LayoutProps {
   children: ReactNode;
   showBack?: boolean;
   backTo?: string;
+  wide?: boolean;
 }
 
-export function Layout({ children, showBack = false, backTo = "/" }: LayoutProps) {
+export function Layout({ children, showBack = false, backTo = "/", wide = false }: LayoutProps) {
   return (
     <div className="min-h-screen bg-[var(--color-bg)]">
       {/* Header */}
@@ -29,7 +30,7 @@ export function Layout({ children, showBack = false, backTo = "/" }: LayoutProps
       </header>
 
       {/* Main */}
-      <main className="max-w-2xl mx-auto px-5 py-8">{children}</main>
+      <main className={`${wide ? 'max-w-7xl' : 'max-w-2xl'} mx-auto px-5 py-8`}>{children}</main>
     </div>
   );
 }

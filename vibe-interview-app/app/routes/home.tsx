@@ -15,7 +15,7 @@ export default function Home() {
   const { getTopicProgress } = useProgress();
 
   return (
-    <Layout>
+    <Layout wide>
       <div className="text-center mb-12">
         <h1 className="font-display text-3xl font-black mb-3 bg-gradient-to-r from-[var(--color-accent)] to-[var(--color-accent2)] bg-clip-text text-transparent">
           Подготовка к собеседованию
@@ -26,7 +26,7 @@ export default function Home() {
       </div>
 
       {/* Topic Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-12">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mb-12">
         {topics.map((topic) => {
           const progress = getTopicProgress(topic.id);
           return (

@@ -194,6 +194,23 @@
 - [x] TypeScript typecheck passes, production build succeeds
 - [x] Saved plan in `IMPROVEMENT-PLAN.md`
 
+### Phase 11: UI Design Improvements — Wider Layout, Theory Cards, Readability ✅
+- [x] Added `wide?: boolean` prop to `Layout.tsx` — switches between `max-w-7xl` (1280px) and `max-w-2xl` (896px)
+- [x] Home page: enabled wide layout, changed grid to `lg:grid-cols-3` (3 columns on desktop)
+- [x] Created `app/components/TheoryCard.tsx` — card wrapper with header strip (surface2 bg, section number, title) and padded content body
+- [x] Restructured `topic-theory.tsx`:
+  - Two-column layout on desktop: sticky sidebar TOC (`lg:w-64 lg:sticky lg:top-8`) + content cards
+  - Active section tracking via `IntersectionObserver` (highlights current TOC item)
+  - Mobile: collapsible TOC via native `<details>/<summary>` (zero JS)
+  - Each section wrapped in `TheoryCard` instead of flat divs
+  - Updated sticky CTA bar to `max-w-7xl`
+- [x] CSS typography improvements in `app.css`:
+  - h3: left border accent (3px cyan), more margin/padding
+  - Non-first h3: top border divider for sub-section separation
+  - Increased paragraph margin (0.75→1rem), list margin-top (0.5rem)
+  - Slightly larger inline code padding
+- [x] TypeScript typecheck passes, production build succeeds
+
 ## 🚀 Next Steps (Optional Enhancements)
 
 If you want to extend further:
