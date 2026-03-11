@@ -84,7 +84,7 @@ function TocLink({
     <li>
       <a
         href={`#section-${idx}`}
-        className={`text-sm transition-colors flex items-baseline gap-2 ${
+        className={`text-[0.8125rem] leading-snug transition-colors flex items-baseline gap-2.5 py-0.5 ${
           active
             ? "text-[var(--color-accent2)] font-semibold"
             : "text-[var(--color-accent)] hover:text-[var(--color-accent2)]"
@@ -153,15 +153,15 @@ export default function TopicTheory({ params }: Route.ComponentProps) {
         </div>
 
         {/* Two-column layout on desktop */}
-        <div className="lg:flex lg:gap-8 lg:items-start">
+        <div className="lg:grid lg:grid-cols-[280px_1fr] lg:gap-10 lg:items-start">
           {/* Sticky sidebar TOC — desktop only */}
           {theory.length > 2 && (
-            <aside className="hidden lg:block lg:w-64 lg:shrink-0 lg:sticky lg:top-8 lg:self-start">
-              <nav className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-xl p-5">
-                <div className="text-[0.625rem] font-bold text-[var(--color-muted)] uppercase tracking-widest mb-3">
+            <aside className="hidden lg:block lg:sticky lg:top-8 lg:self-start">
+              <nav className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-xl p-6">
+                <div className="text-[0.625rem] font-bold text-[var(--color-muted)] uppercase tracking-widest mb-4">
                   Содержание
                 </div>
-                <ol className="space-y-1.5 list-none p-0 m-0">
+                <ol className="space-y-2 list-none p-0 m-0">
                   {tocItems}
                 </ol>
               </nav>
@@ -169,7 +169,7 @@ export default function TopicTheory({ params }: Route.ComponentProps) {
           )}
 
           {/* Main content column */}
-          <div className="flex-1 min-w-0 space-y-6">
+          <div className="min-w-0 space-y-6">
             {/* Mobile TOC — collapsible */}
             {theory.length > 2 && (
               <details className="lg:hidden bg-[var(--color-surface)] border border-[var(--color-border)] rounded-xl">

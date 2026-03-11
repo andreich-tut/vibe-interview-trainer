@@ -162,7 +162,7 @@ export default function TopicPractice({ params }: Route.ComponentProps) {
   // --- SETUP PHASE ---
   if (phase === "setup") {
     return (
-      <Layout showBack backTo="/">
+      <Layout wide showBack backTo="/">
         <div className="space-y-8">
           <div className="text-center mb-8">
             <div className="text-4xl mb-3">{topic.icon}</div>
@@ -174,7 +174,7 @@ export default function TopicPractice({ params }: Route.ComponentProps) {
             </p>
           </div>
 
-          <div className="max-w-sm mx-auto space-y-4">
+          <div className="max-w-md mx-auto space-y-4">
             {/* API key */}
             <div className="p-4 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg">
               <ApiKeyInput onDone={() => setApiKeyReady(true)} />
@@ -207,8 +207,8 @@ export default function TopicPractice({ params }: Route.ComponentProps) {
     }
 
     return (
-      <Layout showBack backTo="/">
-        <div className="space-y-8">
+      <Layout wide showBack backTo="/">
+        <div className="max-w-3xl mx-auto space-y-8">
           <div className="text-center mb-4">
             <div className="text-4xl mb-3">{topic.icon}</div>
             <h1 className="font-display text-2xl font-bold text-[var(--color-accent)]">
@@ -264,8 +264,8 @@ export default function TopicPractice({ params }: Route.ComponentProps) {
   const wrongRemaining = [...bestScores.entries()].filter(([, s]) => s <= 1).length;
 
   return (
-    <Layout showBack backTo="/">
-      <div className="text-center space-y-8 pt-12">
+    <Layout wide showBack backTo="/">
+      <div className="text-center space-y-8 pt-12 max-w-3xl mx-auto">
         <div className="text-6xl mb-4">
           {pct === 100 ? "🏆" : pct >= 80 ? "🎉" : pct >= 50 ? "👍" : "📚"}
         </div>

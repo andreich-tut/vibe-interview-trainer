@@ -30,7 +30,7 @@ export function Layout({ children, showBack = false, backTo = "/", wide = false 
       </header>
 
       {/* Main */}
-      <main className={`${wide ? 'max-w-7xl' : 'max-w-2xl'} mx-auto px-5 py-8`}>{children}</main>
+      <main className={`${wide ? 'max-w-screen-2xl' : 'max-w-4xl'} mx-auto px-6 py-8 lg:px-10`}>{children}</main>
     </div>
   );
 }

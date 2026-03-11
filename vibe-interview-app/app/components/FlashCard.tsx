@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { checkAnswer, type LLMResult } from "~/lib/llm";
+import { useSpeechRecognition } from "~/hooks/useSpeechRecognition";
 
 export interface Card {
   id: string;
@@ -31,6 +32,45 @@ export function FlashCard({ card, onScore, current, total }: FlashCardProps) {
   const [aiLoading, setAiLoading] = useState(false);
   const [aiError, setAiError] = useState<string | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  const speech = useSpeechRecognition();
+  // Text typed before mic was started — preserved as a prefix
+  const typedBeforeMicRef = useRef("");
+
+  // Compose displayed answer: typed prefix + speech transcript + interim
+  useEffect(() => {
+    if (!speech.isListening && !speech.transcript) return;
+    const prefix = typedBeforeMicRef.current;
+    const sep = prefix && !prefix.endsWith(" ") && !prefix.endsWith("\n") ? " " : "";
+    const voicePart = speech.transcript + (speech.interimText ? ` ${speech.interimText}` : "");
+    setUserAnswer(voicePart ? `${prefix}${sep}${voicePart}` : prefix);
+  }, [speech.transcript, speech.interimText, speech.isListening]);
+
+  // When mic stops, commit the full text so user can continue typing
+  useEffect(() => {
+    if (!speech.isListening && speech.transcript) {
+      const prefix = typedBeforeMicRef.current;
+      const sep = prefix && !prefix.endsWith(" ") && !prefix.endsWith("\n") ? " " : "";
+      setUserAnswer(`${prefix}${sep}${speech.transcript}`);
+    }
+  }, [speech.isListening, speech.transcript]);
+
+  // Reset speech state when card changes
+  useEffect(() => {
+    speech.reset();
+    typedBeforeMicRef.current = "";
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [card.id]);
+
+  const toggleMic = useCallback(() => {
+    if (speech.isListening) {
+      speech.stop();
+    } else {
+      typedBeforeMicRef.current = userAnswer;
+      speech.reset();
+      speech.start();
+    }
+  }, [speech, userAnswer]);
 
   // Focus textarea on mount and after AI result clears (retry)
   useEffect(() => {
@@ -116,20 +156,58 @@ export function FlashCard({ card, onScore, current, total }: FlashCardProps) {
         {!aiResult && !aiLoading && !aiError ? (
           /* Input phase */
           <div className="flex flex-col flex-1 space-y-4">
-            <textarea
-              ref={textareaRef}
-              value={userAnswer}
-              onChange={(e) => setUserAnswer(e.target.value)}
-              placeholder="Напиши свой ответ..."
-              rows={4}
-              className="w-full px-4 py-3 bg-[var(--color-bg)] border border-[var(--color-border)] rounded-lg text-sm text-[var(--color-text)] placeholder:text-[var(--color-muted)] focus:border-[var(--color-accent)] focus:outline-none resize-y"
-              onKeyDown={(e) => {
-                if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) {
-                  e.preventDefault();
-                  handleCheck();
-                }
-              }}
-            />
+            <div className="relative">
+              <textarea
+                ref={textareaRef}
+                value={userAnswer}
+                onChange={(e) => setUserAnswer(e.target.value)}
+                placeholder={speech.isListening ? "Говорите..." : "Напиши или надиктуй ответ..."}
+                rows={4}
+                className="w-full px-4 py-3 pr-12 bg-[var(--color-bg)] border rounded-lg text-sm text-[var(--color-text)] placeholder:text-[var(--color-muted)] focus:border-[var(--color-accent)] focus:outline-none resize-y transition-colors"
+                style={{
+                  borderColor: speech.isListening ? "var(--color-red)" : "var(--color-border)",
+                }}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) {
+                    e.preventDefault();
+                    handleCheck();
+                  }
+                }}
+              />
+              {speech.isSupported && (
+                <button
+                  type="button"
+                  onClick={toggleMic}
+                  title={speech.isListening ? "Остановить запись" : "Голосовой ввод"}
+                  className="absolute right-2 top-2 w-8 h-8 flex items-center justify-center rounded-full transition-colors"
+                  style={{
+                    backgroundColor: speech.isListening ? "rgba(248,113,113,0.2)" : "transparent",
+                    color: speech.isListening ? "var(--color-red)" : "var(--color-muted)",
+                  }}
+                >
+                  {speech.isListening ? (
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                      <rect x="6" y="6" width="12" height="12" rx="2" />
+                    </svg>
+                  ) : (
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z" />
+                      <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
+                      <line x1="12" y1="19" x2="12" y2="22" />
+                    </svg>
+                  )}
+                </button>
+              )}
+            </div>
+            {speech.error && (
+              <div className="text-xs text-[var(--color-red)]">{speech.error}</div>
+            )}
+            {speech.isListening && (
+              <div className="flex items-center gap-2 text-xs text-[var(--color-red)]">
+                <span className="inline-block w-2 h-2 rounded-full bg-[var(--color-red)] animate-pulse" />
+                Запись...
+              </div>
+            )}
             <div className="text-[0.625rem] text-[var(--color-muted)] text-center">
               Ctrl+Enter — проверить
             </div>

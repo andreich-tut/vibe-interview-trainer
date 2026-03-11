@@ -211,6 +211,37 @@
   - Slightly larger inline code padding
 - [x] TypeScript typecheck passes, production build succeeds
 
+### Phase 12: Design Overhaul — Full-Width Cards, Better Theory Readability ✅
+- [x] Layout.tsx: widened containers — `max-w-screen-2xl` (wide) / `max-w-4xl` (default), responsive side padding `px-6 lg:px-10`
+- [x] Practice page: all 3 phases (setup/playing/finished) use wide layout; content centered with `max-w-3xl mx-auto`
+- [x] Theory page: switched from flex to CSS grid `grid-cols-[280px_1fr]` for precise two-column alignment; increased gap to 40px; wider TOC sidebar (280px with more padding)
+- [x] TheoryCard: increased internal padding (px-6→px-8, py-6→py-8), title size bumped to text-xl, body text to 15px with 1.85 line-height
+- [x] CSS prose-dark improvements:
+  - h3: 1.125rem (was 1rem), 2.5rem top margin (was 2rem)
+  - h4: 0.875rem (was 0.8125rem), 1.5rem top margin (was 1.25rem)
+  - Paragraphs: 1.125rem bottom margin, 1.85 line-height
+  - Lists: colored markers via `li::marker { color: accent }`, more spacing between items
+  - Code blocks: 1.25rem vertical margin, brighter base text (#9999bb)
+- [x] TOC links: slightly larger (0.8125rem), more vertical padding for tap targets
+- [x] TypeScript typecheck passes
+
+### Phase 13: Voice Input for Practice (Web Speech API) ✅
+- [x] Created `app/hooks/useSpeechRecognition.ts` — encapsulates Web Speech API
+  - `lang: "ru-RU"`, `continuous: true`, `interimResults: true`
+  - Exposes: `isListening`, `transcript`, `interimText`, `isSupported`, `error`, `start`, `stop`, `reset`
+  - Handles browser compatibility (SpeechRecognition / webkitSpeechRecognition)
+  - Error messages in Russian (no permission, no mic, no speech, network)
+  - Cleanup on unmount, abort on re-start
+- [x] Modified `app/components/FlashCard.tsx` — integrated voice input
+  - Mic toggle button (SVG icons) positioned inside textarea (absolute top-right)
+  - Recording state: red pulsing dot indicator + "Запись..." label + red textarea border
+  - Transcript syncs to textarea in real-time (interim + final results)
+  - Preserves typed text before mic start as prefix (type → speak → type flow)
+  - Resets speech state on card change
+  - Hidden on unsupported browsers (Firefox)
+- [x] Created `VOICE_PLAN.md` — implementation plan document
+- [x] TypeScript typecheck passes, production build succeeds
+
 ## 🚀 Next Steps (Optional Enhancements)
 
 If you want to extend further:

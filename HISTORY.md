@@ -348,4 +348,32 @@ npm run build      # Production build
 - Created TheoryCard component: each theory section wrapped in a distinct card with header strip
 - Theory page: sticky sidebar TOC on desktop (with active section tracking via IntersectionObserver), collapsible TOC on mobile via `<details>/<summary>`
 - CSS: h3 left border accent, sub-section dividers, increased spacing for readability
-- TypeScript typecheck passes, production build succeeds
+- TypeScript typecheck passes, production build succeeds.
+
+---
+
+### Prompt 21
+> i want to improve app design. i think all cards should be spaced in all width of screen. also i think nav in theory blocks and info should be aligned in sub-cards. also theory should be more understandable and clearly. suggest variants to implement this tasks. maybe decompose it. make a plan (or plans) and implementation.
+
+**Result:** ✅ Success — Implemented design overhaul across 5 areas:
+- Layout.tsx: widened from `max-w-7xl`/`max-w-2xl` to `max-w-screen-2xl`/`max-w-4xl`, added responsive padding (`px-6 lg:px-10`)
+- Practice page: all 3 phases (setup/playing/finished) use wide layout with `max-w-3xl` centered content
+- Theory page: switched from flex to CSS grid (`grid-cols-[280px_1fr]`), wider TOC sidebar (280px), gap increased to 40px
+- TheoryCard: increased padding (px-6→px-8, py-6→py-8), title bumped to text-xl, body text 15px with 1.85 line-height
+- CSS prose-dark: larger h3 (1.125rem) and h4 (0.875rem), more spacing between sections, colored list markers, better code block contrast
+- TypeScript typecheck passes
+
+---
+
+## Session 5: Voice Input Feature (2026-03-11)
+
+### Prompt 22
+> how can i implement voice answers by user for tests? Lets try via web speech api. Make plan. Save it as md file and implement
+
+**Result:** ✅ Success — Implemented voice input for practice flashcards:
+- Created `VOICE_PLAN.md` — detailed implementation plan
+- Created `app/hooks/useSpeechRecognition.ts` — Web Speech API hook (ru-RU, continuous, interim results, error handling)
+- Modified `app/components/FlashCard.tsx` — mic toggle button in textarea, pulsing red recording indicator, voice transcript syncs to textarea, supports type-then-speak and vice versa
+- Browser support: Chrome, Edge, Safari 14.1+. Firefox gracefully hidden.
+- Zero new dependencies — browser-native API only.
+- TypeScript typecheck passes. Production build passes.
