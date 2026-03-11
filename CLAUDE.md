@@ -51,6 +51,14 @@ After every completed task or work session, update `PROGRESS.md` at the project 
 - Keep entries concise but specific enough to be useful in future sessions
 - This is a **mandatory step** — do not skip it even for small fixes
 
+### Screenshots — Save to `dev-screen/` Directory
+When running Playwright tests or creating screenshots for development:
+- Save all screenshots to `dev-screen/` folder at project root (not project root directly)
+- For each task/feature, create a subfolder with format: `{YYYY-MM-DD}__{task-short-name}`
+  - Example: `2026-03-11__ui-refactor/`, `2026-03-10__playwright-check/`
+- Group related screenshots (home page, theory page, etc.) in same folder
+- Use clear filenames: `home-full-page.png`, `theory-card-detail.png`, etc.
+
 ### Specialist Subagents
 
 The `.claude/agents/` directory contains subagent configurations for a structured frontend development workflow: planning-agent → project-setup-agent → design-system-agent → api-mock-agent → react-ui-builder / react-logic-builder → test-agent → reviewer-agent.

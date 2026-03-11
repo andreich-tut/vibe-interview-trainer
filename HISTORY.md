@@ -377,3 +377,18 @@ npm run build      # Production build
 - Browser support: Chrome, Edge, Safari 14.1+. Firefox gracefully hidden.
 - Zero new dependencies — browser-native API only.
 - TypeScript typecheck passes. Production build passes.
+
+---
+
+### Prompt 23
+> i see many screenshots in project. they are created during playwritechecks. add rule, that saves all screens in folder `dev-screen` at project root and for each task should be created a folder with name in format `{date}__{task short name}`. if you can - apply this rule for existing screens
+
+**Result:** ✅ Success — Screenshot organization system implemented:
+- Added rule to `CLAUDE.md`: all Playwright screenshots → `dev-screen/{YYYY-MM-DD}__{task-name}/`
+- Created directory structure with 4 task folders:
+  - `dev-screen/2026-03-10__home-ui-improvements/` (4 screens)
+  - `dev-screen/2026-03-10__theory-ui-improvements/` (9 screens)
+  - `dev-screen/2026-03-10__practice-ui-improvements/` (3 screens)
+  - `dev-screen/2026-03-10__playwright-check/` (1 screen)
+- Moved all 17 existing screenshots from project root to organized folders
+- Maintains chronological/task-based structure for future screenshots
