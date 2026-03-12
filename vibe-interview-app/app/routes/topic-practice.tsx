@@ -37,7 +37,7 @@ export function meta({ params }: Route.MetaArgs) {
 const MAX_REPLAY_ROUNDS = 2;
 
 export default function TopicPractice({ params }: Route.ComponentProps) {
-  const { lang } = useLanguage();
+  const { lang, t } = useLanguage();
   const { saveCardResult, incrementSessions } = useProgress();
 
   const [topicsData, setTopicsData] = useState<TopicsFile | null>(null);
@@ -65,7 +65,7 @@ export default function TopicPractice({ params }: Route.ComponentProps) {
       })
       .catch((err) => {
         console.error("Failed to load content:", err);
-        setError("Failed to load content. Please refresh the page.");
+        setError(t("common.failedToLoad"));
       })
       .finally(() => {
         setLoading(false);
@@ -80,7 +80,7 @@ export default function TopicPractice({ params }: Route.ComponentProps) {
   if (loading) {
     return (
       <Layout showBack>
-        <p className="text-center text-[var(--color-muted)]">Loading...</p>
+        <p className="text-center text-[var(--color-muted)]">{t("common.loading")}</p>
       </Layout>
     );
   }
@@ -88,7 +88,7 @@ export default function TopicPractice({ params }: Route.ComponentProps) {
   if (error || !topic || !cardsData) {
     return (
       <Layout showBack>
-        <p className="text-center text-red-500">{error || "Failed to load content"}</p>
+        <p className="text-center text-red-500">{error || t("common.failedToLoadContent")}</p>
       </Layout>
     );
   }
@@ -185,10 +185,10 @@ export default function TopicPractice({ params }: Route.ComponentProps) {
           <div className="text-center mb-8">
             <div className="text-4xl mb-3">{topic.icon}</div>
             <h1 className="font-display text-2xl font-bold text-[var(--color-accent)]">
-              {topic.title} — Практика
+              {topic.title} {t("practice.pageTitleSuffix")}
             </h1>
             <p className="text-xs text-[var(--color-muted)] mt-2">
-              {allCards.length} карточек · AI проверка ответов
+              {allCards.length} {t("practice.cardCounterLabel")}
             </p>
           </div>
 
@@ -207,7 +207,7 @@ export default function TopicPractice({ params }: Route.ComponentProps) {
                 color: apiKeyReady ? "white" : "var(--color-muted)",
               }}
             >
-              {apiKeyReady ? "Начать" : "Введите API ключ для начала"}
+              {apiKeyReady ? t("practice.start") : t("practice.enterApiKey")}
             </button>
           </div>
         </div>
@@ -230,11 +230,11 @@ export default function TopicPractice({ params }: Route.ComponentProps) {
           <div className="text-center mb-4">
             <div className="text-4xl mb-3">{topic.icon}</div>
             <h1 className="font-display text-2xl font-bold text-[var(--color-accent)]">
-              {topic.title} — Практика
+              {topic.title} {t("practice.pageTitleSuffix")}
             </h1>
             {round > 1 && (
               <div className="inline-block mt-2 text-[0.625rem] font-bold tracking-wide uppercase px-2 py-0.5 rounded bg-[rgba(245,158,11,0.15)] text-[#f59e0b]">
-                Раунд повтора {round - 1}/{MAX_REPLAY_ROUNDS}
+                {t("practice.replayRound")} {round - 1}/{MAX_REPLAY_ROUNDS}
               </div>
             )}
           </div>
@@ -252,7 +252,7 @@ export default function TopicPractice({ params }: Route.ComponentProps) {
               to={`/${topic.id}/theory`}
               className="text-xs text-[var(--color-muted)] hover:text-[var(--color-accent)] transition-colors"
             >
-              ← Вернуться к теории
+              {t("practice.backToTheory")}
             </Link>
           </div>
         </div>
@@ -289,47 +289,47 @@ export default function TopicPractice({ params }: Route.ComponentProps) {
         </div>
         <h2 className="font-display text-2xl font-bold text-[var(--color-accent2)]">
           {pct === 100
-            ? "Идеально!"
+            ? t("practice.results.perfect")
             : pct >= 80
-              ? "Отлично!"
+              ? t("practice.results.excellent")
               : pct >= 50
-                ? "Неплохо!"
-                : "Есть над чем поработать"}
+                ? t("practice.results.good")
+                : t("practice.results.needsWork")}
         </h2>
         <p className="text-sm text-[var(--color-text)]">
-          Тема: {topic.title} · {totalCards} карточек
+          {topic.title} · {totalCards}
         </p>
 
         <div className="grid grid-cols-5 gap-3 max-w-md mx-auto">
           <div className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg p-3 flex flex-col items-center">
             <StarRating score={3} size="sm" />
             <div className="text-xl font-bold text-[var(--color-green)] mt-1">{scoreCount[3]}</div>
-            <div className="text-[0.5rem] text-[var(--color-muted)] uppercase tracking-wider mt-1">Точно</div>
+            <div className="text-[0.5rem] text-[var(--color-muted)] uppercase tracking-wider mt-1">{t("practice.score.exact")}</div>
           </div>
           <div className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg p-3 flex flex-col items-center">
             <StarRating score={2} size="sm" />
             <div className="text-xl font-bold text-[var(--color-accent2)] mt-1">{scoreCount[2]}</div>
-            <div className="text-[0.5rem] text-[var(--color-muted)] uppercase tracking-wider mt-1">Примерно</div>
+            <div className="text-[0.5rem] text-[var(--color-muted)] uppercase tracking-wider mt-1">{t("practice.score.close")}</div>
           </div>
           <div className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg p-3 flex flex-col items-center">
             <StarRating score={1} size="sm" />
             <div className="text-xl font-bold text-[#f59e0b] mt-1">{scoreCount[1]}</div>
-            <div className="text-[0.5rem] text-[var(--color-muted)] uppercase tracking-wider mt-1">С трудом</div>
+            <div className="text-[0.5rem] text-[var(--color-muted)] uppercase tracking-wider mt-1">{t("practice.score.hard")}</div>
           </div>
           <div className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg p-3 flex flex-col items-center">
             <StarRating score={0} size="sm" />
             <div className="text-xl font-bold text-[var(--color-red)] mt-1">{scoreCount[0]}</div>
-            <div className="text-[0.5rem] text-[var(--color-muted)] uppercase tracking-wider mt-1">Не знал</div>
+            <div className="text-[0.5rem] text-[var(--color-muted)] uppercase tracking-wider mt-1">{t("practice.score.unknown")}</div>
           </div>
           <div className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg p-3 flex flex-col items-center">
             <div className="text-xl font-bold text-[var(--color-accent)]">{pct}%</div>
-            <div className="text-[0.5rem] text-[var(--color-muted)] uppercase tracking-wider mt-1">Итого</div>
+            <div className="text-[0.5rem] text-[var(--color-muted)] uppercase tracking-wider mt-1">{t("practice.score.total")}</div>
           </div>
         </div>
 
         {replayedCount > 0 && (
           <p className="text-xs text-[var(--color-muted)]">
-            Повторено карточек: {replayedCount}
+            {t("practice.replayed")} {replayedCount}
           </p>
         )}
 
@@ -339,26 +339,26 @@ export default function TopicPractice({ params }: Route.ComponentProps) {
               onClick={handleRetryWrong}
               className="py-2 px-6 bg-[rgba(245,158,11,0.15)] text-[#f59e0b] border border-[rgba(245,158,11,0.25)] rounded font-semibold hover:bg-[rgba(245,158,11,0.25)] transition text-sm"
             >
-              Повторить ошибки ({wrongRemaining})
+              {t("practice.repeatErrors")} ({wrongRemaining})
             </button>
           )}
           <button
             onClick={handleRestart}
             className="py-2 px-6 bg-[var(--color-accent)] text-white rounded font-semibold hover:bg-[#6a56f0] transition text-sm"
           >
-            Заново
+            {t("practice.restart")}
           </button>
           <Link
             to={`/${topic.id}/theory`}
             className="py-2 px-6 bg-[var(--color-surface)] border border-[var(--color-border)] text-[var(--color-text)] rounded font-semibold hover:border-[var(--color-accent)] transition text-sm"
           >
-            К теории
+            {t("practice.goToTheory")}
           </Link>
           <Link
             to="/"
             className="py-2 px-6 bg-[var(--color-surface)] border border-[var(--color-border)] text-[var(--color-text)] rounded font-semibold hover:border-[var(--color-accent)] transition text-sm"
           >
-            На главную
+            {t("practice.goHome")}
           </Link>
         </div>
       </div>

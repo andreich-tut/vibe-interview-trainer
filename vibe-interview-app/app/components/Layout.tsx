@@ -3,6 +3,7 @@ import { Link } from "react-router";
 import { useTheme } from "~/hooks/useTheme";
 import type { ThemeMode } from "~/hooks/useTheme";
 import { LanguageSwitcher } from "./LanguageSwitcher";
+import { useLanguage } from "~/contexts/LanguageContext";
 
 const SunIcon = () => (
   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -52,6 +53,7 @@ interface LayoutProps {
 
 export function Layout({ children, showBack = false, backTo = "/", wide = false }: LayoutProps) {
   const { theme, setTheme } = useTheme();
+  const { t } = useLanguage();
 
   return (
     <div className="min-h-screen bg-[var(--color-bg)]">
@@ -72,9 +74,9 @@ export function Layout({ children, showBack = false, backTo = "/", wide = false 
               onChange={(e) => setTheme(e.target.value as ThemeMode)}
               className="appearance-none bg-transparent border border-[var(--color-border)] rounded px-2 py-0.5 text-xs text-[var(--color-muted)] hover:text-[var(--color-text)] cursor-pointer transition focus:outline-none focus:border-[var(--color-accent)]"
             >
-              <option value="dark">Тёмная</option>
-              <option value="light">Светлая</option>
-              <option value="system">Системная</option>
+              <option value="dark">{t("layout.themeDark")}</option>
+              <option value="light">{t("layout.themeLight")}</option>
+              <option value="system">{t("layout.themeSystem")}</option>
             </select>
           </label>
           {showBack && (
@@ -82,7 +84,7 @@ export function Layout({ children, showBack = false, backTo = "/", wide = false 
               to={backTo}
               className="text-xs text-[var(--color-muted)] hover:text-[var(--color-text)] transition"
             >
-              ← Назад
+              {t("layout.goBack")}
             </Link>
           )}
         </div>

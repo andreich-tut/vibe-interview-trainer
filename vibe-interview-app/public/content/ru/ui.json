@@ -1,74 +1,127 @@
 {
-  "header": {
-    "appTitle": "React Prep",
-    "navAriaLabel": "Основная навигация"
-  },
-  "nav": {
-    "home": "Главная",
-    "theory": "Теория",
-    "cards": "Карточки",
-    "practice": "Практика",
-    "eventLoop": "Event Loop",
-    "voiceInput": "Голосовой ввод"
-  },
-  "buttons": {
-    "showAnswer": "Показать ответ",
-    "hideAnswer": "Скрыть ответ",
-    "nextCard": "Следующая →",
-    "prevCard": "← Предыдущая",
-    "startPractice": "Начать практику",
-    "tryAgain": "Попробовать снова",
-    "submit": "Отправить",
-    "close": "Закрыть",
-    "backToTopics": "← К темам",
-    "goBack": "← Назад",
-    "goToTopic": "Перейти к теме",
-    "clear": "Очистить"
-  },
-  "labels": {
-    "topic": "Тема",
-    "difficulty": "Сложность",
-    "question": "Вопрос",
-    "answer": "Ответ",
-    "keyPoints": "Ключевые моменты",
-    "progress": "Прогресс",
-    "score": "Результат",
-    "cardCounter": "Карточка {current} из {total}",
-    "articleCount": "{count} статей",
-    "cardCount": "{count} карточек"
-  },
-  "messages": {
+  "common": {
     "loading": "Загрузка...",
-    "errorGeneric": "Произошла ошибка",
-    "errorNotFound": "Страница не найдена",
-    "noResults": "Нет результатов",
-    "correct": "Правильно!",
-    "incorrect": "Неправильно",
-    "sessionComplete": "Вы ответили правильно на {score} из {total}",
-    "noTheoryArticles": "Нет статей по этой теме",
-    "noCards": "Нет карточек по этой теме",
-    "topicNotFound": "Тема не найдена",
-    "theoryNotFound": "Статья не найдена"
+    "failedToLoad": "Не удалось загрузить. Обновите страницу.",
+    "failedToLoadContent": "Не удалось загрузить контент",
+    "back": "← Назад"
+  },
+  "layout": {
+    "themeLabel": "Тема",
+    "themeDark": "Тёмная",
+    "themeLight": "Светлая",
+    "themeSystem": "Системная",
+    "goBack": "← Назад"
   },
   "home": {
     "pageTitle": "Подготовка к собеседованию",
-    "subtitle": "Выберите тему для изучения",
-    "topicsHeading": "Темы для изучения"
+    "subtitle": "Выбери тему и начни подготовку. Теория + практика по каждой теме.",
+    "eventLoopTitle": "Event Loop Тренажёр",
+    "eventLoopDesc": "Интерактивный тренажёр для отработки Event Loop в JavaScript.",
+    "eventLoopCta": "Начать тренировку →"
+  },
+  "theory": {
+    "pageTitleSuffix": "— Теория",
+    "sidebarTitle": "Содержание",
+    "sidebarTitleWithCount": "Содержание ({count} разделов)",
+    "readyToPractice": "Готов к практике?",
+    "startPractice": "Начать практику →"
+  },
+  "practice": {
+    "pageTitleSuffix": "— Практика",
+    "cardCounterLabel": "карточек · AI проверка ответов",
+    "enterApiKey": "Введите API ключ для начала",
+    "start": "Начать",
+    "results": {
+      "perfect": "Идеально!",
+      "excellent": "Отлично!",
+      "good": "Неплохо!",
+      "needsWork": "Есть над чем поработать"
+    },
+    "score": {
+      "exact": "Точно",
+      "close": "Примерно",
+      "hard": "С трудом",
+      "unknown": "Не знал",
+      "total": "Итого"
+    },
+    "replayed": "Повторено карточек:",
+    "replayRound": "Раунд повтора",
+    "repeatErrors": "Повторить ошибки",
+    "restart": "Заново",
+    "goToTheory": "К теории",
+    "goHome": "На главную",
+    "backToTheory": "← Вернуться к теории"
+  },
+  "topicCard": {
+    "theoryBtn": "Теория",
+    "practiceBtn": "Практика"
+  },
+  "apiKeyInput": {
+    "hint": "Для AI-проверки ответов введите",
+    "hintLink": "Groq API ключ",
+    "hintSuffix": "(бесплатно, без карты):",
+    "placeholder": "gsk_...",
+    "submit": "Сохранить",
+    "clear": "Удалить ключ"
+  },
+  "flashCard": {
+    "yourAnswer": "Твой ответ",
+    "correctAnswer": "Правильный ответ",
+    "keyPoints": "Ключевые пункты:",
+    "placeholder": "Напиши или надиктуй ответ...",
+    "listening": "Говорите...",
+    "submit": "Проверить",
+    "aiChecking": "Проверяю...",
+    "retryCheck": "Повторить проверку",
+    "skip": "Пропустить",
+    "next": "Далее",
+    "ctrlEnterHint": "Ctrl+Enter — проверить",
+    "enterHint": "Enter — далее",
+    "recording": "Запись...",
+    "exact": "Точно знал",
+    "close": "Примерно",
+    "hard": "С трудом",
+    "unknown": "Не знал",
+    "checkError": "Ошибка проверки",
+    "rateLimited": " (лимит запросов)",
+    "noApiKey": " (нет API ключа)"
   },
   "eventLoop": {
-    "pageTitle": "Event Loop Тренажёр",
-    "addTask": "Добавить задачу",
-    "macrotasks": "Макротаски",
-    "microtasks": "Микротаски",
-    "stepForward": "Шаг вперед",
-    "runAll": "Запустить всё",
-    "reset": "Сбросить"
+    "pageTitle": "Event Loop",
+    "subtitle": "Тренажёр",
+    "description": "Предугадай порядок вывода в консоль. Тренируй интуицию на реальных задачах по микро- и макрозадачам.",
+    "start": "Начать →",
+    "taskLabel": "ЗАДАЧА",
+    "consolePrompt": "Что выведет консоль? Напиши числа через запятую",
+    "placeholder": "например: 1, 2, 3",
+    "check": "проверить",
+    "skip": "пропустить",
+    "next": "следующая →",
+    "stepsLabel": "Выполнение по шагам:",
+    "correct": "Верно! ✅",
+    "incorrectPrefix": "Неверно. Правильный ответ: ",
+    "correctAnswerPrefix": "Правильный ответ: ",
+    "results": {
+      "learning": "Учимся!",
+      "learningSubtitle": "Event Loop непрост — просто продолжай практиковаться",
+      "perfect": "Идеально!",
+      "perfectSubtitle": "Ты знаешь Event Loop лучше V8",
+      "great": "Отлично!",
+      "greatSubtitle": "Осталось совсем чуть-чуть до совершенства",
+      "good": "Неплохо!",
+      "goodSubtitle": "Хорошая база, продолжай тренироваться"
+    },
+    "scoreCorrect": "правильно",
+    "scoreTotal": "всего",
+    "scoreAccuracy": "точность",
+    "playAgain": "Ещё раз",
+    "changeLevel": "Сменить уровень"
   },
-  "voiceInput": {
-    "pageTitle": "Голосовой ввод",
-    "notSupported": "Браузер не поддерживает голосовой ввод",
-    "startRecording": "Начать запись",
-    "stopRecording": "Остановить запись",
-    "transcriptLabel": "Голосовой текст:"
+  "errorBoundary": {
+    "oops": "Ой!",
+    "notFoundCode": "404",
+    "errorLabel": "Ошибка",
+    "unexpectedError": "Произошла непредвиденная ошибка.",
+    "pageNotFound": "Запрошенная страница не найдена."
   }
 }

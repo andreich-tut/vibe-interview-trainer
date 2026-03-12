@@ -23,7 +23,7 @@ export const loader = async ({ request }: Route.LoaderArgs) => {
     const url = new URL(`/content/${lang}/ui.json`, request.url);
     const res = await fetch(url.toString());
     if (res.ok) {
-      const dict = (await res.json()) as Record<string, string>;
+      const dict = (await res.json()) as Record<string, unknown>;
       translations = { ui: dict };
     }
   } catch {

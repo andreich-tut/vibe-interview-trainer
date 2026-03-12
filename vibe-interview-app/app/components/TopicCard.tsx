@@ -1,6 +1,7 @@
 import { Link } from "react-router";
 import { StarRating } from "~/components/StarRating";
 import type { Score } from "~/components/FlashCard";
+import { useLanguage } from "~/contexts/LanguageContext";
 
 interface TopicCardProps {
   id: string;
@@ -11,6 +12,7 @@ interface TopicCardProps {
 }
 
 export function TopicCard({ id, icon, title, description, progress }: TopicCardProps) {
+  const { t } = useLanguage();
   return (
     <div className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg p-5 hover:border-[var(--color-accent)] transition">
       <div className="text-3xl mb-3">{icon}</div>
@@ -40,13 +42,13 @@ export function TopicCard({ id, icon, title, description, progress }: TopicCardP
           to={`/${id}/theory`}
           className="flex-1 text-center py-2 px-3 bg-[var(--color-accent)] text-white rounded text-xs font-semibold hover:bg-[#6a56f0] transition"
         >
-          Теория
+          {t("topicCard.theoryBtn")}
         </Link>
         <Link
           to={`/${id}/practice`}
           className="flex-1 text-center py-2 px-3 border border-[var(--color-border)] text-[var(--color-text)] rounded text-xs font-semibold hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] transition"
         >
-          Практика
+          {t("topicCard.practiceBtn")}
         </Link>
       </div>
     </div>

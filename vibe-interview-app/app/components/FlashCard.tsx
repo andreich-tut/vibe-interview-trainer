@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import { checkAnswer, type LLMResult } from "~/lib/llm";
 import { useSpeechRecognition } from "~/hooks/useSpeechRecognition";
 import { StarRating } from "~/components/StarRating";
+import { useLanguage } from "~/contexts/LanguageContext";
 
 export interface Card {
   id: string;
@@ -20,14 +21,21 @@ interface FlashCardProps {
   total: number;
 }
 
-const SCORE_STYLES: Record<Score, { label: string; color: string; bg: string; border: string }> = {
-  3: { label: "Точно знал", color: "var(--color-green)", bg: "rgba(52,211,153,0.12)", border: "rgba(52,211,153,0.25)" },
-  2: { label: "Примерно", color: "var(--color-accent2)", bg: "rgba(34,211,238,0.12)", border: "rgba(34,211,238,0.25)" },
-  1: { label: "С трудом", color: "#f59e0b", bg: "rgba(245,158,11,0.12)", border: "rgba(245,158,11,0.25)" },
-  0: { label: "Не знал", color: "var(--color-red)", bg: "rgba(248,113,113,0.12)", border: "rgba(248,113,113,0.25)" },
+const SCORE_STYLES: Record<Score, { color: string; bg: string; border: string }> = {
+  3: { color: "var(--color-green)", bg: "rgba(52,211,153,0.12)", border: "rgba(52,211,153,0.25)" },
+  2: { color: "var(--color-accent2)", bg: "rgba(34,211,238,0.12)", border: "rgba(34,211,238,0.25)" },
+  1: { color: "#f59e0b", bg: "rgba(245,158,11,0.12)", border: "rgba(245,158,11,0.25)" },
+  0: { color: "var(--color-red)", bg: "rgba(248,113,113,0.12)", border: "rgba(248,113,113,0.25)" },
 };
 
 export function FlashCard({ card, onScore, current, total }: FlashCardProps) {
+  const { t } = useLanguage();
+  const scoreLabels: Record<Score, string> = {
+    3: t("flashCard.exact"),
+    2: t("flashCard.close"),
+    1: t("flashCard.hard"),
+    0: t("flashCard.unknown"),
+  };
   const [userAnswer, setUserAnswer] = useState("");
   const [aiResult, setAiResult] = useState<LLMResult | null>(null);
   const [aiLoading, setAiLoading] = useState(false);
@@ -162,7 +170,7 @@ export function FlashCard({ card, onScore, current, total }: FlashCardProps) {
                 ref={textareaRef}
                 value={userAnswer}
                 onChange={(e) => setUserAnswer(e.target.value)}
-                placeholder={speech.isListening ? "Говорите..." : "Напиши или надиктуй ответ..."}
+                placeholder={speech.isListening ? t("flashCard.listening") : t("flashCard.placeholder")}
                 rows={4}
                 className="w-full px-4 py-3 pr-12 bg-[var(--color-bg)] border rounded-lg text-sm text-[var(--color-text)] placeholder:text-[var(--color-muted)] focus:border-[var(--color-accent)] focus:outline-none resize-y transition-colors"
                 style={{
@@ -179,7 +187,7 @@ export function FlashCard({ card, onScore, current, total }: FlashCardProps) {
                 <button
                   type="button"
                   onClick={toggleMic}
-                  title={speech.isListening ? "Остановить запись" : "Голосовой ввод"}
+                  title={speech.isListening ? t("flashCard.recording") : t("flashCard.ctrlEnterHint")}
                   className="absolute right-2 top-2 w-8 h-8 flex items-center justify-center rounded-full transition-colors"
                   style={{
                     backgroundColor: speech.isListening ? "rgba(248,113,113,0.2)" : "transparent",
@@ -206,11 +214,11 @@ export function FlashCard({ card, onScore, current, total }: FlashCardProps) {
             {speech.isListening && (
               <div className="flex items-center gap-2 text-xs text-[var(--color-red)]">
                 <span className="inline-block w-2 h-2 rounded-full bg-[var(--color-red)] animate-pulse" />
-                Запись...
+                {t("flashCard.recording")}
               </div>
             )}
             <div className="text-[0.625rem] text-[var(--color-muted)] text-center">
-              Ctrl+Enter — проверить
+              {t("flashCard.ctrlEnterHint")}
             </div>
           </div>
         ) : (
@@ -220,7 +228,7 @@ export function FlashCard({ card, onScore, current, total }: FlashCardProps) {
             {userAnswer.trim() && (
               <div className="px-4 py-3 bg-[var(--color-bg)] border border-[var(--color-border)] rounded-lg">
                 <div className="text-[0.625rem] font-bold uppercase tracking-wider text-[var(--color-muted)] mb-1.5">
-                  Твой ответ
+                  {t("flashCard.yourAnswer")}
                 </div>
                 <div className="text-sm text-[var(--color-text)] whitespace-pre-line">
                   {userAnswer}
@@ -237,7 +245,7 @@ export function FlashCard({ card, onScore, current, total }: FlashCardProps) {
               }}
             >
               <div className="text-[0.625rem] font-bold uppercase tracking-wider text-[var(--color-green)] mb-1.5">
-                Правильный ответ
+                {t("flashCard.correctAnswer")}
               </div>
               <div className="text-sm text-[var(--color-text)] leading-relaxed whitespace-pre-line">
                 {card.answer}
@@ -247,7 +255,7 @@ export function FlashCard({ card, onScore, current, total }: FlashCardProps) {
                 ((aiResult.matchedPoints.length > 0) || (aiResult.missedPoints.length > 0)) && (
                 <div className="mt-3 pt-3 border-t border-[rgba(115,176,10,0.15)]">
                   <div className="text-[0.625rem] font-bold uppercase tracking-wider text-[var(--color-muted)] mb-1.5">
-                    Ключевые пункты:
+                    {t("flashCard.keyPoints")}
                   </div>
                   <ul className="space-y-1 text-xs">
                     {aiResult.matchedPoints.map((point, i) => (
@@ -271,7 +279,7 @@ export function FlashCard({ card, onScore, current, total }: FlashCardProps) {
             {aiLoading && (
               <div className="text-xs text-[var(--color-muted)] flex items-center gap-2">
                 <span className="inline-block w-3 h-3 border-2 border-[var(--color-accent)] border-t-transparent rounded-full animate-spin" />
-                Проверяю...
+                {t("flashCard.aiChecking")}
               </div>
             )}
             {aiResult && style && (
@@ -282,7 +290,7 @@ export function FlashCard({ card, onScore, current, total }: FlashCardProps) {
                 <div className="flex items-center gap-2 mb-1.5">
                   <StarRating score={aiResult.score} size="md" />
                   <span className="text-sm font-semibold" style={{ color: style.color }}>
-                    {style.label}
+                    {scoreLabels[aiResult.score]}
                   </span>
                 </div>
                 <div className="text-xs text-[var(--color-text)] opacity-80 leading-relaxed">
@@ -292,7 +300,7 @@ export function FlashCard({ card, onScore, current, total }: FlashCardProps) {
             )}
             {aiError && (
               <div className="text-xs text-[var(--color-red)]">
-                Ошибка проверки{aiError === "RATE_LIMITED" ? " (лимит запросов)" : aiError === "NO_API_KEY" ? " (нет API ключа)" : ""}
+                {t("flashCard.checkError")}{aiError === "RATE_LIMITED" ? t("flashCard.rateLimited") : aiError === "NO_API_KEY" ? t("flashCard.noApiKey") : ""}
               </div>
             )}
           </div>
@@ -306,10 +314,10 @@ export function FlashCard({ card, onScore, current, total }: FlashCardProps) {
             onClick={handleNext}
             className="w-full py-2.5 px-4 bg-[var(--color-accent)] text-white text-sm font-semibold rounded hover:bg-[#6a56f0] transition"
           >
-            Далее
+            {t("flashCard.next")}
           </button>
           <div className="text-[0.625rem] text-[var(--color-muted)] text-center">
-            Enter — далее
+            {t("flashCard.enterHint")}
           </div>
         </div>
       ) : aiError ? (
@@ -318,13 +326,13 @@ export function FlashCard({ card, onScore, current, total }: FlashCardProps) {
             onClick={handleCheck}
             className="flex-1 py-2.5 px-4 bg-[var(--color-accent)] text-white text-sm font-semibold rounded hover:bg-[#6a56f0] transition"
           >
-            Повторить проверку
+            {t("flashCard.retryCheck")}
           </button>
           <button
             onClick={handleSkip}
             className="py-2.5 px-4 bg-[var(--color-surface)] border border-[var(--color-border)] text-[var(--color-muted)] text-sm font-semibold rounded hover:border-[var(--color-accent)] transition"
           >
-            Пропустить
+            {t("flashCard.skip")}
           </button>
         </div>
       ) : (
@@ -337,7 +345,7 @@ export function FlashCard({ card, onScore, current, total }: FlashCardProps) {
             color: userAnswer.trim() ? "white" : "var(--color-muted)",
           }}
         >
-          {aiLoading ? "Проверяю..." : "Проверить"}
+          {aiLoading ? t("flashCard.aiChecking") : t("flashCard.submit")}
         </button>
       )}
     </div>

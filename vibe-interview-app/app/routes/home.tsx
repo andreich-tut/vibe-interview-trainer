@@ -15,7 +15,7 @@ export function meta() {
 
 export default function Home() {
   const { getTopicProgress } = useProgress();
-  const { lang } = useLanguage();
+  const { lang, t } = useLanguage();
   const [topicsData, setTopicsData] = useState<TopicsFile | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -28,18 +28,18 @@ export default function Home() {
       })
       .catch((err) => {
         console.error("Failed to load topics:", err);
-        setError("Failed to load topics. Please refresh the page.");
+        setError(t("common.failedToLoad"));
       })
       .finally(() => {
         setLoading(false);
       });
-  }, []);
+  }, [lang]); // eslint-disable-line react-hooks/exhaustive-deps
 
   if (loading) {
     return (
       <Layout wide>
         <div className="text-center py-12">
-          <p className="text-[var(--color-muted)]">Loading...</p>
+          <p className="text-[var(--color-muted)]">{t("common.loading")}</p>
         </div>
       </Layout>
     );
@@ -49,7 +49,7 @@ export default function Home() {
     return (
       <Layout wide>
         <div className="text-center py-12">
-          <p className="text-red-500">{error || "Failed to load content"}</p>
+          <p className="text-red-500">{error || t("common.failedToLoadContent")}</p>
         </div>
       </Layout>
     );
@@ -61,10 +61,10 @@ export default function Home() {
     <Layout wide>
       <div className="text-center mb-12">
         <h1 className="font-display text-3xl font-black mb-3 bg-gradient-to-r from-[var(--color-accent)] to-[var(--color-accent2)] bg-clip-text text-transparent">
-          Подготовка к собеседованию
+          {t("home.pageTitle")}
         </h1>
         <p className="text-sm text-[var(--color-muted)]">
-          Выбери тему и начни подготовку. Теория + практика по каждой теме.
+          {t("home.subtitle")}
         </p>
       </div>
 
@@ -88,15 +88,15 @@ export default function Home() {
       {/* Event Loop Trainer */}
       <div className="bg-gradient-to-br from-[var(--color-surface)] to-[var(--color-surface2)] border border-[var(--color-accent)] border-opacity-30 rounded-lg p-6 text-center">
         <div className="text-4xl mb-3">🔄</div>
-        <h3 className="font-display font-bold text-lg mb-2">Event Loop Тренажёр</h3>
+        <h3 className="font-display font-bold text-lg mb-2">{t("home.eventLoopTitle")}</h3>
         <p className="text-xs text-[var(--color-muted)] mb-4">
-          Интерактивный тренажёр для отработки Event Loop в JavaScript.
+          {t("home.eventLoopDesc")}
         </p>
         <Link
           to="/event-loop"
           className="inline-block py-2 px-6 bg-[var(--color-accent2)] text-white rounded text-sm font-semibold hover:bg-cyan-500 transition"
         >
-          Начать тренировку →
+          {t("home.eventLoopCta")}
         </Link>
       </div>
     </Layout>

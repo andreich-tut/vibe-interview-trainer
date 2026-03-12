@@ -1,81 +1,127 @@
 {
-  "header": {
-    "title": "Interview Prep",
-    "subtitle": "React & Frontend"
-  },
-  "navigation": {
-    "home": "Home",
-    "theory": "Theory",
-    "practice": "Practice",
-    "progress": "Progress"
-  },
-  "home": {
-    "heroTitle": "Prepare for Your Technical Interview",
-    "heroSubtitle": "Structured knowledge base for React and Frontend developer positions",
-    "startButton": "Start Learning",
-    "topicsTitle": "Topics",
-    "topicsSubtitle": "Select a topic to study",
-    "statsTitle": "Your Progress",
-    "totalTopics": "Topics",
-    "totalCards": "Theory Cards",
-    "completedCards": "Completed"
-  },
-  "theory": {
-    "pageTitle": "Theory",
-    "pageSubtitle": "Core concepts for technical interviews",
-    "backButton": "Back to Topics",
-    "level": {
-      "junior": "Junior",
-      "middle": "Middle",
-      "senior": "Senior"
-    },
-    "tags": "Tags",
-    "readTime": "min read",
-    "noContent": "Content not available yet"
-  },
-  "practice": {
-    "pageTitle": "Practice",
-    "pageSubtitle": "Interview questions with detailed answers",
-    "showAnswer": "Show Answer",
-    "hideAnswer": "Hide Answer",
-    "nextQuestion": "Next Question",
-    "prevQuestion": "Previous Question",
-    "questionCounter": "Question {current} of {total}",
-    "difficulty": {
-      "easy": "Easy",
-      "medium": "Medium",
-      "hard": "Hard"
-    }
-  },
   "common": {
     "loading": "Loading...",
-    "error": "Something went wrong",
-    "retry": "Try Again",
-    "close": "Close",
-    "open": "Open",
-    "back": "Back",
-    "next": "Next",
-    "previous": "Previous",
-    "search": "Search",
-    "searchPlaceholder": "Search topics...",
-    "filter": "Filter",
-    "filterAll": "All",
-    "language": "Language",
-    "theme": "Theme",
+    "failedToLoad": "Failed to load. Please refresh the page.",
+    "failedToLoadContent": "Failed to load content",
+    "back": "← Back"
+  },
+  "layout": {
+    "themeLabel": "Theme",
     "themeDark": "Dark",
-    "themeLight": "Light"
+    "themeLight": "Light",
+    "themeSystem": "System",
+    "goBack": "← Back"
   },
-  "topics": {
-    "javascript": "JavaScript",
-    "react": "React",
-    "typescript": "TypeScript",
-    "css": "CSS",
-    "nodejs": "Node.js",
-    "testing": "Testing",
-    "algorithms": "Algorithms"
+  "home": {
+    "pageTitle": "Interview Prep",
+    "subtitle": "Choose a topic and start preparing. Theory + practice for each topic.",
+    "eventLoopTitle": "Event Loop Trainer",
+    "eventLoopDesc": "Interactive trainer to master JavaScript's Event Loop.",
+    "eventLoopCta": "Start Training →"
   },
-  "footer": {
-    "madeWith": "Made for interview preparation",
-    "version": "Version"
+  "theory": {
+    "pageTitleSuffix": "— Theory",
+    "sidebarTitle": "Contents",
+    "sidebarTitleWithCount": "Contents ({count} sections)",
+    "readyToPractice": "Ready to practice?",
+    "startPractice": "Start Practice →"
+  },
+  "practice": {
+    "pageTitleSuffix": "— Practice",
+    "cardCounterLabel": "cards · AI answer checking",
+    "enterApiKey": "Enter API key to start",
+    "start": "Start",
+    "results": {
+      "perfect": "Perfect!",
+      "excellent": "Excellent!",
+      "good": "Good job!",
+      "needsWork": "Needs more work"
+    },
+    "score": {
+      "exact": "Exact",
+      "close": "Close",
+      "hard": "Hard",
+      "unknown": "Unknown",
+      "total": "Total"
+    },
+    "replayed": "Cards replayed:",
+    "replayRound": "Replay round",
+    "repeatErrors": "Repeat errors",
+    "restart": "Restart",
+    "goToTheory": "To Theory",
+    "goHome": "Home",
+    "backToTheory": "← Back to Theory"
+  },
+  "topicCard": {
+    "theoryBtn": "Theory",
+    "practiceBtn": "Practice"
+  },
+  "apiKeyInput": {
+    "hint": "For AI answer checking, enter your",
+    "hintLink": "Groq API key",
+    "hintSuffix": "(free, no card required):",
+    "placeholder": "gsk_...",
+    "submit": "Save",
+    "clear": "Remove key"
+  },
+  "flashCard": {
+    "yourAnswer": "Your answer",
+    "correctAnswer": "Correct answer",
+    "keyPoints": "Key points:",
+    "placeholder": "Type or dictate your answer...",
+    "listening": "Speak now...",
+    "submit": "Check",
+    "aiChecking": "Checking...",
+    "retryCheck": "Retry check",
+    "skip": "Skip",
+    "next": "Next",
+    "ctrlEnterHint": "Ctrl+Enter — check",
+    "enterHint": "Enter — next",
+    "recording": "Recording...",
+    "exact": "Knew it",
+    "close": "Close enough",
+    "hard": "With difficulty",
+    "unknown": "Didn't know",
+    "checkError": "Check failed",
+    "rateLimited": " (rate limited)",
+    "noApiKey": " (no API key)"
+  },
+  "eventLoop": {
+    "pageTitle": "Event Loop",
+    "subtitle": "Trainer",
+    "description": "Predict the console output order. Train your intuition on real micro- and macrotask problems.",
+    "start": "Start →",
+    "taskLabel": "TASK",
+    "consolePrompt": "What does the console output? Write numbers separated by commas",
+    "placeholder": "e.g.: 1, 2, 3",
+    "check": "check",
+    "skip": "skip",
+    "next": "next →",
+    "stepsLabel": "Step-by-step execution:",
+    "correct": "Correct! ✅",
+    "incorrectPrefix": "Wrong. Correct answer: ",
+    "correctAnswerPrefix": "Correct answer: ",
+    "results": {
+      "learning": "Keep learning!",
+      "learningSubtitle": "Event Loop is tricky — just keep practicing",
+      "perfect": "Perfect!",
+      "perfectSubtitle": "You know the Event Loop better than V8",
+      "great": "Excellent!",
+      "greatSubtitle": "Just a bit more to go for perfection",
+      "good": "Good job!",
+      "goodSubtitle": "Good foundation, keep practicing"
+    },
+    "scoreCorrect": "correct",
+    "scoreTotal": "total",
+    "scoreAccuracy": "accuracy",
+    "playAgain": "Play again",
+    "changeLevel": "Change level"
+  },
+  "errorBoundary": {
+    "oops": "Oops!",
+    "notFoundCode": "404",
+    "errorLabel": "Error",
+    "unexpectedError": "An unexpected error occurred.",
+    "pageNotFound": "The requested page could not be found."
   }
 }

@@ -87,7 +87,7 @@ function TocLink({
 }
 
 export default function TopicTheory({ params }: Route.ComponentProps) {
-  const { lang } = useLanguage();
+  const { lang, t } = useLanguage();
   const [topicsData, setTopicsData] = useState<TopicsFile | null>(null);
   const [theoryData, setTheoryData] = useState<TheoryFile | null>(null);
   const [loading, setLoading] = useState(true);
@@ -107,7 +107,7 @@ export default function TopicTheory({ params }: Route.ComponentProps) {
       })
       .catch((err) => {
         console.error("Failed to load content:", err);
-        setError("Failed to load content. Please refresh the page.");
+        setError(t("common.failedToLoad"));
       })
       .finally(() => {
         setLoading(false);
@@ -144,7 +144,7 @@ export default function TopicTheory({ params }: Route.ComponentProps) {
   if (loading) {
     return (
       <Layout showBack>
-        <p className="text-center text-(--color-muted)">Loading...</p>
+        <p className="text-center text-(--color-muted)">{t("common.loading")}</p>
       </Layout>
     );
   }
@@ -152,7 +152,7 @@ export default function TopicTheory({ params }: Route.ComponentProps) {
   if (error || !topic || !theoryData) {
     return (
       <Layout showBack>
-        <p className="text-center text-red-500">{error || "Failed to load content"}</p>
+        <p className="text-center text-red-500">{error || t("common.failedToLoadContent")}</p>
       </Layout>
     );
   }
@@ -168,7 +168,7 @@ export default function TopicTheory({ params }: Route.ComponentProps) {
         <div className="text-center mb-8">
           <div className="text-4xl mb-3">{topic.icon}</div>
           <h1 className="font-display text-2xl font-bold text-[var(--color-accent)] mb-2">
-            {topic.title} — Теория
+            {topic.title} {t("theory.pageTitleSuffix")}
           </h1>
         </div>
 
@@ -179,7 +179,7 @@ export default function TopicTheory({ params }: Route.ComponentProps) {
             <aside className="hidden lg:block lg:sticky lg:top-8 lg:self-start">
               <nav className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-xl p-6">
                 <div className="text-[0.625rem] font-bold text-[var(--color-muted)] uppercase tracking-widest mb-4">
-                  Содержание
+                  {t("theory.sidebarTitle")}
                 </div>
                 <ol className="space-y-2 list-none p-0 m-0">
                   {tocItems}
@@ -194,7 +194,7 @@ export default function TopicTheory({ params }: Route.ComponentProps) {
             {theory.length > 2 && (
               <details className="lg:hidden bg-[var(--color-surface)] border border-[var(--color-border)] rounded-xl">
                 <summary className="px-5 py-4 cursor-pointer text-sm font-semibold text-[var(--color-accent)]">
-                  Содержание ({theory.length} разделов)
+                  {t("theory.sidebarTitle")} ({theory.length})
                 </summary>
                 <ol className="space-y-1.5 list-none p-0 m-0 px-5 pb-4">
                   {tocItems}
@@ -220,13 +220,13 @@ export default function TopicTheory({ params }: Route.ComponentProps) {
       <div className="fixed bottom-0 left-0 right-0 bg-[var(--color-bg)]/95 backdrop-blur-sm border-t border-[var(--color-border)] py-3 px-5 z-50">
         <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
           <span className="text-xs text-[var(--color-muted)] hidden sm:block">
-            Готов к практике?
+            {t("theory.readyToPractice")}
           </span>
           <Link
             to={`/${topic.id}/practice`}
             className="inline-block py-2 px-6 bg-[var(--color-accent2)] text-white text-sm font-semibold rounded hover:bg-[#3ab0db] transition ml-auto"
           >
-            Начать практику →
+            {t("theory.startPractice")}
           </Link>
         </div>
       </div>

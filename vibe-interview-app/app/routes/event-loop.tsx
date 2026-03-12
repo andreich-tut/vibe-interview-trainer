@@ -3,18 +3,21 @@ import { Layout } from "~/components/Layout";
 import { CodeBlock } from "~/components/CodeBlock";
 import { StepVisualizer } from "~/components/StepVisualizer";
 import { loadContent, type EventLoopFile } from "~/lib/contentLoader";
+import { useLanguage } from "~/contexts/LanguageContext";
 
 type Screen = "splash" | "quiz" | "results";
 type Level = "easy" | "medium" | "hard";
 
 export function meta() {
   return [
-    { title: "Event Loop Тренажёр" },
-    { name: "description", content: "Интерактивный тренер для отработки Event Loop" },
+    { title: "Event Loop Trainer" },
+    { name: "description", content: "Interactive Event Loop trainer" },
   ];
 }
 
 export default function EventLoop() {
+  const { lang, t } = useLanguage();
+
   const [eventLoopData, setEventLoopData] = useState<EventLoopFile | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -28,21 +31,24 @@ export default function EventLoop() {
   const [userAnswer, setUserAnswer] = useState("");
   const [feedback, setFeedback] = useState<{ isCorrect: boolean; message: string } | null>(null);
 
-  // Load event-loop data
+  // Load event-loop data — re-runs when language changes
   useEffect(() => {
-    loadContent("ru", "event-loop")
+    setLoading(true);
+    setError(null);
+    setEventLoopData(null);
+    loadContent(lang, "event-loop")
       .then((data) => {
         setEventLoopData(data);
         setError(null);
       })
       .catch((err) => {
         console.error("Failed to load event-loop data:", err);
-        setError("Failed to load event-loop data. Please refresh the page.");
+        setError(t("common.failedToLoad"));
       })
       .finally(() => {
         setLoading(false);
       });
-  }, []);
+  }, [lang]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const questions = useMemo(() => {
     if (!eventLoopData) return [];
@@ -86,7 +92,9 @@ export default function EventLoop() {
     setAnswered(true);
     setFeedback({
       isCorrect,
-      message: isCorrect ? "Верно! ✅" : `Неверно. Правильный ответ: ${currentQuestion.answer}`,
+      message: isCorrect
+        ? t("eventLoop.correct")
+        : `${t("eventLoop.incorrectPrefix")}${currentQuestion.answer}`,
     });
   };
 
@@ -113,7 +121,7 @@ export default function EventLoop() {
     return (
       <Layout showBack>
         <div className="text-center py-12">
-          <p className="text-(--color-muted)">Loading...</p>
+          <p className="text-(--color-muted)">{t("common.loading")}</p>
         </div>
       </Layout>
     );
@@ -123,7 +131,7 @@ export default function EventLoop() {
     return (
       <Layout showBack>
         <div className="text-center py-12">
-          <p className="text-red-500">{error || "Failed to load event-loop data"}</p>
+          <p className="text-red-500">{error || t("common.failedToLoadContent")}</p>
         </div>
       </Layout>
     );
@@ -136,14 +144,13 @@ export default function EventLoop() {
           <div className="text-5xl mb-4">🔄</div>
           <div>
             <h1 className="font-display text-3xl font-black mb-3 bg-gradient-to-r from-[var(--color-accent)] to-[var(--color-accent2)] bg-clip-text text-transparent">
-              Event Loop
+              {t("eventLoop.pageTitle")}
             </h1>
             <h2 className="font-display text-2xl font-black mb-4 text-[var(--color-accent2)]">
-              Тренажёр
+              {t("eventLoop.subtitle")}
             </h2>
             <p className="text-sm text-[var(--color-muted)] max-w-sm mx-auto mb-8">
-              Предугадай порядок вывода в консоль. Тренируй интуицию на реальных задачах по микро- и
-              макрозадачам.
+              {t("eventLoop.description")}
             </p>
           </div>
 
@@ -173,7 +180,7 @@ export default function EventLoop() {
             onClick={() => handleStartGame(level)}
             className="inline-block py-2 px-8 bg-[var(--color-accent)] text-white font-semibold rounded hover:bg-opacity-90 transition"
           >
-            Начать →
+            {t("eventLoop.start")}
           </button>
         </div>
       </Layout>
@@ -197,7 +204,7 @@ export default function EventLoop() {
           {/* Question header */}
           <div className="flex items-center justify-between text-xs">
             <div className="text-[var(--color-muted)]">
-              ЗАДАЧА {currentIndex + 1} / {questions.length}
+              {t("eventLoop.taskLabel")} {currentIndex + 1} / {questions.length}
             </div>
             <div
               className={`px-2 py-1 rounded text-xs font-bold ${
@@ -222,7 +229,7 @@ export default function EventLoop() {
           {/* Input */}
           <div className="space-y-2">
             <label className="text-xs text-[var(--color-muted)] block">
-              Что выведет консоль? Напиши числа через запятую
+              {t("eventLoop.consolePrompt")}
             </label>
             <input
               type="text"
@@ -232,7 +239,7 @@ export default function EventLoop() {
                 if (e.key === "Enter" && !answered) handleCheckAnswer();
               }}
               disabled={answered}
-              placeholder="например: 1, 2, 3"
+              placeholder={t("eventLoop.placeholder")}
               className={`w-full py-2 px-3 bg-[var(--color-surface)] border rounded text-sm ${
                 answered
                   ? feedback?.isCorrect
@@ -252,7 +259,7 @@ export default function EventLoop() {
                   onClick={handleCheckAnswer}
                   className="flex-1 py-2 px-4 bg-[var(--color-accent)] text-white text-sm font-semibold rounded hover:bg-opacity-90 transition"
                 >
-                  проверить
+                  {t("eventLoop.check")}
                 </button>
                 <button
                   onClick={() => {
@@ -260,12 +267,12 @@ export default function EventLoop() {
                     setAnswered(true);
                     setFeedback({
                       isCorrect: false,
-                      message: `Правильный ответ: ${currentQuestion.answer}`,
+                      message: `${t("eventLoop.correctAnswerPrefix")}${currentQuestion.answer}`,
                     });
                   }}
                   className="flex-1 py-2 px-4 border border-[var(--color-border)] text-[var(--color-muted)] text-sm font-semibold rounded hover:border-[var(--color-accent)] transition"
                 >
-                  пропустить
+                  {t("eventLoop.skip")}
                 </button>
               </>
             ) : (
@@ -273,7 +280,7 @@ export default function EventLoop() {
                 onClick={handleNextQuestion}
                 className="flex-1 py-2 px-4 bg-[var(--color-accent2)] text-white text-sm font-semibold rounded hover:bg-opacity-90 transition"
               >
-                следующая →
+                {t("eventLoop.next")}
               </button>
             )}
           </div>
@@ -301,7 +308,7 @@ export default function EventLoop() {
 
               {/* Steps */}
               <div className="mt-4 pt-4 border-t border-current border-opacity-20">
-                <div className="text-xs font-bold mb-3 opacity-70">Выполнение по шагам:</div>
+                <div className="text-xs font-bold mb-3 opacity-70">{t("eventLoop.stepsLabel")}</div>
                 <StepVisualizer steps={currentQuestion.steps} />
               </div>
             </div>
@@ -314,21 +321,21 @@ export default function EventLoop() {
   // Results screen
   const percentage = total > 0 ? Math.round((correct / total) * 100) : 0;
   let emoji = "📚";
-  let title = "Учимся!";
-  let subtitle = "Event Loop непрост — просто продолжай практиковаться";
+  let title = t("eventLoop.results.learning");
+  let subtitle = t("eventLoop.results.learningSubtitle");
 
   if (percentage >= 100) {
     emoji = "🏆";
-    title = "Идеально!";
-    subtitle = "Ты знаешь Event Loop лучше V8";
+    title = t("eventLoop.results.perfect");
+    subtitle = t("eventLoop.results.perfectSubtitle");
   } else if (percentage >= 80) {
     emoji = "🥇";
-    title = "Отлично!";
-    subtitle = "Осталось совсем чуть-чуть до совершенства";
+    title = t("eventLoop.results.great");
+    subtitle = t("eventLoop.results.greatSubtitle");
   } else if (percentage >= 60) {
     emoji = "🥈";
-    title = "Неплохо!";
-    subtitle = "Хорошая база, продолжай тренироваться";
+    title = t("eventLoop.results.good");
+    subtitle = t("eventLoop.results.goodSubtitle");
   }
 
   return (
@@ -346,15 +353,15 @@ export default function EventLoop() {
         <div className="grid grid-cols-3 gap-3 max-w-sm mx-auto">
           <div className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg p-4">
             <div className="font-black text-2xl text-[var(--color-green)] mb-1">{correct}</div>
-            <div className="text-xs text-[var(--color-muted)]">правильно</div>
+            <div className="text-xs text-[var(--color-muted)]">{t("eventLoop.scoreCorrect")}</div>
           </div>
           <div className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg p-4">
             <div className="font-black text-2xl text-[var(--color-accent2)] mb-1">{total}</div>
-            <div className="text-xs text-[var(--color-muted)]">всего</div>
+            <div className="text-xs text-[var(--color-muted)]">{t("eventLoop.scoreTotal")}</div>
           </div>
           <div className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg p-4">
             <div className="font-black text-2xl text-[var(--color-accent)] mb-1">{percentage}%</div>
-            <div className="text-xs text-[var(--color-muted)]">точность</div>
+            <div className="text-xs text-[var(--color-muted)]">{t("eventLoop.scoreAccuracy")}</div>
           </div>
         </div>
 
@@ -364,13 +371,13 @@ export default function EventLoop() {
             onClick={handleRestart}
             className="flex-1 py-2 px-4 bg-[var(--color-accent)] text-white font-semibold rounded hover:bg-opacity-90 transition"
           >
-            Ещё раз
+            {t("eventLoop.playAgain")}
           </button>
           <button
             onClick={handleBackToSplash}
             className="flex-1 py-2 px-4 border border-[var(--color-border)] text-[var(--color-text)] font-semibold rounded hover:border-[var(--color-accent)] transition"
           >
-            Сменить уровень
+            {t("eventLoop.changeLevel")}
           </button>
         </div>
       </div>

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { hasApiKey, setApiKey, removeApiKey, getApiKey } from "~/lib/llm";
+import { useLanguage } from "~/contexts/LanguageContext";
 
 function maskKey(key: string): string {
   if (key.length <= 8) return "****";
@@ -9,6 +10,7 @@ function maskKey(key: string): string {
 export function ApiKeyInput({ onDone }: { onDone?: () => void }) {
   const [value, setValue] = useState("");
   const [saved, setSaved] = useState(hasApiKey);
+  const { t } = useLanguage();
 
   const handleSave = () => {
     const trimmed = value.trim();
@@ -35,7 +37,7 @@ export function ApiKeyInput({ onDone }: { onDone?: () => void }) {
           onClick={handleRemove}
           className="text-[var(--color-red)] hover:underline"
         >
-          Удалить ключ
+          {t("apiKeyInput.clear")}
         </button>
       </div>
     );
@@ -44,23 +46,23 @@ export function ApiKeyInput({ onDone }: { onDone?: () => void }) {
   return (
     <div className="space-y-2">
       <p className="text-xs text-[var(--color-muted)]">
-        Для AI-проверки ответов введите{" "}
+        {t("apiKeyInput.hint")}{" "}
         <a
           href="https://console.groq.com/keys"
           target="_blank"
           rel="noopener noreferrer"
           className="text-[var(--color-accent)] hover:underline"
         >
-          Groq API ключ
+          {t("apiKeyInput.hintLink")}
         </a>{" "}
-        (бесплатно, без карты):
+        {t("apiKeyInput.hintSuffix")}
       </p>
       <div className="flex gap-2">
         <input
           type="password"
           value={value}
           onChange={(e) => setValue(e.target.value)}
-          placeholder="gsk_..."
+          placeholder={t("apiKeyInput.placeholder")}
           className="flex-1 px-3 py-1.5 bg-[var(--color-surface)] border border-[var(--color-border)] rounded text-sm text-[var(--color-text)] placeholder:text-[var(--color-muted)] focus:border-[var(--color-accent)] focus:outline-none"
           onKeyDown={(e) => e.key === "Enter" && handleSave()}
         />
@@ -68,7 +70,7 @@ export function ApiKeyInput({ onDone }: { onDone?: () => void }) {
           onClick={handleSave}
           className="px-4 py-1.5 bg-[var(--color-accent)] text-white text-sm rounded hover:bg-[#6a56f0] transition"
         >
-          Сохранить
+          {t("apiKeyInput.submit")}
         </button>
       </div>
     </div>

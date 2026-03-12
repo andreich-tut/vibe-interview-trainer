@@ -2,51 +2,31 @@ import { createContext, useContext, useMemo } from 'react';
 import type { ReactElement, ReactNode } from 'react';
 import type { Language } from '~/lib/i18n';
 
-// ---------------------------------------------------------------------------
-// Types
-// ---------------------------------------------------------------------------
-
-/** Flat dictionary of translation key → string value for a single namespace. */
-export type TranslationDict = Record<string, string>;
-
-/**
- * Multi-namespace translation map.
- * Keys are namespace names (e.g. "ui", "theory"); values are flat dicts.
- */
-export type TranslationMap = Record<string, TranslationDict>;
+export type TranslationDict = Record<string, unknown>;
+export type TranslationMap = Record<string, Record<string, unknown>>;
 
 export interface LanguageContextValue {
-  /** Active language tag. */
   lang: Language;
-  /**
-   * Translate a key within an optional namespace.
-   * Falls back to the key itself when no match is found.
-   *
-   * @param key       - Dot-notation key (e.g. "nav.home")
-   * @param namespace - Namespace name (default: "ui")
-   */
   t: (key: string, namespace?: string) => string;
 }
 
-// ---------------------------------------------------------------------------
-// Context
-// ---------------------------------------------------------------------------
-
 const LanguageContext = createContext<LanguageContextValue | null>(null);
 
-// ---------------------------------------------------------------------------
-// Provider
-// ---------------------------------------------------------------------------
-
 export interface LanguageProviderProps {
-  /** The active language for this render. */
   lang: Language;
-  /**
-   * Pre-loaded translation dictionaries keyed by namespace.
-   * The "ui" namespace is expected at minimum.
-   */
   translations?: TranslationMap;
   children: ReactNode;
+}
+
+function resolveDotNotation(dict: Record<string, unknown>, key: string): string {
+  const segments = key.split('.');
+  let current: unknown = dict;
+  for (const segment of segments) {
+    if (current === null || typeof current !== 'object') return key;
+    current = (current as Record<string, unknown>)[segment];
+    if (current === undefined) return key;
+  }
+  return typeof current === 'string' ? current : key;
 }
 
 export function LanguageProvider({
@@ -59,7 +39,7 @@ export function LanguageProvider({
       (key: string, namespace = 'ui'): string => {
         const dict = translations[namespace];
         if (!dict) return key;
-        return dict[key] ?? key;
+        return resolveDotNotation(dict, key);
       },
     [translations],
   );
@@ -73,14 +53,6 @@ export function LanguageProvider({
   );
 }
 
-// ---------------------------------------------------------------------------
-// Hook
-// ---------------------------------------------------------------------------
-
-/**
- * Returns the current language context.
- * Must be called inside a `<LanguageProvider>` tree.
- */
 export function useLanguage(): LanguageContextValue {
   const ctx = useContext(LanguageContext);
   if (ctx === null) {
