@@ -21,12 +21,16 @@ const SYSTEM_PROMPT = `Ты — строгий экзаменатор по пр�
 - Не снижай оценку за отсутствие примеров кода, если смысл передан.
 - Будь строгим к фактическим ошибкам — они снижают оценку.
 
+Если ключевые моменты не предоставлены, оставь matchedPoints и missedPoints пустыми массивами.
+
 Ответь строго в формате JSON:
-{"score": <0-3>, "feedback": "<на русском: что раскрыто хорошо + какие ключевые моменты упущены, 1-3 предложения>"}`;
+{"score": <0-3>, "feedback": "<на русском: что раскрыто хорошо + какие ключевые моменты упущены, 1-3 предложения>", "matchedPoints": ["<раскрытые ключевые моменты>"], "missedPoints": ["<упущенные ключевые моменты>"]}`;
 
 export interface LLMResult {
   score: 0 | 1 | 2 | 3;
   feedback: string;
+  matchedPoints: string[];
+  missedPoints: string[];
 }
 
 export async function checkAnswer(
@@ -59,7 +63,7 @@ export async function checkAnswer(
         { role: "user", content: userPrompt },
       ],
       temperature: 0.1,
-      max_tokens: 300,
+      max_tokens: 500,
       response_format: { type: "json_object" },
     }),
   });
@@ -71,7 +75,17 @@ export async function checkAnswer(
 
   const data = await res.json();
   const text = data.choices?.[0]?.message?.content;
-  return JSON.parse(text);
+  const parsed = JSON.parse(text) as Record<string, unknown>;
+  return {
+    score: parsed.score as LLMResult["score"],
+    feedback: parsed.feedback as string,
+    matchedPoints: Array.isArray(parsed.matchedPoints)
+      ? (parsed.matchedPoints as string[])
+      : [],
+    missedPoints: Array.isArray(parsed.missedPoints)
+      ? (parsed.missedPoints as string[])
+      : [],
+  };
 }
 
 const STORAGE_KEY = "groq-api-key";

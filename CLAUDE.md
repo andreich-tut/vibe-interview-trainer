@@ -8,7 +8,8 @@ This is an interview preparation project for React/frontend developer positions.
 
 - **`vibe-interview-app/`** — A React Router v7 (framework mode) app with SSR, Tailwind CSS v4, and TypeScript. This is the main application being developed.
 - **`questions/`** — Interview question banks (in Russian) covering JS, React, Next.js, Node.js, CSS, CI/CD, and testing.
-- **`event-loop-trainer.html`** — A standalone HTML tool for practicing JavaScript event loop concepts.
+- **`reference/`** — Reference materials and standalone tools (e.g., `event-loop-trainer.html`).
+- **`planning/`** — Task plans saved by Claude for each work session. Files follow the format `{datetime}_{taskname}_plan.md`.
 
 ## Commands
 
@@ -37,19 +38,12 @@ npm run typecheck  # Run react-router typegen + tsc
 ### Rules Go in CLAUDE.md
 When the user asks to add, change, or remove a rule, always persist it in this file (`CLAUDE.md`). Do not store rules only in auto-memory — `CLAUDE.md` is the single source of truth for project rules.
 
-### HISTORY.md — Persist Every User Prompt
-Every user prompt/request must be logged in `HISTORY.md` at the project root:
-- Log each prompt as `> quoted text` under a numbered heading
-- After accomplishment, rate success: `✅ Success` / `⚠️ Partial` / `❌ Failed`
-- Include brief outcome description with the rating
-- This applies to ALL prompts, even small ones — do not skip
-
-### PROGRESS.md — Always Update After Completed Tasks
-After every completed task or work session, update `PROGRESS.md` at the project root:
-- Add a new Phase/section under `## ✅ COMPLETED` with `[x]` checkboxes
-- Describe what was done and why (e.g., root cause + fix for bugs)
-- Keep entries concise but specific enough to be useful in future sessions
-- This is a **mandatory step** — do not skip it even for small fixes
+### Task Plans — Save to `planning/` Directory
+When starting a new task or feature, create a plan file in `planning/`:
+- Filename format: `{datetime}_{taskname}_plan.md`
+  - Example: `2026-03-12T14-30_dark-theme-refactor_plan.md`
+- The plan should describe the task, approach, steps, and affected files
+- Save the plan before starting implementation
 
 ### Screenshots — Save to `dev-screen/` Directory
 When running Playwright tests or creating screenshots for development:
@@ -59,6 +53,8 @@ When running Playwright tests or creating screenshots for development:
 - Group related screenshots (home page, theory page, etc.) in same folder
 - Use clear filenames: `home-full-page.png`, `theory-card-detail.png`, etc.
 
-### Specialist Subagents
+### Specialist Subagents — ALWAYS USE
 
 The `.claude/agents/` directory contains subagent configurations for a structured frontend development workflow: planning-agent → project-setup-agent → design-system-agent → api-mock-agent → react-ui-builder / react-logic-builder → test-agent → reviewer-agent.
+
+**Rule: Always delegate implementation work to specialist subagents.** Never write component code, hooks, CSS, or logic directly in the main conversation. The main conversation is for planning, coordination, and user communication only. Use agents for all code changes.

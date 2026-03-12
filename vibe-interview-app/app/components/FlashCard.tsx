@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { checkAnswer, type LLMResult } from "~/lib/llm";
 import { useSpeechRecognition } from "~/hooks/useSpeechRecognition";
+import { StarRating } from "~/components/StarRating";
 
 export interface Card {
   id: string;
@@ -213,31 +214,60 @@ export function FlashCard({ card, onScore, current, total }: FlashCardProps) {
             </div>
           </div>
         ) : (
-          /* Result phase */
+          /* Result phase — three distinct blocks */
           <div className="space-y-4 animate-in fade-in">
-            {/* User answer */}
+            {/* Block 1 — User answer (gray border) */}
             {userAnswer.trim() && (
-              <div>
+              <div className="px-4 py-3 bg-[var(--color-bg)] border border-[var(--color-border)] rounded-lg">
                 <div className="text-[0.625rem] font-bold uppercase tracking-wider text-[var(--color-muted)] mb-1.5">
                   Твой ответ
                 </div>
-                <div className="px-4 py-3 bg-[var(--color-bg)] border border-[var(--color-border)] rounded-lg text-sm text-[var(--color-text)] whitespace-pre-line">
+                <div className="text-sm text-[var(--color-text)] whitespace-pre-line">
                   {userAnswer}
                 </div>
               </div>
             )}
 
-            {/* Reference answer */}
-            <div>
-              <div className="text-[0.625rem] font-bold uppercase tracking-wider text-[var(--color-muted)] mb-1.5">
+            {/* Block 2 — Reference answer (green-tinted border) */}
+            <div
+              className="px-4 py-3 rounded-lg"
+              style={{
+                backgroundColor: "rgba(115,176,10,0.06)",
+                border: "1px solid rgba(115,176,10,0.25)",
+              }}
+            >
+              <div className="text-[0.625rem] font-bold uppercase tracking-wider text-[var(--color-green)] mb-1.5">
                 Правильный ответ
               </div>
-              <div className="text-base text-[var(--color-text)] leading-relaxed whitespace-pre-line">
+              <div className="text-sm text-[var(--color-text)] leading-relaxed whitespace-pre-line">
                 {card.answer}
               </div>
+              {/* Key points checklist */}
+              {aiResult &&
+                ((aiResult.matchedPoints.length > 0) || (aiResult.missedPoints.length > 0)) && (
+                <div className="mt-3 pt-3 border-t border-[rgba(115,176,10,0.15)]">
+                  <div className="text-[0.625rem] font-bold uppercase tracking-wider text-[var(--color-muted)] mb-1.5">
+                    Ключевые пункты:
+                  </div>
+                  <ul className="space-y-1 text-xs">
+                    {aiResult.matchedPoints.map((point, i) => (
+                      <li key={`m-${i}`} className="flex items-start gap-1.5">
+                        <span className="text-[var(--color-green)] font-bold shrink-0">{"\u2713"}</span>
+                        <span className="text-[var(--color-text)]">{point}</span>
+                      </li>
+                    ))}
+                    {aiResult.missedPoints.map((point, i) => (
+                      <li key={`x-${i}`} className="flex items-start gap-1.5">
+                        <span className="text-[var(--color-red)] font-bold shrink-0">{"\u2717"}</span>
+                        <span className="text-[var(--color-muted)]">{point}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
             </div>
 
-            {/* AI score */}
+            {/* Block 3 — Score (score-colored border) */}
             {aiLoading && (
               <div className="text-xs text-[var(--color-muted)] flex items-center gap-2">
                 <span className="inline-block w-3 h-3 border-2 border-[var(--color-accent)] border-t-transparent rounded-full animate-spin" />
@@ -246,11 +276,18 @@ export function FlashCard({ card, onScore, current, total }: FlashCardProps) {
             )}
             {aiResult && style && (
               <div
-                className="inline-flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-semibold"
-                style={{ backgroundColor: style.bg, color: style.color, border: `1px solid ${style.border}` }}
+                className="px-4 py-3 rounded-lg"
+                style={{ backgroundColor: style.bg, border: `1px solid ${style.border}` }}
               >
-                <span>{aiResult.score}/3 — {style.label}</span>
-                <span className="font-normal opacity-80">{aiResult.feedback}</span>
+                <div className="flex items-center gap-2 mb-1.5">
+                  <StarRating score={aiResult.score} size="md" />
+                  <span className="text-sm font-semibold" style={{ color: style.color }}>
+                    {style.label}
+                  </span>
+                </div>
+                <div className="text-xs text-[var(--color-text)] opacity-80 leading-relaxed">
+                  {aiResult.feedback}
+                </div>
               </div>
             )}
             {aiError && (

@@ -1,5 +1,46 @@
 import type { ReactNode } from "react";
 import { Link } from "react-router";
+import { useTheme } from "~/hooks/useTheme";
+import type { ThemeMode } from "~/hooks/useTheme";
+
+const SunIcon = () => (
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <circle cx="12" cy="12" r="5" />
+    <line x1="12" y1="1" x2="12" y2="3" />
+    <line x1="12" y1="21" x2="12" y2="23" />
+    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+    <line x1="1" y1="12" x2="3" y2="12" />
+    <line x1="21" y1="12" x2="23" y2="12" />
+    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+  </svg>
+);
+
+const MoonIcon = () => (
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+  </svg>
+);
+
+const MonitorIcon = () => (
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <rect x="2" y="3" width="20" height="14" rx="2" ry="2" />
+    <line x1="8" y1="21" x2="16" y2="21" />
+    <line x1="12" y1="17" x2="12" y2="21" />
+  </svg>
+);
+
+function ThemeIcon({ theme }: { theme: ThemeMode }) {
+  switch (theme) {
+    case "light":
+      return <SunIcon />;
+    case "dark":
+      return <MoonIcon />;
+    case "system":
+      return <MonitorIcon />;
+  }
+}
 
 interface LayoutProps {
   children: ReactNode;
@@ -9,6 +50,8 @@ interface LayoutProps {
 }
 
 export function Layout({ children, showBack = false, backTo = "/", wide = false }: LayoutProps) {
+  const { theme, setTheme } = useTheme();
+
   return (
     <div className="min-h-screen bg-[var(--color-bg)]">
       {/* Header */}
@@ -19,14 +62,28 @@ export function Layout({ children, showBack = false, backTo = "/", wide = false 
         >
           interview<span className="text-[var(--color-accent2)]">trainer</span>
         </Link>
-        {showBack && (
-          <Link
-            to={backTo}
-            className="ml-auto text-xs text-[var(--color-muted)] hover:text-[var(--color-text)] transition"
-          >
-            ← Назад
-          </Link>
-        )}
+        <div className="ml-auto flex items-center gap-4">
+          <label className="flex items-center gap-1.5 text-[var(--color-muted)]">
+            <ThemeIcon theme={theme} />
+            <select
+              value={theme}
+              onChange={(e) => setTheme(e.target.value as ThemeMode)}
+              className="appearance-none bg-transparent border border-[var(--color-border)] rounded px-2 py-0.5 text-xs text-[var(--color-muted)] hover:text-[var(--color-text)] cursor-pointer transition focus:outline-none focus:border-[var(--color-accent)]"
+            >
+              <option value="dark">Тёмная</option>
+              <option value="light">Светлая</option>
+              <option value="system">Системная</option>
+            </select>
+          </label>
+          {showBack && (
+            <Link
+              to={backTo}
+              className="text-xs text-[var(--color-muted)] hover:text-[var(--color-text)] transition"
+            >
+              ← Назад
+            </Link>
+          )}
+        </div>
       </header>
 
       {/* Main */}

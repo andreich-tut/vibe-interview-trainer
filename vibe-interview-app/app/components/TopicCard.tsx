@@ -1,4 +1,6 @@
 import { Link } from "react-router";
+import { StarRating } from "~/components/StarRating";
+import type { Score } from "~/components/FlashCard";
 
 interface TopicCardProps {
   id: string;
@@ -24,8 +26,11 @@ export function TopicCard({ id, icon, title, description, progress }: TopicCardP
               style={{ width: `${Math.round((progress.mastered / progress.total) * 100)}%` }}
             />
           </div>
-          <div className="text-[0.5rem] text-[var(--color-muted)] text-right">
-            {progress.mastered}/{progress.total}
+          <div className="flex items-center justify-end gap-1.5">
+            <StarRating score={Math.round((progress.mastered / progress.total) * 3) as Score} size="sm" />
+            <span className="text-[0.5rem] text-[var(--color-muted)]">
+              {progress.mastered}/{progress.total}
+            </span>
           </div>
         </div>
       )}

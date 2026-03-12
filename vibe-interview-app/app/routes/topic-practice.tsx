@@ -3,6 +3,7 @@ import { useState, useMemo } from "react";
 import { Link } from "react-router";
 import { Layout } from "~/components/Layout";
 import { FlashCard, type Card, type Score } from "~/components/FlashCard";
+import { StarRating } from "~/components/StarRating";
 import { ApiKeyInput } from "~/components/ApiKeyInput";
 import { useProgress } from "~/hooks/useProgress";
 import { hasApiKey } from "~/lib/llm";
@@ -283,23 +284,27 @@ export default function TopicPractice({ params }: Route.ComponentProps) {
         </p>
 
         <div className="grid grid-cols-5 gap-3 max-w-md mx-auto">
-          <div className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg p-3">
-            <div className="text-xl font-bold text-[var(--color-green)]">{scoreCount[3]}</div>
+          <div className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg p-3 flex flex-col items-center">
+            <StarRating score={3} size="sm" />
+            <div className="text-xl font-bold text-[var(--color-green)] mt-1">{scoreCount[3]}</div>
             <div className="text-[0.5rem] text-[var(--color-muted)] uppercase tracking-wider mt-1">Точно</div>
           </div>
-          <div className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg p-3">
-            <div className="text-xl font-bold text-[var(--color-accent2)]">{scoreCount[2]}</div>
+          <div className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg p-3 flex flex-col items-center">
+            <StarRating score={2} size="sm" />
+            <div className="text-xl font-bold text-[var(--color-accent2)] mt-1">{scoreCount[2]}</div>
             <div className="text-[0.5rem] text-[var(--color-muted)] uppercase tracking-wider mt-1">Примерно</div>
           </div>
-          <div className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg p-3">
-            <div className="text-xl font-bold text-[#f59e0b]">{scoreCount[1]}</div>
+          <div className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg p-3 flex flex-col items-center">
+            <StarRating score={1} size="sm" />
+            <div className="text-xl font-bold text-[#f59e0b] mt-1">{scoreCount[1]}</div>
             <div className="text-[0.5rem] text-[var(--color-muted)] uppercase tracking-wider mt-1">С трудом</div>
           </div>
-          <div className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg p-3">
-            <div className="text-xl font-bold text-[var(--color-red)]">{scoreCount[0]}</div>
+          <div className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg p-3 flex flex-col items-center">
+            <StarRating score={0} size="sm" />
+            <div className="text-xl font-bold text-[var(--color-red)] mt-1">{scoreCount[0]}</div>
             <div className="text-[0.5rem] text-[var(--color-muted)] uppercase tracking-wider mt-1">Не знал</div>
           </div>
-          <div className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg p-3">
+          <div className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg p-3 flex flex-col items-center">
             <div className="text-xl font-bold text-[var(--color-accent)]">{pct}%</div>
             <div className="text-[0.5rem] text-[var(--color-muted)] uppercase tracking-wider mt-1">Итого</div>
           </div>
