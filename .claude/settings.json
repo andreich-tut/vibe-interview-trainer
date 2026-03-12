@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(curl -s http://localhost:5173)",
+      "Bash(find /home/ilya/dev/ai/interview-cloude -path */content/* -name *.json)",
+      "Bash(grep -l loadContent /home/ilya/dev/ai/interview-cloude/vibe-interview-app/app/routes/*.tsx)"
+    ]
+  }
+}

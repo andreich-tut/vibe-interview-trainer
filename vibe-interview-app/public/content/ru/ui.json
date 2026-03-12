@@ -1,0 +1,74 @@
+{
+  "header": {
+    "appTitle": "React Prep",
+    "navAriaLabel": "Основная навигация"
+  },
+  "nav": {
+    "home": "Главная",
+    "theory": "Теория",
+    "cards": "Карточки",
+    "practice": "Практика",
+    "eventLoop": "Event Loop",
+    "voiceInput": "Голосовой ввод"
+  },
+  "buttons": {
+    "showAnswer": "Показать ответ",
+    "hideAnswer": "Скрыть ответ",
+    "nextCard": "Следующая →",
+    "prevCard": "← Предыдущая",
+    "startPractice": "Начать практику",
+    "tryAgain": "Попробовать снова",
+    "submit": "Отправить",
+    "close": "Закрыть",
+    "backToTopics": "← К темам",
+    "goBack": "← Назад",
+    "goToTopic": "Перейти к теме",
+    "clear": "Очистить"
+  },
+  "labels": {
+    "topic": "Тема",
+    "difficulty": "Сложность",
+    "question": "Вопрос",
+    "answer": "Ответ",
+    "keyPoints": "Ключевые моменты",
+    "progress": "Прогресс",
+    "score": "Результат",
+    "cardCounter": "Карточка {current} из {total}",
+    "articleCount": "{count} статей",
+    "cardCount": "{count} карточек"
+  },
+  "messages": {
+    "loading": "Загрузка...",
+    "errorGeneric": "Произошла ошибка",
+    "errorNotFound": "Страница не найдена",
+    "noResults": "Нет результатов",
+    "correct": "Правильно!",
+    "incorrect": "Неправильно",
+    "sessionComplete": "Вы ответили правильно на {score} из {total}",
+    "noTheoryArticles": "Нет статей по этой теме",
+    "noCards": "Нет карточек по этой теме",
+    "topicNotFound": "Тема не найдена",
+    "theoryNotFound": "Статья не найдена"
+  },
+  "home": {
+    "pageTitle": "Подготовка к собеседованию",
+    "subtitle": "Выберите тему для изучения",
+    "topicsHeading": "Темы для изучения"
+  },
+  "eventLoop": {
+    "pageTitle": "Event Loop Тренажёр",
+    "addTask": "Добавить задачу",
+    "macrotasks": "Макротаски",
+    "microtasks": "Микротаски",
+    "stepForward": "Шаг вперед",
+    "runAll": "Запустить всё",
+    "reset": "Сбросить"
+  },
+  "voiceInput": {
+    "pageTitle": "Голосовой ввод",
+    "notSupported": "Браузер не поддерживает голосовой ввод",
+    "startRecording": "Начать запись",
+    "stopRecording": "Остановить запись",
+    "transcriptLabel": "Голосовой текст:"
+  }
+}

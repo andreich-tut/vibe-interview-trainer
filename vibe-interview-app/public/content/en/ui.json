@@ -1,0 +1,81 @@
+{
+  "header": {
+    "title": "Interview Prep",
+    "subtitle": "React & Frontend"
+  },
+  "navigation": {
+    "home": "Home",
+    "theory": "Theory",
+    "practice": "Practice",
+    "progress": "Progress"
+  },
+  "home": {
+    "heroTitle": "Prepare for Your Technical Interview",
+    "heroSubtitle": "Structured knowledge base for React and Frontend developer positions",
+    "startButton": "Start Learning",
+    "topicsTitle": "Topics",
+    "topicsSubtitle": "Select a topic to study",
+    "statsTitle": "Your Progress",
+    "totalTopics": "Topics",
+    "totalCards": "Theory Cards",
+    "completedCards": "Completed"
+  },
+  "theory": {
+    "pageTitle": "Theory",
+    "pageSubtitle": "Core concepts for technical interviews",
+    "backButton": "Back to Topics",
+    "level": {
+      "junior": "Junior",
+      "middle": "Middle",
+      "senior": "Senior"
+    },
+    "tags": "Tags",
+    "readTime": "min read",
+    "noContent": "Content not available yet"
+  },
+  "practice": {
+    "pageTitle": "Practice",
+    "pageSubtitle": "Interview questions with detailed answers",
+    "showAnswer": "Show Answer",
+    "hideAnswer": "Hide Answer",
+    "nextQuestion": "Next Question",
+    "prevQuestion": "Previous Question",
+    "questionCounter": "Question {current} of {total}",
+    "difficulty": {
+      "easy": "Easy",
+      "medium": "Medium",
+      "hard": "Hard"
+    }
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "Something went wrong",
+    "retry": "Try Again",
+    "close": "Close",
+    "open": "Open",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous",
+    "search": "Search",
+    "searchPlaceholder": "Search topics...",
+    "filter": "Filter",
+    "filterAll": "All",
+    "language": "Language",
+    "theme": "Theme",
+    "themeDark": "Dark",
+    "themeLight": "Light"
+  },
+  "topics": {
+    "javascript": "JavaScript",
+    "react": "React",
+    "typescript": "TypeScript",
+    "css": "CSS",
+    "nodejs": "Node.js",
+    "testing": "Testing",
+    "algorithms": "Algorithms"
+  },
+  "footer": {
+    "madeWith": "Made for interview preparation",
+    "version": "Version"
+  }
+}

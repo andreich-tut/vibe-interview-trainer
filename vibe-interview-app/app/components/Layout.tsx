@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import { Link } from "react-router";
 import { useTheme } from "~/hooks/useTheme";
 import type { ThemeMode } from "~/hooks/useTheme";
+import { LanguageSwitcher } from "./LanguageSwitcher";
 
 const SunIcon = () => (
   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -63,6 +64,7 @@ export function Layout({ children, showBack = false, backTo = "/", wide = false 
           interview<span className="text-[var(--color-accent2)]">trainer</span>
         </Link>
         <div className="ml-auto flex items-center gap-4">
+          <LanguageSwitcher />
           <label className="flex items-center gap-1.5 text-[var(--color-muted)]">
             <ThemeIcon theme={theme} />
             <select

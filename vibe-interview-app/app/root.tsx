@@ -5,10 +5,32 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
+  useLoaderData,
 } from "react-router";
 
 import type { Route } from "./+types/root";
 import "./app.css";
+import { resolveLanguage } from "~/lib/cookies";
+import { LanguageProvider } from "~/contexts/LanguageContext";
+import type { TranslationMap } from "~/contexts/LanguageContext";
+
+export const loader = async ({ request }: Route.LoaderArgs) => {
+  const lang = resolveLanguage(request);
+
+  let translations: TranslationMap = {};
+  try {
+    const url = new URL(`/content/${lang}/ui.json`, request.url);
+    const res = await fetch(url.toString());
+    if (res.ok) {
+      const dict = (await res.json()) as Record<string, string>;
+      translations = { ui: dict };
+    }
+  } catch {
+    // Non-fatal: components will fall back to translation keys.
+  }
+
+  return { lang, translations };
+};
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -24,8 +46,9 @@ export const links: Route.LinksFunction = () => [
 ];
 
 export function Layout({ children }: { children: React.ReactNode }) {
+  const { lang } = useLoaderData<typeof loader>();
   return (
-    <html lang="ru">
+    <html lang={lang}>
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -47,7 +70,13 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
-  return <Outlet />;
+  const { lang, translations } = useLoaderData<typeof loader>();
+
+  return (
+    <LanguageProvider lang={lang} translations={translations}>
+      <Outlet />
+    </LanguageProvider>
+  );
 }
 
 export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
