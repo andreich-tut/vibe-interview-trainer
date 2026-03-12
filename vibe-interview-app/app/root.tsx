@@ -10,12 +10,13 @@ import {
 
 import type { Route } from "./+types/root";
 import "./app.css";
-import { resolveLanguage } from "~/lib/cookies";
+import { resolveLanguage, getThemeCookie } from "~/lib/cookies";
 import { LanguageProvider } from "~/contexts/LanguageContext";
 import type { TranslationMap } from "~/contexts/LanguageContext";
 
 export const loader = async ({ request }: Route.LoaderArgs) => {
   const lang = resolveLanguage(request);
+  const theme = getThemeCookie(request) ?? "dark";
 
   let translations: TranslationMap = {};
   try {
@@ -29,7 +30,7 @@ export const loader = async ({ request }: Route.LoaderArgs) => {
     // Non-fatal: components will fall back to translation keys.
   }
 
-  return { lang, translations };
+  return { lang, translations, theme };
 };
 
 export const links: Route.LinksFunction = () => [
@@ -46,9 +47,9 @@ export const links: Route.LinksFunction = () => [
 ];
 
 export function Layout({ children }: { children: React.ReactNode }) {
-  const { lang } = useLoaderData<typeof loader>();
+  const { lang, theme } = useLoaderData<typeof loader>();
   return (
-    <html lang={lang}>
+    <html lang={lang} data-theme={theme} suppressHydrationWarning>
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -56,7 +57,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
         <script
           dangerouslySetInnerHTML={{
-            __html: `(function(){try{var t=localStorage.getItem("theme-preference");var r;if(t==="dark"||t==="light"){r=t}else{r=window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"}document.documentElement.setAttribute("data-theme",r)}catch(e){}})();`,
+            __html: `(function(){try{var t=localStorage.getItem("theme-preference");var r;if(t==="dark"||t==="light"){r=t}else{r=window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"}document.documentElement.setAttribute("data-theme",r);var m=60*60*24*365;document.cookie="theme-preference="+r+"; path=/; max-age="+m+"; SameSite=Lax"}catch(e){}})();`,
           }}
         />
       </head>

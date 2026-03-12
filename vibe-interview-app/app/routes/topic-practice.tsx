@@ -8,6 +8,7 @@ import { ApiKeyInput } from "~/components/ApiKeyInput";
 import { useProgress } from "~/hooks/useProgress";
 import { hasApiKey } from "~/lib/llm";
 import { loadContent, type CardsFile, type TopicsFile } from "~/lib/contentLoader";
+import { useLanguage } from "~/contexts/LanguageContext";
 
 type Phase = "setup" | "playing" | "finished";
 
@@ -36,6 +37,7 @@ export function meta({ params }: Route.MetaArgs) {
 const MAX_REPLAY_ROUNDS = 2;
 
 export default function TopicPractice({ params }: Route.ComponentProps) {
+  const { lang } = useLanguage();
   const { saveCardResult, incrementSessions } = useProgress();
 
   const [topicsData, setTopicsData] = useState<TopicsFile | null>(null);
@@ -53,8 +55,8 @@ export default function TopicPractice({ params }: Route.ComponentProps) {
   // Load topics and cards
   useEffect(() => {
     Promise.all([
-      loadContent("ru", "topics"),
-      loadContent("ru", "cards", params.topicId),
+      loadContent(lang, "topics"),
+      loadContent(lang, "cards", params.topicId),
     ])
       .then(([topics, cards]) => {
         setTopicsData(topics);
@@ -68,7 +70,7 @@ export default function TopicPractice({ params }: Route.ComponentProps) {
       .finally(() => {
         setLoading(false);
       });
-  }, [params.topicId]);
+  }, [params.topicId, lang]);
 
   const topic = topicsData?.topics.find((t) => t.id === params.topicId);
   const allCards = useMemo(() => shuffle(cardsData?.cards ?? []), [cardsData?.cards]);

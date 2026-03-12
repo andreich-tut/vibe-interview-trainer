@@ -1,0 +1,94 @@
+- generic [ref=e2]:
+  - banner [ref=e3]:
+    - link "interviewtrainer" [ref=e4] [cursor=pointer]:
+      - /url: /
+    - generic [ref=e5]:
+      - radiogroup "Select language" [ref=e6]:
+        - radio "RU" [checked] [ref=e7] [cursor=pointer]
+        - radio "EN" [ref=e8] [cursor=pointer]
+      - generic [ref=e9]:
+        - img [ref=e10]
+        - combobox [ref=e12] [cursor=pointer]:
+          - option "Тёмная"
+          - option "Светлая"
+          - option "Системная" [selected]
+  - main [ref=e13]:
+    - generic [ref=e14]:
+      - heading "Подготовка к собеседованию" [level=1] [ref=e15]
+      - paragraph [ref=e16]: Выбери тему и начни подготовку. Теория + практика по каждой теме.
+    - generic [ref=e17]:
+      - generic [ref=e18]:
+        - generic [ref=e19]: 📜
+        - heading "JavaScript" [level=3] [ref=e20]
+        - paragraph [ref=e21]: Основы языка, асинхронность, замыкания
+        - generic [ref=e25]:
+          - generic "3 из 3" [ref=e26]:
+            - generic [ref=e27]: ★
+            - generic [ref=e28]: ★
+            - generic [ref=e29]: ★
+          - generic [ref=e30]: 10/10
+        - generic [ref=e31]:
+          - link "Теория" [ref=e32] [cursor=pointer]:
+            - /url: /javascript/theory
+          - link "Практика" [ref=e33] [cursor=pointer]:
+            - /url: /javascript/practice
+      - generic [ref=e34]:
+        - generic [ref=e35]: ⚛️
+        - heading "React" [level=3] [ref=e36]
+        - paragraph [ref=e37]: Компоненты, хуки, состояние, оптимизация
+        - generic [ref=e38]:
+          - link "Теория" [ref=e39] [cursor=pointer]:
+            - /url: /react/theory
+          - link "Практика" [ref=e40] [cursor=pointer]:
+            - /url: /react/practice
+      - generic [ref=e41]:
+        - generic [ref=e42]: ▲
+        - heading "Next.js" [level=3] [ref=e43]
+        - paragraph [ref=e44]: SSR, SSG, ISR, маршрутизация, оптимизация
+        - generic [ref=e45]:
+          - link "Теория" [ref=e46] [cursor=pointer]:
+            - /url: /nextjs/theory
+          - link "Практика" [ref=e47] [cursor=pointer]:
+            - /url: /nextjs/practice
+      - generic [ref=e48]:
+        - generic [ref=e49]: 🟢
+        - heading "Node.js" [level=3] [ref=e50]
+        - paragraph [ref=e51]: Модули, асинхронная модель, серверы
+        - generic [ref=e52]:
+          - link "Теория" [ref=e53] [cursor=pointer]:
+            - /url: /nodejs/theory
+          - link "Практика" [ref=e54] [cursor=pointer]:
+            - /url: /nodejs/practice
+      - generic [ref=e55]:
+        - generic [ref=e56]: 🎨
+        - heading "CSS" [level=3] [ref=e57]
+        - paragraph [ref=e58]: Селекторы, Flexbox, Grid, анимации
+        - generic [ref=e59]:
+          - link "Теория" [ref=e60] [cursor=pointer]:
+            - /url: /css/theory
+          - link "Практика" [ref=e61] [cursor=pointer]:
+            - /url: /css/practice
+      - generic [ref=e62]:
+        - generic [ref=e63]: 🔄
+        - heading "CI/CD" [level=3] [ref=e64]
+        - paragraph [ref=e65]: Автоматизация, деплой, мониторинг
+        - generic [ref=e66]:
+          - link "Теория" [ref=e67] [cursor=pointer]:
+            - /url: /cicd/theory
+          - link "Практика" [ref=e68] [cursor=pointer]:
+            - /url: /cicd/practice
+      - generic [ref=e69]:
+        - generic [ref=e70]: ✅
+        - heading "Тестирование" [level=3] [ref=e71]
+        - paragraph [ref=e72]: Unit тесты, компоненты, E2E
+        - generic [ref=e73]:
+          - link "Теория" [ref=e74] [cursor=pointer]:
+            - /url: /testing/theory
+          - link "Практика" [ref=e75] [cursor=pointer]:
+            - /url: /testing/practice
+    - generic [ref=e76]:
+      - generic [ref=e77]: 🔄
+      - heading "Event Loop Тренажёр" [level=3] [ref=e78]
+      - paragraph [ref=e79]: Интерактивный тренажёр для отработки Event Loop в JavaScript.
+      - link "Начать тренировку →" [ref=e80] [cursor=pointer]:
+        - /url: /event-loop

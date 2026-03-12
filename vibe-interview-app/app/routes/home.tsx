@@ -4,6 +4,7 @@ import { useProgress } from "~/hooks/useProgress";
 import { Link } from "react-router";
 import { useEffect, useState } from "react";
 import { loadContent, type TopicsFile } from "~/lib/contentLoader";
+import { useLanguage } from "~/contexts/LanguageContext";
 
 export function meta() {
   return [
@@ -14,12 +15,13 @@ export function meta() {
 
 export default function Home() {
   const { getTopicProgress } = useProgress();
+  const { lang } = useLanguage();
   const [topicsData, setTopicsData] = useState<TopicsFile | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    loadContent("ru", "topics")
+    loadContent(lang, "topics")
       .then((data) => {
         setTopicsData(data);
         setError(null);

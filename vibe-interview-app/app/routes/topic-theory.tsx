@@ -4,6 +4,7 @@ import { Link } from "react-router";
 import { Layout } from "~/components/Layout";
 import { TheoryCard } from "~/components/TheoryCard";
 import { loadContent, type TopicsFile, type TheoryFile } from "~/lib/contentLoader";
+import { useLanguage } from "~/contexts/LanguageContext";
 
 interface TheorySection {
   title: string;
@@ -86,6 +87,7 @@ function TocLink({
 }
 
 export default function TopicTheory({ params }: Route.ComponentProps) {
+  const { lang } = useLanguage();
   const [topicsData, setTopicsData] = useState<TopicsFile | null>(null);
   const [theoryData, setTheoryData] = useState<TheoryFile | null>(null);
   const [loading, setLoading] = useState(true);
@@ -95,8 +97,8 @@ export default function TopicTheory({ params }: Route.ComponentProps) {
   // Load topics and theory
   useEffect(() => {
     Promise.all([
-      loadContent("ru", "topics"),
-      loadContent("ru", "theory", params.topicId),
+      loadContent(lang, "topics"),
+      loadContent(lang, "theory", params.topicId),
     ])
       .then(([topics, theory]) => {
         setTopicsData(topics);
@@ -110,7 +112,7 @@ export default function TopicTheory({ params }: Route.ComponentProps) {
       .finally(() => {
         setLoading(false);
       });
-  }, [params.topicId]);
+  }, [params.topicId, lang]);
 
   // Observer for active section highlighting
   useEffect(() => {

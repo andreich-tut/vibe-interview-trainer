@@ -1,41 +1,23 @@
 {
-  "id": "javascript",
-  "title": "JavaScript",
-  "description": "Core JavaScript concepts for technical interviews",
-  "cards": [
+  "theory": [
     {
-      "id": "closures",
       "title": "Closures",
-      "level": "junior",
-      "tags": ["closures", "scope", "functions"],
       "content": "<h2>Closures</h2><p>A <strong>closure</strong> is a function that retains access to variables from its outer (enclosing) scope even after that outer function has returned.</p><h3>How it works</h3><p>When a function is created in JavaScript, it captures a reference to its surrounding lexical environment — all variables in the scope where it was defined. This combination of the function and its lexical scope is called a closure.</p><pre><code>function counter() {\n  let count = 0;\n  return function() {\n    count++;\n    return count;\n  };\n}\n\nconst increment = counter();\nconsole.log(increment()); // 1\nconsole.log(increment()); // 2\nconsole.log(increment()); // 3</code></pre><h3>Common use cases</h3><ul><li><strong>Data encapsulation</strong> — hiding private state inside a function</li><li><strong>Factory functions</strong> — creating functions with preconfigured behavior</li><li><strong>Memoization</strong> — caching the results of expensive computations</li><li><strong>Callbacks and event handlers</strong> — preserving context from the outer scope</li></ul>"
     },
     {
-      "id": "prototype",
       "title": "Prototype and Inheritance",
-      "level": "middle",
-      "tags": ["prototype", "inheritance", "OOP"],
       "content": "<h2>Prototype and Inheritance</h2><p>JavaScript uses <strong>prototype-based inheritance</strong>. Every object has an internal link to another object called its <strong>prototype</strong>. When you access a property that doesn't exist on an object, the engine traverses the prototype chain to find it.</p><h3>Prototype chain</h3><pre><code>const animal = {\n  speak() {\n    return `${this.name} makes a sound`;\n  }\n};\n\nconst dog = Object.create(animal);\ndog.name = 'Rex';\n\nconsole.log(dog.speak()); // Rex makes a sound\nconsole.log(Object.getPrototypeOf(dog) === animal); // true</code></pre><h3>ES6 Classes</h3><p>Classes are syntactic sugar over prototypal inheritance:</p><pre><code>class Animal {\n  constructor(name) {\n    this.name = name;\n  }\n  speak() {\n    return `${this.name} makes a sound`;\n  }\n}\n\nclass Dog extends Animal {\n  speak() {\n    return `${this.name} barks`;\n  }\n}\n\nconst dog = new Dog('Rex');\nconsole.log(dog.speak()); // Rex barks</code></pre>"
     },
     {
-      "id": "event-loop",
       "title": "Event Loop",
-      "level": "middle",
-      "tags": ["event loop", "async", "concurrency"],
       "content": "<h2>Event Loop</h2><p>JavaScript is <strong>single-threaded</strong> but handles asynchronous operations through the <strong>event loop</strong> — a mechanism that continuously checks whether the call stack is empty and then processes queued tasks.</p><h3>Execution order</h3><pre><code>console.log('1'); // synchronous\n\nsetTimeout(() => console.log('2'), 0); // macrotask\n\nPromise.resolve().then(() => console.log('3')); // microtask\n\nconsole.log('4'); // synchronous\n\n// Output: 1, 4, 3, 2</code></pre><h3>Key rule</h3><p>After each macrotask, the engine processes <strong>all</strong> pending microtasks before moving to the next macrotask. This is why Promise callbacks always run before setTimeout callbacks, even with a 0 ms delay.</p>"
     },
     {
-      "id": "promises",
       "title": "Promises and Async/Await",
-      "level": "junior",
-      "tags": ["promises", "async/await", "asynchronous"],
       "content": "<h2>Promises and Async/Await</h2><p>A <strong>Promise</strong> is an object representing the eventual completion or failure of an asynchronous operation. It can be in one of three states: <em>pending</em>, <em>fulfilled</em>, or <em>rejected</em>.</p><h3>Async/Await</h3><p><code>async/await</code> is syntactic sugar over Promises that makes asynchronous code look and behave like synchronous code:</p><pre><code>async function loadUsers() {\n  try {\n    const users = await fetchData('/api/users');\n    return users.filter(u => u.active);\n  } catch (err) {\n    console.error('Error:', err);\n  }\n}</code></pre><h3>Promise combinators</h3><ul><li><code>Promise.all()</code> — waits for all promises; rejects if any rejects</li><li><code>Promise.allSettled()</code> — waits for all; returns results regardless of outcome</li><li><code>Promise.race()</code> — resolves/rejects with the first settled promise</li><li><code>Promise.any()</code> — resolves with the first fulfilled promise</li></ul>"
     },
     {
-      "id": "this",
       "title": "this keyword",
-      "level": "middle",
-      "tags": ["this", "context", "binding"],
       "content": "<h2>The <code>this</code> Keyword</h2><p>In JavaScript, <code>this</code> refers to the <strong>execution context</strong> — the object that is currently calling the function. Its value is determined at runtime, not at definition time (except for arrow functions).</p><h3>Rules for determining <code>this</code></h3><ol><li><strong>Global context</strong> — <code>this</code> is <code>window</code> (browser) or <code>global</code> (Node.js)</li><li><strong>Method call</strong> — <code>this</code> is the object before the dot: <code>obj.method()</code></li><li><strong>Explicit binding</strong> — <code>call</code>, <code>apply</code>, or <code>bind</code> set <code>this</code> explicitly</li><li><strong>Constructor call</strong> — <code>new Func()</code> sets <code>this</code> to the newly created object</li><li><strong>Arrow functions</strong> — inherit <code>this</code> from the enclosing lexical scope</li></ol>"
     }
   ]

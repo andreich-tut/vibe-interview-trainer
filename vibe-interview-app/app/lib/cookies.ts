@@ -53,3 +53,16 @@ export function validateLanguageFromCookie(value: string): Language | null {
 export function resolveLanguage(request: Request): Language {
   return getLanguageCookie(request) ?? DEFAULT_LANGUAGE;
 }
+
+/**
+ * Server-side: reads the theme-preference cookie from an incoming Request.
+ * Returns "dark" | "light" or null if absent/invalid.
+ */
+export function getThemeCookie(request: Request): "dark" | "light" | null {
+  const cookieHeader = request.headers.get('Cookie') ?? '';
+  if (!cookieHeader) return null;
+  const cookies = parseCookieHeader(cookieHeader);
+  const value = cookies['theme-preference'];
+  if (value === 'dark' || value === 'light') return value;
+  return null;
+}

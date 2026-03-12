@@ -109,6 +109,8 @@ export function useTheme(): {
     const resolvedTheme = t === "system" ? getSystemTheme() : t;
     currentState = { theme: t, resolvedTheme };
     applyTheme(resolvedTheme);
+    const maxAge = 60 * 60 * 24 * 365;
+    document.cookie = `theme-preference=${resolvedTheme}; path=/; max-age=${maxAge}; SameSite=Lax`;
     notify();
   }, []);
 
