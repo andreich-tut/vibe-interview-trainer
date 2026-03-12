@@ -1,8 +1,8 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { Layout } from "~/components/Layout";
 import { CodeBlock } from "~/components/CodeBlock";
 import { StepVisualizer } from "~/components/StepVisualizer";
-import { eventLoopQuestions } from "~/data/event-loop";
+import { loadContent, type EventLoopFile } from "~/lib/contentLoader";
 
 type Screen = "splash" | "quiz" | "results";
 type Level = "easy" | "medium" | "hard";
@@ -15,6 +15,10 @@ export function meta() {
 }
 
 export default function EventLoop() {
+  const [eventLoopData, setEventLoopData] = useState<EventLoopFile | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
   const [screen, setScreen] = useState<Screen>("splash");
   const [level, setLevel] = useState<Level>("easy");
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -24,8 +28,25 @@ export default function EventLoop() {
   const [userAnswer, setUserAnswer] = useState("");
   const [feedback, setFeedback] = useState<{ isCorrect: boolean; message: string } | null>(null);
 
+  // Load event-loop data
+  useEffect(() => {
+    loadContent("ru", "event-loop")
+      .then((data) => {
+        setEventLoopData(data);
+        setError(null);
+      })
+      .catch((err) => {
+        console.error("Failed to load event-loop data:", err);
+        setError("Failed to load event-loop data. Please refresh the page.");
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }, []);
+
   const questions = useMemo(() => {
-    const pool = [...eventLoopQuestions[level]];
+    if (!eventLoopData) return [];
+    const pool = [...eventLoopData[level]];
     // Shuffle
     for (let i = pool.length - 1; i > 0; i--) {
       // eslint-disable-next-line react-hooks/purity
@@ -33,7 +54,7 @@ export default function EventLoop() {
       [pool[i], pool[j]] = [pool[j], pool[i]];
     }
     return pool;
-  }, [level]);
+  }, [level, eventLoopData]);
 
   const currentQuestion = questions[currentIndex];
 
@@ -87,6 +108,26 @@ export default function EventLoop() {
   const handleBackToSplash = () => {
     setScreen("splash");
   };
+
+  if (loading) {
+    return (
+      <Layout showBack>
+        <div className="text-center py-12">
+          <p className="text-(--color-muted)">Loading...</p>
+        </div>
+      </Layout>
+    );
+  }
+
+  if (error || !eventLoopData) {
+    return (
+      <Layout showBack>
+        <div className="text-center py-12">
+          <p className="text-red-500">{error || "Failed to load event-loop data"}</p>
+        </div>
+      </Layout>
+    );
+  }
 
   if (screen === "splash") {
     return (

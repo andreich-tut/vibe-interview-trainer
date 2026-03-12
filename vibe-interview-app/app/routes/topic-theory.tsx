@@ -3,14 +3,7 @@ import type { Route } from "./+types/topic-theory";
 import { Link } from "react-router";
 import { Layout } from "~/components/Layout";
 import { TheoryCard } from "~/components/TheoryCard";
-import { javascriptTheory } from "~/data/theory/javascript";
-import { reactTheory } from "~/data/theory/react";
-import { nextjsTheory } from "~/data/theory/nextjs";
-import { nodejsTheory } from "~/data/theory/nodejs";
-import { cssTheory } from "~/data/theory/css";
-import { cicdTheory } from "~/data/theory/cicd";
-import { testingTheory } from "~/data/theory/testing";
-import { topics } from "~/data/topics";
+import { loadContent, type TopicsFile, type TheoryFile } from "~/lib/contentLoader";
 
 interface TheorySection {
   title: string;
@@ -53,21 +46,10 @@ function processContent(html: string): string {
   });
 }
 
-const theoryMap: Record<string, TheorySection[]> = {
-  javascript: javascriptTheory,
-  react: reactTheory,
-  nextjs: nextjsTheory,
-  nodejs: nodejsTheory,
-  css: cssTheory,
-  cicd: cicdTheory,
-  testing: testingTheory,
-};
-
 export function meta({ params }: Route.MetaArgs) {
-  const topic = topics.find((t) => t.id === params.topicId);
   return [
-    { title: `${topic?.title || "Теория"} — Теория` },
-    { name: "description", content: topic?.description },
+    { title: `Теория` },
+    { name: "description", content: "Изучайте теорию" },
   ];
 }
 
@@ -104,11 +86,36 @@ function TocLink({
 }
 
 export default function TopicTheory({ params }: Route.ComponentProps) {
-  const topic = topics.find((t) => t.id === params.topicId);
-  const theory = theoryMap[params.topicId] || [];
+  const [topicsData, setTopicsData] = useState<TopicsFile | null>(null);
+  const [theoryData, setTheoryData] = useState<TheoryFile | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [activeSection, setActiveSection] = useState(0);
 
+  // Load topics and theory
   useEffect(() => {
+    Promise.all([
+      loadContent("ru", "topics"),
+      loadContent("ru", "theory", params.topicId),
+    ])
+      .then(([topics, theory]) => {
+        setTopicsData(topics);
+        setTheoryData(theory);
+        setError(null);
+      })
+      .catch((err) => {
+        console.error("Failed to load content:", err);
+        setError("Failed to load content. Please refresh the page.");
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }, [params.topicId]);
+
+  // Observer for active section highlighting
+  useEffect(() => {
+    if (!theoryData) return;
+
     const observer = new IntersectionObserver(
       (entries) => {
         for (const entry of entries) {
@@ -121,18 +128,29 @@ export default function TopicTheory({ params }: Route.ComponentProps) {
       { rootMargin: "-80px 0px -60% 0px" },
     );
 
-    theory.forEach((_, idx) => {
+    theoryData.theory.forEach((_, idx) => {
       const el = document.getElementById(`section-${idx}`);
       if (el) observer.observe(el);
     });
 
     return () => observer.disconnect();
-  }, [theory]);
+  }, [theoryData]);
 
-  if (!topic) {
+  const topic = topicsData?.topics.find((t) => t.id === params.topicId);
+  const theory = theoryData?.theory || [];
+
+  if (loading) {
     return (
       <Layout showBack>
-        <p className="text-center text-[var(--color-red)]">Тема не найдена</p>
+        <p className="text-center text-(--color-muted)">Loading...</p>
+      </Layout>
+    );
+  }
+
+  if (error || !topic || !theoryData) {
+    return (
+      <Layout showBack>
+        <p className="text-center text-red-500">{error || "Failed to load content"}</p>
       </Layout>
     );
   }

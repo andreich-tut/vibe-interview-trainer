@@ -1,0 +1,34 @@
+{
+  "theory": [
+    {
+      "title": "Что такое Next.js?",
+      "content": "\n<h3>Next.js — это React фреймворк</h3>\n<p>Фреймворк поверх React для быстрой разработки полнофункциональных веб-приложений с встроенной оптимизацией.</p>\n\n<h3>Основные возможности</h3>\n<ul>\n  <li><strong>Маршрутизация на основе файловой системы</strong> — файлы в pages/ = маршруты</li>\n  <li><strong>Серверный рендеринг (SSR)</strong> — рендер на сервере для лучшего SEO</li>\n  <li><strong>Статическая генерация (SSG)</strong> — сборка статических HTML страниц</li>\n  <li><strong>API маршруты</strong> — создание API без отдельного бэкенда</li>\n  <li><strong>Оптимизация образов и шрифтов</strong> — встроенные компоненты Image и Font</li>\n</ul>\n      ",
+      "contentFormat": "html"
+    },
+    {
+      "title": "Режимы рендеринга",
+      "content": "\n<h3>SSR (Server-Side Rendering)</h3>\n<p>Страница рендерится на сервере при каждом запросе. Нужно для часто изменяющихся данных:</p>\n<pre>export async function getServerSideProps() {\n  const res = await fetch('https://api.example.com/data');\n  const data = await res.json();\n  return { props: { data }, revalidate: 10 };\n}</pre>\n\n<h3>SSG (Static Site Generation)</h3>\n<p>Страницы генерируются один раз при сборке и кэшируются. Быстро, но нужно пересобирать:</p>\n<pre>export async function getStaticProps() {\n  const res = await fetch('https://api.example.com/posts');\n  const posts = await res.json();\n  return { props: { posts }, revalidate: 3600 };\n}</pre>\n\n<h3>ISR (Incremental Static Regeneration)</h3>\n<p>Комбинация SSG и SSR. Страница регенерируется в фоне, пока она кэшируется:</p>\n<pre>export async function getStaticProps() {\n  return {\n    props: { data },\n    revalidate: 60 // пересчитать каждые 60 сек\n  };\n}</pre>\n      ",
+      "contentFormat": "html"
+    },
+    {
+      "title": "Маршрутизация",
+      "content": "\n<h3>Основная маршрутизация</h3>\n<p>Структура папок в pages/ определяет маршруты:</p>\n<pre>pages/\n  index.tsx           → /\n  about.tsx           → /about\n  blog/\n    index.tsx         → /blog\n    [id].tsx          → /blog/1, /blog/hello\n  api/\n    users.ts          → POST /api/users</pre>\n\n<h3>Динамические маршруты</h3>\n<p>Квадратные скобки [] для динамических сегментов:</p>\n<pre>// pages/blog/[id].tsx\nexport default function Post({ post }) {\n  return <h1>{post.title}</h1>;\n}\n\nexport async function getStaticPaths() {\n  return {\n    paths: [{ params: { id: '1' } }],\n    fallback: true\n  };\n}</pre>\n      ",
+      "contentFormat": "html"
+    },
+    {
+      "title": "API маршруты",
+      "content": "\n<h3>Создание API без отдельного бэкенда</h3>\n<p>Файлы в pages/api/ становятся API маршрутами:</p>\n<pre>// pages/api/hello.ts\nexport default function handler(req, res) {\n  if (req.method === 'POST') {\n    res.status(200).json({ message: 'Hello' });\n  }\n}</pre>\n      ",
+      "contentFormat": "html"
+    },
+    {
+      "title": "Оптимизация в Next.js",
+      "content": "\n<h3>Image Optimization</h3>\n<p>next/image автоматически оптимизирует изображения</p>\n\n<h3>Font Optimization</h3>\n<p>next/font для оптимизации шрифтов</p>\n\n<h3>Code Splitting</h3>\n<p>Автоматический code splitting по маршрутам</p>\n      ",
+      "contentFormat": "html"
+    },
+    {
+      "title": "Развертывание Next.js",
+      "content": "\n<h3>Vercel</h3>\n<p>Родная платформа для Next.js с автодеплоем</p>\n\n<h3>Self-hosted</h3>\n<p>npm run build && npm start на любом Node.js сервере</p>\n\n<h3>Docker</h3>\n<p>Контейнеризация с output: 'standalone' в next.config.js</p>\n      ",
+      "contentFormat": "html"
+    }
+  ]
+}

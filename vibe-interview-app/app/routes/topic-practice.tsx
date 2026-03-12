@@ -1,5 +1,5 @@
 import type { Route } from "./+types/topic-practice";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { Link } from "react-router";
 import { Layout } from "~/components/Layout";
 import { FlashCard, type Card, type Score } from "~/components/FlashCard";
@@ -7,24 +7,7 @@ import { StarRating } from "~/components/StarRating";
 import { ApiKeyInput } from "~/components/ApiKeyInput";
 import { useProgress } from "~/hooks/useProgress";
 import { hasApiKey } from "~/lib/llm";
-import { javascriptCards } from "~/data/cards/javascript";
-import { reactCards } from "~/data/cards/react";
-import { nextjsCards } from "~/data/cards/nextjs";
-import { nodejsCards } from "~/data/cards/nodejs";
-import { cssCards } from "~/data/cards/css";
-import { cicdCards } from "~/data/cards/cicd";
-import { testingCards } from "~/data/cards/testing";
-import { topics } from "~/data/topics";
-
-const cardsMap: Record<string, Card[]> = {
-  javascript: javascriptCards,
-  react: reactCards,
-  nextjs: nextjsCards,
-  nodejs: nodejsCards,
-  css: cssCards,
-  cicd: cicdCards,
-  testing: testingCards,
-};
+import { loadContent, type CardsFile, type TopicsFile } from "~/lib/contentLoader";
 
 type Phase = "setup" | "playing" | "finished";
 
@@ -44,18 +27,21 @@ function shuffle<T>(arr: T[]): T[] {
 }
 
 export function meta({ params }: Route.MetaArgs) {
-  const topic = topics.find((t) => t.id === params.topicId);
   return [
-    { title: `${topic?.title || "Практика"} — Практика` },
-    { name: "description", content: topic?.description },
+    { title: `Практика` },
+    { name: "description", content: "Практикуйтесь с карточками" },
   ];
 }
 
 const MAX_REPLAY_ROUNDS = 2;
 
 export default function TopicPractice({ params }: Route.ComponentProps) {
-  const topic = topics.find((t) => t.id === params.topicId);
   const { saveCardResult, incrementSessions } = useProgress();
+
+  const [topicsData, setTopicsData] = useState<TopicsFile | null>(null);
+  const [cardsData, setCardsData] = useState<CardsFile | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   const [phase, setPhase] = useState<Phase>("setup");
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -64,14 +50,43 @@ export default function TopicPractice({ params }: Route.ComponentProps) {
   const [replayQueue, setReplayQueue] = useState<Card[]>([]);
   const [apiKeyReady, setApiKeyReady] = useState(hasApiKey);
 
-  const allCards = useMemo(() => shuffle(cardsMap[params.topicId] ?? []), [params.topicId]);
+  // Load topics and cards
+  useEffect(() => {
+    Promise.all([
+      loadContent("ru", "topics"),
+      loadContent("ru", "cards", params.topicId),
+    ])
+      .then(([topics, cards]) => {
+        setTopicsData(topics);
+        setCardsData(cards);
+        setError(null);
+      })
+      .catch((err) => {
+        console.error("Failed to load content:", err);
+        setError("Failed to load content. Please refresh the page.");
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }, [params.topicId]);
+
+  const topic = topicsData?.topics.find((t) => t.id === params.topicId);
+  const allCards = useMemo(() => shuffle(cardsData?.cards ?? []), [cardsData?.cards]);
 
   const currentDeck = round === 1 ? allCards : replayQueue;
 
-  if (!topic) {
+  if (loading) {
     return (
       <Layout showBack>
-        <p className="text-center text-[var(--color-red)]">Тема не найдена</p>
+        <p className="text-center text-[var(--color-muted)]">Loading...</p>
+      </Layout>
+    );
+  }
+
+  if (error || !topic || !cardsData) {
+    return (
+      <Layout showBack>
+        <p className="text-center text-red-500">{error || "Failed to load content"}</p>
       </Layout>
     );
   }

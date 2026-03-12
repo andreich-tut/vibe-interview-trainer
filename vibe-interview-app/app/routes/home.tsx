@@ -1,8 +1,9 @@
 import { Layout } from "~/components/Layout";
 import { TopicCard } from "~/components/TopicCard";
-import { topics } from "~/data/topics";
 import { useProgress } from "~/hooks/useProgress";
 import { Link } from "react-router";
+import { useEffect, useState } from "react";
+import { loadContent, type TopicsFile } from "~/lib/contentLoader";
 
 export function meta() {
   return [
@@ -13,6 +14,46 @@ export function meta() {
 
 export default function Home() {
   const { getTopicProgress } = useProgress();
+  const [topicsData, setTopicsData] = useState<TopicsFile | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    loadContent("ru", "topics")
+      .then((data) => {
+        setTopicsData(data);
+        setError(null);
+      })
+      .catch((err) => {
+        console.error("Failed to load topics:", err);
+        setError("Failed to load topics. Please refresh the page.");
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }, []);
+
+  if (loading) {
+    return (
+      <Layout wide>
+        <div className="text-center py-12">
+          <p className="text-[var(--color-muted)]">Loading...</p>
+        </div>
+      </Layout>
+    );
+  }
+
+  if (error || !topicsData) {
+    return (
+      <Layout wide>
+        <div className="text-center py-12">
+          <p className="text-red-500">{error || "Failed to load content"}</p>
+        </div>
+      </Layout>
+    );
+  }
+
+  const topics = topicsData.topics;
 
   return (
     <Layout wide>

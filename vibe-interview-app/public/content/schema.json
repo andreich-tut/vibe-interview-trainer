@@ -1,0 +1,200 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Interview Content Schema",
+  "description": "JSON schema for interview preparation content (Russian and English versions)",
+
+  "definitions": {
+    "topic": {
+      "type": "object",
+      "required": ["id", "title", "icon", "description"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique topic identifier",
+          "enum": ["javascript", "react", "nextjs", "nodejs", "css", "cicd", "testing"]
+        },
+        "title": {
+          "type": "string",
+          "description": "Topic title (e.g., 'JavaScript', 'React')"
+        },
+        "icon": {
+          "type": "string",
+          "description": "Emoji icon representing the topic"
+        },
+        "description": {
+          "type": "string",
+          "description": "Brief topic description"
+        }
+      }
+    },
+
+    "flashcard": {
+      "type": "object",
+      "required": ["id", "category", "question", "answer", "keyPoints"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique card ID within topic (1-10)"
+        },
+        "category": {
+          "type": "string",
+          "description": "Category name (e.g., 'Область видимости', 'Компоненты')"
+        },
+        "question": {
+          "type": "string",
+          "description": "Interview question text (Russian or English)"
+        },
+        "answer": {
+          "type": "string",
+          "description": "Answer to the question (plain text, no HTML)"
+        },
+        "keyPoints": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Array of key points or bullet points"
+        }
+      }
+    },
+
+    "theory": {
+      "type": "object",
+      "required": ["title", "content", "contentFormat"],
+      "properties": {
+        "title": {
+          "type": "string",
+          "description": "Theory section title"
+        },
+        "content": {
+          "type": "string",
+          "description": "Theory content in specified format (HTML or Markdown)"
+        },
+        "contentFormat": {
+          "type": "string",
+          "enum": ["html", "markdown"],
+          "description": "Format of content field. All theory currently uses 'html'."
+        }
+      }
+    },
+
+    "eventLoopStep": {
+      "type": "object",
+      "required": ["tag", "label", "desc"],
+      "properties": {
+        "tag": {
+          "type": "string",
+          "enum": ["sync", "micro", "macro"],
+          "description": "Step type: sync (synchronous), micro (microtask), macro (macrotask)"
+        },
+        "label": {
+          "type": "string",
+          "description": "Human-readable label (e.g., 'синхронно', 'микрозадача')"
+        },
+        "desc": {
+          "type": "string",
+          "description": "Step description"
+        }
+      }
+    },
+
+    "eventLoopQuestion": {
+      "type": "object",
+      "required": ["code", "answer", "hint", "difficulty", "steps", "explanation"],
+      "properties": {
+        "code": {
+          "type": "string",
+          "description": "JavaScript code snippet to analyze"
+        },
+        "answer": {
+          "type": "string",
+          "description": "Expected output/answer (e.g., '1, 3, 2')"
+        },
+        "hint": {
+          "type": "string",
+          "description": "Hint for solving the problem"
+        },
+        "difficulty": {
+          "type": "string",
+          "enum": ["easy", "medium", "hard"],
+          "description": "Question difficulty level"
+        },
+        "steps": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/eventLoopStep" },
+          "description": "Execution steps (Event Loop analysis)"
+        },
+        "explanation": {
+          "type": "string",
+          "description": "Full explanation of the answer"
+        }
+      }
+    }
+  },
+
+  "topics": {
+    "type": "object",
+    "required": ["topics"],
+    "properties": {
+      "topics": {
+        "type": "array",
+        "items": { "$ref": "#/definitions/topic" },
+        "minItems": 7,
+        "maxItems": 7,
+        "description": "Array of all interview topics"
+      }
+    }
+  },
+
+  "cards": {
+    "type": "object",
+    "required": ["cards"],
+    "properties": {
+      "cards": {
+        "type": "array",
+        "items": { "$ref": "#/definitions/flashcard" },
+        "minItems": 10,
+        "maxItems": 10,
+        "description": "Array of flashcards for a topic (exactly 10)"
+      }
+    }
+  },
+
+  "theory": {
+    "type": "object",
+    "required": ["theory"],
+    "properties": {
+      "theory": {
+        "type": "array",
+        "items": { "$ref": "#/definitions/theory" },
+        "description": "Array of theory sections for a topic"
+      }
+    }
+  },
+
+  "eventLoop": {
+    "type": "object",
+    "required": ["easy", "medium", "hard"],
+    "properties": {
+      "easy": {
+        "type": "array",
+        "items": { "$ref": "#/definitions/eventLoopQuestion" },
+        "description": "Easy difficulty event loop questions (5 total)"
+      },
+      "medium": {
+        "type": "array",
+        "items": { "$ref": "#/definitions/eventLoopQuestion" },
+        "description": "Medium difficulty event loop questions (3 total)"
+      },
+      "hard": {
+        "type": "array",
+        "items": { "$ref": "#/definitions/eventLoopQuestion" },
+        "description": "Hard difficulty event loop questions (5 total)"
+      }
+    }
+  },
+
+  "notes": {
+    "contentFormat": "All theory content is currently in HTML format. Cards are plain text. Event loop questions are structured with steps array for visualization.",
+    "languages": "Content available in 'ru' (Russian, completed) and 'en' (English, for future translations)",
+    "structure": "content/{language}/{type}/{topic}.json where type is 'cards', 'theory', or root for topics.json and event-loop.json"
+  }
+}

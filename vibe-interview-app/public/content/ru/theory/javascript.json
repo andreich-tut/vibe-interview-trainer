@@ -1,0 +1,34 @@
+{
+  "theory": [
+    {
+      "title": "Область видимости (Scope)",
+      "content": "\n<h3>Что такое scope?</h3>\n<p>Область видимости — это правило, определяющее, где переменная доступна. В JavaScript есть несколько типов:</p>\n\n<h4>Глобальный scope</h4>\n<p>Переменные, объявленные вне функций и блоков, доступны везде:</p>\n<pre>const global = 'доступна везде';</pre>\n\n<h4>Функциональный scope</h4>\n<p>var имеет функциональный scope — видна только внутри функции:</p>\n<pre>function test() {\n  var local = 'видна только в функции';\n}\n// Ошибка: local не определена</pre>\n\n<h4>Блочный scope</h4>\n<p>let и const имеют блочный scope — видны только в блоке {} (if, for, while):</p>\n<pre>if (true) {\n  let block = 'видна только в блоке if';\n}\n// Ошибка: block не определена</pre>\n\n<h3>Замыкание (Closure)</h3>\n<p>Функция, которая помнит переменные из своего внешнего scope. Очень полезно для инкапсуляции:</p>\n<pre>function createCounter() {\n  let count = 0;  // приватная переменная\n  return function() {\n    count++;\n    return count;\n  };\n}\nconst counter = createCounter();\nconsole.log(counter()); // 1\nconsole.log(counter()); // 2</pre>\n    ",
+      "contentFormat": "html"
+    },
+    {
+      "title": "Асинхронное программирование",
+      "content": "\n<h3>Promise</h3>\n<p>Promise — это объект, который представляет будущий результат операции. Может быть в трёх состояниях:</p>\n<ul>\n  <li><strong>Pending</strong> — ожидание результата</li>\n  <li><strong>Fulfilled</strong> — успешно выполнено (resolve)</li>\n  <li><strong>Rejected</strong> — ошибка (reject)</li>\n</ul>\n\n<h3>async/await</h3>\n<p>Синтаксический сахар над Promise, делает код более читаемым:</p>\n<pre>async function fetchData() {\n  try {\n    const response = await fetch('/api/data');\n    const data = await response.json();\n    return data;\n  } catch (error) {\n    console.error('Ошибка:', error);\n  }\n}</pre>\n\n<h3>setTimeout vs setInterval</h3>\n<ul>\n  <li><strong>setTimeout</strong> — выполняет функцию один раз через N миллисекунд</li>\n  <li><strong>setInterval</strong> — повторяет функцию каждые N миллисекунд</li>\n</ul>\n    ",
+      "contentFormat": "html"
+    },
+    {
+      "title": "Прототипное наследование",
+      "content": "\n<h3>Что такое прототип?</h3>\n<p>Каждый объект в JavaScript имеет внутреннюю ссылку на другой объект — его прототип. Это используется для поиска свойств и методов:</p>\n<pre>const person = { name: 'John' };\nconsole.log(person.toString()); // наследуется из Object.prototype</pre>\n\n<h3>Цепочка прототипов</h3>\n<p>Поиск свойства идёт вверх по цепочке: объект → его прототип → прототип прототипа → Object.prototype</p>\n\n<h3>Constructor функции</h3>\n<pre>function Person(name) {\n  this.name = name;\n}\nPerson.prototype.greet = function() {\n  return 'Привет, ' + this.name;\n};\nconst john = new Person('John');\nconsole.log(john.greet()); // Привет, John</pre>\n    ",
+      "contentFormat": "html"
+    },
+    {
+      "title": "this в JavaScript",
+      "content": "\n<h3>Что такое this?</h3>\n<p>this — это ключевое слово, которое ссылается на объект, вызвавший функцию. Его значение зависит от контекста вызова:</p>\n\n<h3>В методе объекта</h3>\n<pre>const obj = {\n  name: 'Object',\n  getName: function() {\n    return this.name; // this = obj\n  }\n};\nconsole.log(obj.getName()); // Object</pre>\n\n<h3>call, apply, bind</h3>\n<p>Позволяют явно указать, что будет this:</p>\n<pre>function greet(greeting) {\n  return greeting + ', ' + this.name;\n}\nconst person = { name: 'Alice' };\n\ngreet.call(person, 'Привет');    // явный контекст\ngreet.apply(person, ['Hi']);      // аргументы как массив\nconst bound = greet.bind(person); // возвращает новую функцию\nbound('Hello');                    // Привет, Alice</pre>\n    ",
+      "contentFormat": "html"
+    },
+    {
+      "title": "ES6+ функции",
+      "content": "\n<h3>Стрелочные функции (Arrow Functions)</h3>\n<p>Компактный синтаксис, но не имеют своего this:</p>\n<pre>const add = (a, b) => a + b;\n\nconst obj = {\n  value: 10,\n  method: function() {\n    const arrow = () => this.value; // this = obj\n    const regular = function() { return this.value; }; // this = undefined\n  }\n};</pre>\n\n<h3>Деструктуризация</h3>\n<p>Быстрый способ извлечь значения из объектов и массивов:</p>\n<pre>// Объект\nconst { name, age } = { name: 'John', age: 30 };\n\n// Массив\nconst [first, second] = [1, 2, 3];\n\n// С переименованием\nconst { name: fullName } = { name: 'John' };</pre>\n\n<h3>Остаточные параметры (...rest)</h3>\n<pre>function sum(...numbers) {\n  return numbers.reduce((a, b) => a + b);\n}\nconsole.log(sum(1, 2, 3, 4)); // 10</pre>\n    ",
+      "contentFormat": "html"
+    },
+    {
+      "title": "Модули в JavaScript",
+      "content": "\n<h3>import vs require</h3>\n\n<h4>require (CommonJS) — в Node.js</h4>\n<pre>const module = require('./file.js');\nmodule.exports = { someFunction };</pre>\n\n<h4>import (ES6 modules) — современный стандарт</h4>\n<pre>import { someFunction } from './file.js';\nexport function someFunction() { }</pre>\n\n<h3>Типы экспорта</h3>\n<pre>// Named exports\nexport const func1 = () => {};\nexport const func2 = () => {};\nimport { func1, func2 } from './module';\n\n// Default export\nexport default MyComponent;\nimport MyComponent from './module';</pre>\n    ",
+      "contentFormat": "html"
+    }
+  ]
+}

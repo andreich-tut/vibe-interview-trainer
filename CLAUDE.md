@@ -58,3 +58,7 @@ When running Playwright tests or creating screenshots for development:
 The `.claude/agents/` directory contains subagent configurations for a structured frontend development workflow: planning-agent → project-setup-agent → design-system-agent → api-mock-agent → react-ui-builder / react-logic-builder → test-agent → reviewer-agent.
 
 **Rule: Always delegate implementation work to specialist subagents.** Never write component code, hooks, CSS, or logic directly in the main conversation. The main conversation is for planning, coordination, and user communication only. Use agents for all code changes.
+
+### Agent Communication — Transparency About Tool Use
+
+During task implementation, always communicate which agent you are using for each phase of work. If no specialized agent is available for the current task, explicitly state that. Transparency helps the user understand your approach and decision-making process.
