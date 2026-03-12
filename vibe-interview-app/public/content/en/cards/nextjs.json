@@ -1,0 +1,132 @@
+{
+  "cards": [
+    {
+      "id": "1",
+      "category": "Basics",
+      "question": "What is Next.js and what are its main features?",
+      "answer": "Next.js is a React framework for full-featured web applications. Main features: App Router with file-based routing, Server Components by default, server-side rendering (SSR), static generation (SSG), Server Actions, Middleware, built-in optimization (Image, Font, Script). Uses React Server Components to reduce client bundle size.",
+      "keyPoints": [
+        "React framework for fullstack web applications",
+        "App Router with file-based routing",
+        "Server Components by default",
+        "Support for SSR, SSG, ISR",
+        "Built-in optimization (Image, Font, Script)"
+      ]
+    },
+    {
+      "id": "2",
+      "category": "Rendering",
+      "question": "What are Server Components and Client Components in Next.js? What's the difference?",
+      "answer": "Server Components render on the server, don't send JavaScript to client, have direct access to DB and filesystem. By default all components are server components. Client Components are marked with 'use client' directive, render on client, can use useState, useEffect, event handlers. Server components reduce bundle size. Client components needed for interactivity.",
+      "keyPoints": [
+        "Server Components render on server, don't send JS to client",
+        "By default all components are server components",
+        "Client Components marked with 'use client' directive",
+        "Client Components needed for interactivity (hooks, event handlers)",
+        "Server Components can directly access DB and filesystem"
+      ]
+    },
+    {
+      "id": "3",
+      "category": "Rendering",
+      "question": "What rendering strategies does Next.js App Router support?",
+      "answer": "Static Rendering (default) — page generated at build time and cached. Dynamic Rendering — rendered on every request (if using cookies(), headers(), searchParams). Streaming — gradual HTML delivery with loading.tsx and Suspense. ISR — revalidate via time-based (export const revalidate = 60) or on-demand (revalidatePath/revalidateTag).",
+      "keyPoints": [
+        "Static Rendering — generated at build, cached (default)",
+        "Dynamic Rendering — rendered on every request (cookies, headers, searchParams)",
+        "Streaming — gradual HTML delivery via Suspense and loading.tsx",
+        "ISR — revalidate by time or on-demand (revalidatePath/revalidateTag)"
+      ]
+    },
+    {
+      "id": "4",
+      "category": "Routing",
+      "question": "How does App Router work in Next.js?",
+      "answer": "App Router uses the app/ directory. Routes defined by folders, not files. Each folder = URL segment. page.tsx — route page, layout.tsx — shared layout (preserves state on navigation), loading.tsx — loading UI (Suspense), error.tsx — error handling, not-found.tsx — 404. Layouts are nested and don't re-render on navigation.",
+      "keyPoints": [
+        "app/ directory instead of pages/",
+        "Routes defined by folders, page.tsx is the page",
+        "layout.tsx is shared layout, preserves state on navigation",
+        "loading.tsx for Suspense, error.tsx for error handling",
+        "Layouts are nested and don't re-render"
+      ]
+    },
+    {
+      "id": "5",
+      "category": "Routing",
+      "question": "How do dynamic routes work in App Router?",
+      "answer": "Dynamic segments in square brackets: app/blog/[slug]/page.tsx. Parameters come as props: ({ params }) => params.slug. For SSG use generateStaticParams() to specify all paths. Catch-all: [...slug] (required) and [[...slug]] (optional). Parallel routes: @modal. Intercepting: (.)photo.",
+      "keyPoints": [
+        "Square brackets for dynamic segments: [slug]",
+        "generateStaticParams() instead of getStaticPaths for SSG",
+        "Catch-all segments: [...slug] and [[...slug]]",
+        "Parameters come through component props"
+      ]
+    },
+    {
+      "id": "6",
+      "category": "Data Loading",
+      "question": "How do you load data in Server Components?",
+      "answer": "In Server Components you can use async/await directly in the component: export default async function Page() { const data = await fetch(url); }. No need for getServerSideProps/getStaticProps. Next.js automatically deduplicates identical fetch requests. Caching set via fetch options: { cache: 'force-cache' } (static) or { next: { revalidate: 60 } } (ISR).",
+      "keyPoints": [
+        "async/await directly in component (no getServerSideProps/getStaticProps)",
+        "Next.js automatically deduplicates fetch requests",
+        "cache: 'force-cache' for static caching",
+        "next: { revalidate: N } for ISR",
+        "Data loaded on server, doesn't increase client bundle"
+      ]
+    },
+    {
+      "id": "7",
+      "category": "Server Actions",
+      "question": "What are Server Actions in Next.js?",
+      "answer": "Server Actions are async functions executed on the server. Marked with 'use server' directive. Can be called from client components via form action or directly. Replace API routes for data mutations. Auto-integrate with revalidation. Support progressive enhancement — forms work without JS.",
+      "keyPoints": [
+        "Async functions with 'use server' directive",
+        "Executed on server, called from client",
+        "Replace API routes for data mutations",
+        "Work via form action (progressive enhancement without JS)",
+        "Integrate with revalidatePath/revalidateTag"
+      ]
+    },
+    {
+      "id": "8",
+      "category": "Optimization",
+      "question": "What built-in optimization tools does Next.js have?",
+      "answer": "next/image — auto image optimization (lazy loading, WebP/AVIF, responsive sizes). next/font — font optimization (self-hosted, no layout shift). next/script — control script loading (beforeInteractive, afterInteractive, lazyOnload). Automatic code splitting per route. Link prefetching. Streaming SSR.",
+      "keyPoints": [
+        "next/image — image optimization (lazy loading, modern formats, responsive)",
+        "next/font — self-hosted fonts without layout shift",
+        "next/script — control script loading priority",
+        "Automatic code splitting per route",
+        "Link prefetching"
+      ]
+    },
+    {
+      "id": "9",
+      "category": "Middleware",
+      "question": "What is Middleware in Next.js and how do you use it?",
+      "answer": "Middleware executes before request handling. File middleware.ts at app root. Used for: redirects, rewrites, authentication, A/B testing, i18n. Runs on Edge Runtime (fast, limited API). Configured via matcher: export const config = { matcher: '/dashboard/:path*' }.",
+      "keyPoints": [
+        "Executes before every request processing",
+        "File middleware.ts at project root",
+        "Runs on Edge Runtime (fast, limited API)",
+        "Uses: redirects, authentication, A/B tests, i18n",
+        "Config via matcher to filter routes"
+      ]
+    },
+    {
+      "id": "10",
+      "category": "Deployment",
+      "question": "How do you deploy a Next.js application? What hosting options exist?",
+      "answer": "Vercel — native platform (auto-deploy, Edge Functions, Analytics). Self-hosted: npm run build && npm start on any server. Docker — containerization (output: 'standalone' in next.config). Static export: output: 'export' for CDN without server. AWS (Amplify, Lambda@Edge), Cloudflare Pages. Choice depends on: need SSR, budget, infrastructure.",
+      "keyPoints": [
+        "Vercel — native platform, auto-deploy from git",
+        "Self-hosted: build + start on any Node.js server",
+        "Docker with output: 'standalone' for containerization",
+        "Static export (output: 'export') for CDN without server",
+        "Choice depends on SSR needs and budget"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,76 @@
+{
+  "cards": [
+    {
+      "id": "1",
+      "category": "Basics",
+      "question": "What is the difference between CI, Continuous Delivery, and Continuous Deployment?",
+      "answer": "CI: automatically builds and tests every commit. Continuous Delivery: ensures every passing build is ready to deploy but requires manual approval. Continuous Deployment: every passing build is deployed to production automatically without human intervention.",
+      "keyPoints": [
+        "CI: automatic build + test on every commit",
+        "Continuous Delivery: deployable at any time, manual release",
+        "Continuous Deployment: auto-deploys every passing build",
+        "All three require automated tests as quality gate"
+      ]
+    },
+    {
+      "id": "2",
+      "category": "GitHub Actions",
+      "question": "How do GitHub Actions workflows work?",
+      "answer": "A workflow is a YAML file in .github/workflows/. Triggered by events (push, pull_request, schedule). Contains jobs which run in parallel by default. Each job has steps that run sequentially. Jobs can declare dependencies with 'needs' to run sequentially.",
+      "keyPoints": [
+        "Triggered by events: push, pull_request, schedule, workflow_dispatch",
+        "Jobs run in parallel by default; 'needs' creates dependency order",
+        "Steps run sequentially within a job",
+        "Secrets stored in GitHub Settings, accessed as ${{ secrets.NAME }}"
+      ]
+    },
+    {
+      "id": "3",
+      "category": "Deployments",
+      "question": "What deployment strategies exist and when to use them?",
+      "answer": "Blue-Green: two identical environments, instant switch, easy rollback. Canary: gradually route small percentage to new version, catch issues early. Rolling: replace instances one by one with zero downtime. Feature flags: decouple deployment from release.",
+      "keyPoints": [
+        "Blue-Green: instant switch, requires 2x resources, easy rollback",
+        "Canary: gradual traffic shift, detects issues with limited blast radius",
+        "Rolling: zero downtime, briefly runs two versions simultaneously",
+        "Feature flags: deploy code to all, control visibility per user/group"
+      ]
+    },
+    {
+      "id": "4",
+      "category": "Docker",
+      "question": "How is Docker used in CI/CD pipelines?",
+      "answer": "Docker packages the application and all dependencies into an image, ensuring the same artifact runs identically in CI, staging, and production. Multi-stage builds produce small production images. Images pushed to registry and pulled by deployment targets.",
+      "keyPoints": [
+        "Immutable artifact: same image tested and deployed",
+        "Multi-stage builds: build in full image, copy to minimal runtime image",
+        "Container registry stores versioned images (ECR, GCR, Docker Hub)",
+        ".dockerignore reduces image size and build context"
+      ]
+    },
+    {
+      "id": "5",
+      "category": "Monitoring",
+      "question": "What are the three pillars of observability?",
+      "answer": "Metrics: numerical measurements over time (latency, error rate, CPU). Logs: timestamped records of discrete events for debugging. Traces: track a request across multiple services to identify bottlenecks. Together they answer: what's wrong, why it happened, where across services.",
+      "keyPoints": [
+        "Metrics: quantitative over time — Prometheus, Datadog",
+        "Logs: timestamped event records — structured JSON preferred",
+        "Traces: distributed request tracking — Jaeger, OpenTelemetry",
+        "Alert on symptoms (error rate), not causes (CPU spike)"
+      ]
+    },
+    {
+      "id": "6",
+      "category": "Optimization",
+      "question": "How do you optimize CI/CD pipeline speed?",
+      "answer": "Cache dependencies between runs to avoid reinstalling. Run jobs in parallel where possible. Use matrix builds for cross-environment testing. Only run relevant jobs based on changed files (path filtering). Use incremental builds and test only affected code.",
+      "keyPoints": [
+        "Cache node_modules by package-lock.json hash",
+        "Parallel jobs: lint, typecheck, and test simultaneously",
+        "Path filtering: only run deploy job when src/ changes",
+        "Fail fast: run fastest checks (lint, typecheck) before slow tests"
+      ]
+    }
+  ]
+}

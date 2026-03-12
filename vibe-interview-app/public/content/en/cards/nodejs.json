@@ -1,0 +1,126 @@
+{
+  "cards": [
+    {
+      "id": "1",
+      "category": "Basics",
+      "question": "What is Node.js?",
+      "answer": "Node.js is a JavaScript runtime for executing JS outside the browser. Used for creating servers, CLI tools, bots, scripts. Uses Chrome's V8 engine. Has built-in modules (fs, http, path). npm ecosystem with millions of packages.",
+      "keyPoints": [
+        "JavaScript runtime outside the browser (based on Chrome's V8 engine)",
+        "Single-threaded with non-blocking I/O and Event Loop",
+        "Used for servers, CLI, scripts",
+        "npm ecosystem — largest package registry"
+      ]
+    },
+    {
+      "id": "2",
+      "category": "Basics",
+      "question": "How does Node.js's asynchronous model work?",
+      "answer": "Node.js uses Event Loop for async processing. Non-blocking I/O — operations run in background. Callbacks, Promises, async/await for handling results. EventEmitter for events system. Allows handling thousands of connections simultaneously.",
+      "keyPoints": [
+        "Event Loop — event processing cycle (single-threaded)",
+        "Non-blocking I/O — operations run in background (libuv)",
+        "Callbacks, Promises, async/await for handling results",
+        "Can handle thousands of connections simultaneously"
+      ]
+    },
+    {
+      "id": "3",
+      "category": "Modules",
+      "question": "What is CommonJS and how do require/module.exports work?",
+      "answer": "CommonJS is Node.js module standard. require('./file.js') imports a module. module.exports = { func } exports. Synchronous import. Each file is a separate module. Module variables are private, not visible outside. Old format but still popular.",
+      "keyPoints": [
+        "require() — synchronous module import",
+        "module.exports — export from module",
+        "Each file is a separate module with private scope",
+        "Modules are cached after first require"
+      ]
+    },
+    {
+      "id": "4",
+      "category": "Modules",
+      "question": "What is the difference between require and import?",
+      "answer": "require (CommonJS) — synchronous, dynamic, for Node.js. import (ES6) — asynchronous, static, standard. import can be analyzed at build time. require allows dynamic paths. Modern Node.js supports import with 'type': 'module' in package.json.",
+      "keyPoints": [
+        "require — synchronous, dynamic (CommonJS)",
+        "import — statically analyzed, ES Modules standard",
+        "import allows tree-shaking during build",
+        "Node.js supports ESM via type: 'module' in package.json"
+      ]
+    },
+    {
+      "id": "5",
+      "category": "Built-in Modules",
+      "question": "What built-in Node.js modules do you know?",
+      "answer": "fs — working with files and folders. http — HTTP server. https — HTTPS. path — working with paths. events — EventEmitter. stream — data streams. os — OS information. util — utilities. child_process — running subprocesses. crypto — cryptography.",
+      "keyPoints": [
+        "fs — filesystem operations (sync and async API)",
+        "http/https — creating HTTP servers and requests",
+        "path — safe working with file paths",
+        "events — EventEmitter, stream — streaming data processing",
+        "child_process — running subprocesses, crypto — cryptography"
+      ]
+    },
+    {
+      "id": "6",
+      "category": "Servers",
+      "question": "How do you create a simple HTTP server in Node.js?",
+      "answer": "const http = require('http'); const server = http.createServer((req, res) => { res.end('Hello'); }); server.listen(3000); Use frameworks for real applications: Express, Fastify, Hapi, Koa. Routing, middleware, authentication — all in frameworks.",
+      "keyPoints": [
+        "http.createServer() with callback (req, res)",
+        "server.listen(port) to start",
+        "For real applications — use frameworks (Express, Fastify)",
+        "Frameworks add routing, middleware, error handling"
+      ]
+    },
+    {
+      "id": "7",
+      "category": "Servers",
+      "question": "Which framework should you choose for a Node.js server?",
+      "answer": "Express — most popular, simple, large community. Fastify — faster, modern. Hapi — enterprise, lots built-in. Koa — compact, uses async/await. Choose depending on project. For beginners: Express. For production: Fastify or Hapi.",
+      "keyPoints": [
+        "Express — most popular, simple, huge ecosystem",
+        "Fastify — high performance, schema validation, modern",
+        "Koa — minimal, async/await, from Express creators",
+        "Choice depends on project requirements and team"
+      ]
+    },
+    {
+      "id": "8",
+      "category": "Streams",
+      "question": "What are Streams in Node.js and what types exist?",
+      "answer": "Streams are a way to process data in chunks without loading everything into memory. 4 types: Readable (read, fs.createReadStream), Writable (write, fs.createWriteStream), Duplex (read and write, net.Socket), Transform (transform, zlib.createGzip). Use pipe() to connect: readable.pipe(transform).pipe(writable).",
+      "keyPoints": [
+        "Process data in chunks, don't load everything in memory",
+        "4 types: Readable, Writable, Duplex, Transform",
+        "pipe() to connect streams in a chain",
+        "Efficient for large files and network data"
+      ]
+    },
+    {
+      "id": "9",
+      "category": "Error Handling",
+      "question": "How do you properly handle errors in Node.js? What is uncaughtException?",
+      "answer": "Sync errors — try/catch. Async — .catch() for promises, error event for streams. process.on('uncaughtException') catches unhandled exceptions — must log and exit. process.on('unhandledRejection') for promises. In Express — error middleware (err, req, res, next). Always log errors, never swallow them silently.",
+      "keyPoints": [
+        "try/catch for sync code, .catch() for promises",
+        "process.on('uncaughtException') — catches unhandled exceptions",
+        "process.on('unhandledRejection') — unhandled promise rejections",
+        "On uncaughtException must log and exit (graceful shutdown)",
+        "In Express — error middleware with 4 args (err, req, res, next)"
+      ]
+    },
+    {
+      "id": "10",
+      "category": "Scaling",
+      "question": "What are Worker Threads and child_process? What's the difference?",
+      "answer": "child_process.fork() creates a new Node.js process with separate memory — communicate via IPC (message passing). Worker Threads (worker_threads) — threads in one process with shared memory (SharedArrayBuffer). Workers are lightweight, good for CPU tasks (parsing, computations). child_process for isolation and running external commands. Cluster module uses fork to scale HTTP server to all cores.",
+      "keyPoints": [
+        "child_process.fork() — new process with separate memory, IPC communication",
+        "Worker Threads — threads in one process, shared memory (SharedArrayBuffer)",
+        "Workers are lightweight, good for CPU-intensive tasks",
+        "Cluster module — scale HTTP server to all CPU cores"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,125 @@
+{
+  "cards": [
+    {
+      "id": "1",
+      "category": "Selectors",
+      "question": "What is a CSS selector and what types exist?",
+      "answer": "A selector is a pattern for selecting HTML elements. Types: element (p), class (.class), ID (#id), attribute ([type]), combinators (div > p, div p, p + span, p ~ span), pseudo-class (:hover, :active, :first-child), pseudo-element (::before, ::after).",
+      "keyPoints": [
+        "A pattern for selecting HTML elements for styling",
+        "Basic: element, class (.class), ID (#id), attribute ([attr])",
+        "Combinators: descendant (A B), child (A > B), adjacent (A + B), general (A ~ B)",
+        "Pseudo-classes (:hover, :nth-child) and pseudo-elements (::before, ::after)"
+      ]
+    },
+    {
+      "id": "2",
+      "category": "Selectors",
+      "question": "What is CSS selector specificity?",
+      "answer": "Specificity determines rule priority in conflicts. Calculated as a tuple (inline, ID, class, element): inline style > ID > class/attribute/pseudo-class > element/pseudo-element. NOT a decimal system: 11 classes don't outweigh 1 ID. !important overrides all specificity. At equal specificity, the last rule wins (cascade).",
+      "keyPoints": [
+        "Tuple (inline, ID, class, element) — NOT a decimal score system",
+        "inline style > ID > class/attribute/pseudo-class > element",
+        "11 classes do NOT outweigh 1 ID (common misconception)",
+        "!important overrides any specificity",
+        "At equal specificity, last rule in source wins (cascade)"
+      ]
+    },
+    {
+      "id": "3",
+      "category": "Flexbox",
+      "question": "How does Flexbox work and what are its main properties?",
+      "answer": "Flexbox aligns elements in a one-dimensional row or column. Container: display: flex, flex-direction, justify-content (along axis), align-items (across). Elements: flex (grow/shrink/basis), align-self. gap — spacing. Perfect for navigation, cards, alignment.",
+      "keyPoints": [
+        "One-dimensional layout (row OR column)",
+        "Container: display: flex, flex-direction, justify-content, align-items",
+        "Elements: flex (grow/shrink/basis), align-self, order",
+        "gap for spacing between elements"
+      ]
+    },
+    {
+      "id": "4",
+      "category": "Flexbox",
+      "question": "What is the difference between justify-content and align-items?",
+      "answer": "justify-content aligns along the main axis (usually horizontal). align-items aligns along the cross axis (usually vertical). With flex-direction: column, axes swap. flex-start, center, space-between, space-around, etc. — values for both.",
+      "keyPoints": [
+        "justify-content — aligns along main axis",
+        "align-items — aligns along cross axis",
+        "With flex-direction: column, axes swap",
+        "Values: flex-start, center, space-between, space-around, stretch"
+      ]
+    },
+    {
+      "id": "5",
+      "category": "Grid",
+      "question": "How does CSS Grid work?",
+      "answer": "Grid aligns elements in a 2D table (rows AND columns). display: grid, grid-template-columns, grid-template-rows. Elements: grid-column, grid-row. Automatic layout. More powerful than Flexbox for complex layouts. vs Flexbox: Grid for 2D, Flexbox for 1D.",
+      "keyPoints": [
+        "Two-dimensional layout (rows AND columns simultaneously)",
+        "grid-template-columns/rows to define grid",
+        "grid-column/row to place elements",
+        "Grid for 2D layouts, Flexbox for 1D alignment"
+      ]
+    },
+    {
+      "id": "6",
+      "category": "Responsiveness",
+      "question": "How do you use media queries for responsive design?",
+      "answer": "@media (max-width: 768px) { } — for screens smaller than 768px. @media (min-width: 1024px) { } — for larger than 1024px. @media (prefers-color-scheme: dark) { } — for dark theme. Mobile-first: start with mobile styles, expand via min-width. Desktop-first uses max-width.",
+      "keyPoints": [
+        "@media (max-width: N) and @media (min-width: N) for breakpoints",
+        "Mobile-first: base styles for mobile, expand via min-width",
+        "prefers-color-scheme: dark for dark theme",
+        "Typical breakpoints: 768px (tablet), 1024px (desktop)"
+      ]
+    },
+    {
+      "id": "7",
+      "category": "Animations",
+      "question": "What is transition in CSS?",
+      "answer": "transition smoothly changes a property. transition: background 0.3s ease; Background color changes over 0.3s with ease timing. Can use on all properties: transition: all 0.3s; Used on :hover, :focus. Best for simple transitions.",
+      "keyPoints": [
+        "Smooth change of a CSS property between two states",
+        "Syntax: transition: property duration timing-function delay",
+        "Triggered when property changes (hover, focus, class toggle)",
+        "For simple transitions, @keyframes for complex animations"
+      ]
+    },
+    {
+      "id": "8",
+      "category": "Animations",
+      "question": "How do you create a CSS animation with @keyframes?",
+      "answer": "@keyframes slidein { from { transform: translateX(-100%); } to { transform: translateX(0); } } .item { animation: slidein 0.5s ease-out; } More complex than transition. Can specify multiple steps (0%, 50%, 100%). animation-delay for delay.",
+      "keyPoints": [
+        "@keyframes defines animation steps (from/to or percentages)",
+        "animation: name duration timing-function on element",
+        "Supports multiple steps (0%, 25%, 50%, 100%)",
+        "animation-iteration-count: infinite for looping"
+      ]
+    },
+    {
+      "id": "9",
+      "category": "Transforms",
+      "question": "What transformations can be applied to an element?",
+      "answer": "transform: rotate(45deg), scale(1.5), translateX(50px), skew(10deg), perspective(1000px). Can combine: transform: rotate(45deg) scale(1.5). Don't affect other elements (don't change flow). Efficient for animations (GPU acceleration).",
+      "keyPoints": [
+        "rotate, scale, translate, skew — main transformations",
+        "Can combine in one transform property",
+        "Don't affect layout of other elements (don't change document flow)",
+        "Use GPU acceleration — efficient for animations"
+      ]
+    },
+    {
+      "id": "10",
+      "category": "Preprocessors",
+      "question": "What is SASS/SCSS and its advantages?",
+      "answer": "SASS is a CSS preprocessor with variables, nesting, mixins, functions. $color: red; .button { background: $color; } Nesting: .button { &:hover { } }. Better code organization. Compiles to regular CSS. Alternatives: PostCSS, Styled-components, CSS Modules.",
+      "keyPoints": [
+        "CSS preprocessor with variables ($var), nesting, mixins",
+        "Compiles to regular CSS",
+        "& for parent selector reference",
+        "Alternatives: PostCSS, CSS Modules, CSS-in-JS (styled-components)"
+      ]
+    }
+  ]
+}

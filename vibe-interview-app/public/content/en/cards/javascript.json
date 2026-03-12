@@ -1,0 +1,99 @@
+{
+  "cards": [
+    {
+      "id": "1",
+      "category": "Scope",
+      "question": "Explain how scope works in JavaScript. How do local and global scopes differ?",
+      "answer": "Scope determines where a variable is accessible. Global scope is outside functions and visible everywhere. Local scope is inside a function or block (let, const) and visible only there. var has function scope, while let/const have block scope.",
+      "keyPoints": [
+        "Scope determines variable accessibility",
+        "Global scope is visible everywhere, local scope only inside function/block",
+        "var has function scope",
+        "let and const have block scope"
+      ]
+    },
+    {
+      "id": "2",
+      "category": "Scope",
+      "question": "What is a closure and how does it work?",
+      "answer": "A closure is a function that remembers variables from its outer scope. The function 'closes over' or 'captures' external variables and maintains access to them even after the outer function has executed. Used for encapsulation and creating private variables.",
+      "keyPoints": [
+        "A function that remembers variables from its outer scope",
+        "Access to outer variables is preserved after the outer function completes",
+        "Used for encapsulation and private variables"
+      ]
+    },
+    {
+      "id": "3",
+      "category": "Async Programming",
+      "question": "What is a Promise and how does it work?",
+      "answer": "A Promise is an object representing the eventual result of an asynchronous operation. It has 3 states: pending (waiting), fulfilled (success/resolve), rejected (error/reject). Used with .then() to handle results and .catch() to handle errors.",
+      "keyPoints": [
+        "An object representing the eventual result of an async operation",
+        "3 states: pending, fulfilled, rejected",
+        ".then() for success, .catch() for errors",
+        "State is irreversible — once fulfilled/rejected, cannot change"
+      ]
+    },
+    {
+      "id": "4",
+      "category": "Async Programming",
+      "question": "Explain how async/await works. What advantages do they have over Promise chains?",
+      "answer": "async/await is syntactic sugar over Promises. An async function always returns a Promise. await pauses execution until the Promise resolves. Advantages: readability (looks like synchronous code), easier error handling (try/catch), clearer logic flow.",
+      "keyPoints": [
+        "Syntactic sugar over Promise",
+        "async function always returns a Promise",
+        "await pauses execution until Promise resolves",
+        "Better readability — code looks synchronous",
+        "Error handling via try/catch instead of .catch()"
+      ]
+    },
+    {
+      "id": "5",
+      "category": "Async Programming",
+      "question": "What is the difference between setTimeout and setInterval?",
+      "answer": "setTimeout executes a function once after a specified number of milliseconds. setInterval repeatedly executes a function every N milliseconds. Both return an ID that can be used with clearTimeout/clearInterval to cancel execution.",
+      "keyPoints": [
+        "setTimeout — executes once after a delay",
+        "setInterval — executes repeatedly at intervals",
+        "Both return IDs for cancellation via clearTimeout/clearInterval"
+      ]
+    },
+    {
+      "id": "6",
+      "category": "OOP and Prototypes",
+      "question": "How does prototype-based inheritance work in JavaScript?",
+      "answer": "Every object has an internal reference to a prototype (via Object.getPrototypeOf). When accessing a property, JavaScript searches first in the object itself, then in the prototype, then in the prototype's prototype — this is the prototype chain. Inheritance occurs through this chain.",
+      "keyPoints": [
+        "Every object has a reference to a prototype (__proto__ / Object.getPrototypeOf)",
+        "Property lookup follows the prototype chain upward",
+        "Chain ends at Object.prototype (null)",
+        "Inheritance is implemented via the prototype chain"
+      ]
+    },
+    {
+      "id": "7",
+      "category": "OOP and Prototypes",
+      "question": "What is 'this' in JavaScript, and how can context be changed using call, apply, and bind?",
+      "answer": "'this' is a keyword referring to the object that invoked the function. call(obj, arg1, arg2) executes the function with the specified context and arguments. apply(obj, [arg1, arg2]) is similar but takes arguments as an array. bind(obj) returns a new function with a bound context.",
+      "keyPoints": [
+        "'this' refers to the object in whose context the function is called",
+        "call — invokes with specified 'this' and arguments",
+        "apply — similar to call, but arguments in an array",
+        "bind — returns a new function with bound 'this' (doesn't invoke immediately)"
+      ]
+    },
+    {
+      "id": "8",
+      "category": "ES6+ Functions",
+      "question": "How do arrow functions differ from regular functions?",
+      "answer": "Arrow functions (=>) have concise syntax, cannot be constructors (new), don't have their own 'this' (inherit from surrounding scope). Regular functions have 'this' determined by how they're called. Arrow functions are convenient for callbacks and class methods.",
+      "keyPoints": [
+        "Don't have their own 'this' — inherit from lexical scope",
+        "Cannot be constructors (cannot use with new)",
+        "No 'arguments' object (use rest parameters instead)",
+        "Concise syntax, implicit return for single-line functions"
+      ]
+    }
+  ]
+}

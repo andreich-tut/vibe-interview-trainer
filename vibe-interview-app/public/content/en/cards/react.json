@@ -1,0 +1,123 @@
+{
+  "cards": [
+    {
+      "id": "1",
+      "category": "Components",
+      "question": "What is a functional component in React?",
+      "answer": "A functional component is a regular JavaScript function that returns JSX (markup). This is the modern approach (using hooks). Example: function Button(props) { return <button>{props.label}</button>; }. Preferred over class components.",
+      "keyPoints": [
+        "A JavaScript function that returns JSX",
+        "Modern approach — use hooks for state and effects",
+        "Preferred over class components"
+      ]
+    },
+    {
+      "id": "2",
+      "category": "Components",
+      "question": "What is the difference between functional and class components?",
+      "answer": "Functional components are regular functions that use hooks (useState, useEffect). Class components inherit from React.Component and use methods (componentDidMount, etc.). Functional components are simpler, faster, and more modern. Class components still work but are becoming outdated.",
+      "keyPoints": [
+        "Functional — functions with hooks, class — inherit React.Component",
+        "Class components use lifecycle methods, functional use useEffect",
+        "Functional components are simpler and easier to test",
+        "Class components are outdated but still supported"
+      ]
+    },
+    {
+      "id": "3",
+      "category": "Props and State",
+      "question": "What are props in React and how are they passed?",
+      "answer": "Props are arguments passed to a component. Passed as attributes: <Button label='Click' onClick={...} />. The component receives them as a parameter: function Button({ label, onClick }) or Button(props). Props are read-only and cannot be changed inside the component.",
+      "keyPoints": [
+        "Arguments passed to a component through JSX attributes",
+        "Read-only (one-way data flow from parent to child)",
+        "Destructuring in parameters: ({ label, onClick })",
+        "Data flows top-down (from parent to child)"
+      ]
+    },
+    {
+      "id": "4",
+      "category": "Props and State",
+      "question": "Explain the useState hook and how to manage component state.",
+      "answer": "useState(initialValue) returns an array [value, setValue]. value is the current value, setValue is the update function. Example: const [count, setCount] = useState(0); <button onClick={() => setCount(count + 1)}>. setState triggers a component re-render with the new value.",
+      "keyPoints": [
+        "useState(initialValue) returns [value, setter]",
+        "The setter triggers a component re-render",
+        "Update can be a value or a function: setState(prev => prev + 1)",
+        "State persists between renders"
+      ]
+    },
+    {
+      "id": "5",
+      "category": "Lifecycle",
+      "question": "How do you use useEffect to manage side effects?",
+      "answer": "useEffect(callback, dependencies) executes a function after render. Without dependencies — every render. With [] — once on mount. With [dep] — when dep changes. Returns a cleanup function (unsubscribe from events, cleanup). Used for fetch, subscriptions, timers.",
+      "keyPoints": [
+        "Executes side effects after render",
+        "Without dependency array — every render, with [] — only on mount",
+        "With [dep] — re-run when dependency changes",
+        "Returns cleanup function for cleanup (unsubscribes, timers)"
+      ]
+    },
+    {
+      "id": "6",
+      "category": "Lifecycle",
+      "question": "What lifecycle phases of a component do you know?",
+      "answer": "Mounting (componentDidMount) — component created, added to DOM. Updating (componentDidUpdate) — props or state changed. Unmounting (componentWillUnmount) — component removed. In functional components this is implemented via useEffect with different dependencies.",
+      "keyPoints": [
+        "Mounting — component created and added to DOM",
+        "Updating — props or state changed, re-render",
+        "Unmounting — component removed from DOM",
+        "In functional components — useEffect with different dependencies"
+      ]
+    },
+    {
+      "id": "7",
+      "category": "Optimization",
+      "question": "What is React.memo and when should it be used?",
+      "answer": "React.memo is a wrapper that skips re-render if props haven't changed. const Button = React.memo(({ label }) => ...); Used for expensive components that render with the same props. Good for performance optimization.",
+      "keyPoints": [
+        "HOC that prevents re-render when props don't change",
+        "Compares props shallowly (shallow comparison)",
+        "Use for expensive components with frequent parent re-renders",
+        "Don't use blindly — comparison adds overhead"
+      ]
+    },
+    {
+      "id": "8",
+      "category": "Optimization",
+      "question": "Explain useMemo and useCallback.",
+      "answer": "useMemo(compute, [deps]) caches the result of a function, recomputes only if deps change. useCallback(fn, [deps]) caches a function, returns the same reference if deps don't change. Both improve performance for expensive operations and with React.memo.",
+      "keyPoints": [
+        "useMemo caches computation result, recomputes when deps change",
+        "useCallback caches function reference, updates when deps change",
+        "useCallback(fn, deps) is equivalent to useMemo(() => fn, deps)",
+        "Useful with React.memo to prevent unnecessary re-renders"
+      ]
+    },
+    {
+      "id": "9",
+      "category": "API Integration",
+      "question": "How do you load data from an API in a React component?",
+      "answer": "Use useEffect with fetch or a library. useEffect(() => { fetch('/api/data').then(res => res.json()).then(data => setState(data)).catch(err => setError(err)); }, []); Correctly: error handling, loading state, cleanup for unsubscribing.",
+      "keyPoints": [
+        "useEffect with empty dependency array to load on mount",
+        "fetch or library (axios, react-query, SWR)",
+        "Required: loading, error, and data states",
+        "Cleanup via AbortController to prevent race conditions"
+      ]
+    },
+    {
+      "id": "10",
+      "category": "API Integration",
+      "question": "How do you properly handle errors when loading data?",
+      "answer": "Use try/catch with async/await or .catch(). Create an error state: const [error, setError] = useState(null). Show user: if (error) return <p>Error: {error}</p>. Log errors for debugging. Provide a retry button for re-trying.",
+      "keyPoints": [
+        "try/catch for async/await or .catch() for promises",
+        "Separate error state: useState(null)",
+        "Display error to user with clear message",
+        "Retry button for re-attempting the request"
+      ]
+    }
+  ]
+}

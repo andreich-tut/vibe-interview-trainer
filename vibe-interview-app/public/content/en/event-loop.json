@@ -1,0 +1,118 @@
+{
+  "easy": [
+    {
+      "code": "console.log(1);\n\nsetTimeout(() => console.log(2), 0);\n\nconsole.log(3);",
+      "answer": "1, 3, 2",
+      "hint": "setTimeout is a macrotask, executes after synchronous code",
+      "difficulty": "easy",
+      "steps": [
+        {"tag": "sync", "label": "synchronously", "desc": "log(1) → outputs 1"},
+        {"tag": "macro", "label": "macrotask", "desc": "setTimeout queued"},
+        {"tag": "sync", "label": "synchronously", "desc": "log(3) → outputs 3"},
+        {"tag": "macro", "label": "macrotask", "desc": "stack empty → take setTimeout → outputs 2"}
+      ],
+      "explanation": "Synchronous code executes immediately. setTimeout(fn, 0) is a macrotask, executes only after the stack and all microtasks are empty."
+    },
+    {
+      "code": "console.log(1);\n\nPromise.resolve().then(() => console.log(2));\n\nconsole.log(3);",
+      "answer": "1, 3, 2",
+      "hint": "Promise.then is a microtask, but still after synchronous code",
+      "difficulty": "easy",
+      "steps": [
+        {"tag": "sync", "label": "synchronously", "desc": "log(1) → outputs 1"},
+        {"tag": "micro", "label": "microtask", "desc": "Promise.then → callback in Microtask Queue"},
+        {"tag": "sync", "label": "synchronously", "desc": "log(3) → outputs 3"},
+        {"tag": "micro", "label": "microtask", "desc": "stack empty → take then → outputs 2"}
+      ],
+      "explanation": "Promise.then callback is never called synchronously — it always goes to Microtask Queue. But the queue is only checked when the stack is empty."
+    },
+    {
+      "code": "setTimeout(() => console.log(1), 0);\nsetTimeout(() => console.log(2), 0);\nsetTimeout(() => console.log(3), 0);",
+      "answer": "1, 2, 3",
+      "hint": "Multiple setTimeout with same time — in what order do they execute?",
+      "difficulty": "easy",
+      "steps": [
+        {"tag": "macro", "label": "macrotask", "desc": "setTimeout(1) → queue"},
+        {"tag": "macro", "label": "macrotask", "desc": "setTimeout(2) → queue"},
+        {"tag": "macro", "label": "macrotask", "desc": "setTimeout(3) → queue"},
+        {"tag": "macro", "label": "macrotask", "desc": "stack empty → FIFO: 1, 2, 3"}
+      ],
+      "explanation": "Macrotask Queue works like a regular queue — FIFO (first in, first out). Tasks with same time execute in registration order."
+    },
+    {
+      "code": "console.log(1);\n\nsetTimeout(() => console.log(2), 0);\n\nPromise.resolve().then(() => console.log(3));\n\nconsole.log(4);",
+      "answer": "1, 4, 3, 2",
+      "hint": "Microtasks always execute before macrotasks",
+      "difficulty": "easy",
+      "steps": [
+        {"tag": "sync", "label": "synchronously", "desc": "log(1) → outputs 1"},
+        {"tag": "macro", "label": "macrotask", "desc": "setTimeout → in Macrotask Queue"},
+        {"tag": "micro", "label": "microtask", "desc": "Promise.then → in Microtask Queue"},
+        {"tag": "sync", "label": "synchronously", "desc": "log(4) → outputs 4"},
+        {"tag": "micro", "label": "microtask", "desc": "stack empty → first microtasks → log(3)"},
+        {"tag": "macro", "label": "macrotask", "desc": "microtasks empty → take setTimeout → log(2)"}
+      ],
+      "explanation": "Key rule: after each macrotask and after synchronous code, event loop completely drains Microtask Queue before taking next macrotask."
+    },
+    {
+      "code": "Promise.resolve()\n  .then(() => console.log(1))\n  .then(() => console.log(2))\n  .then(() => console.log(3));",
+      "answer": "1, 2, 3",
+      "hint": "Chain of .then() — each next enters queue only after previous",
+      "difficulty": "easy",
+      "steps": [
+        {"tag": "micro", "label": "microtask", "desc": "first .then → queue: [A]"},
+        {"tag": "micro", "label": "microtask", "desc": "A executes → log(1), B queued: [B]"},
+        {"tag": "micro", "label": "microtask", "desc": "B executes → log(2), C queued: [C]"},
+        {"tag": "micro", "label": "microtask", "desc": "C executes → log(3)"}
+      ],
+      "explanation": "In .then() chain each next callback enters Microtask Queue only after previous executes. Order is always sequential."
+    }
+  ],
+  "medium": [
+    {
+      "code": "console.log(1);\n\nsetTimeout(() => {\n  console.log(2);\n  Promise.resolve().then(() => console.log(3));\n}, 0);\n\nPromise.resolve()\n  .then(() => console.log(4))\n  .then(() => console.log(5));\n\nconsole.log(6);",
+      "answer": "1, 6, 4, 5, 2, 3",
+      "hint": "Promise inside setTimeout executes as microtask — but within its macrotask",
+      "difficulty": "medium",
+      "steps": [
+        {"tag": "sync", "label": "synchronously", "desc": "log(1) and log(6)"},
+        {"tag": "micro", "label": "microtask", "desc": "Promise.then(4) → queue: [A]"},
+        {"tag": "micro", "label": "microtask", "desc": "A: log(4), queues B → log(5)"},
+        {"tag": "macro", "label": "macrotask", "desc": "microtasks done → setTimeout executes"},
+        {"tag": "sync", "label": "synchronously", "desc": "inside setTimeout: log(2)"},
+        {"tag": "micro", "label": "microtask", "desc": "Promise.then(3) → queue"},
+        {"tag": "micro", "label": "microtask", "desc": "log(3) → done"}
+      ],
+      "explanation": "After executing a macrotask, event loop processes its microtasks before moving to the next macrotask. Promise created inside setTimeout becomes a microtask of that macrotask."
+    },
+    {
+      "code": "Promise.resolve()\n  .then(() => {\n    console.log(1);\n    return Promise.resolve();\n  })\n  .then(() => console.log(2));\n\nsetTimeout(() => console.log(3), 0);",
+      "answer": "1, 2, 3",
+      "hint": "Returning a Promise from .then() creates a dependency, not separate task",
+      "difficulty": "medium",
+      "steps": [
+        {"tag": "micro", "label": "microtask", "desc": "first .then → queue"},
+        {"tag": "micro", "label": "microtask", "desc": "executes: log(1), returns Promise"},
+        {"tag": "micro", "label": "microtask", "desc": "second .then queued after first Promise resolves"},
+        {"tag": "micro", "label": "microtask", "desc": "second .then → log(2)"},
+        {"tag": "macro", "label": "macrotask", "desc": "microtasks done → setTimeout → log(3)"}
+      ],
+      "explanation": "When .then() returns a Promise, the next .then() waits for that Promise to resolve. This is different from just chaining — the dependency is explicit."
+    }
+  ],
+  "hard": [
+    {
+      "code": "async function test() {\n  console.log(1);\n  await Promise.resolve();\n  console.log(2);\n}\n\ntest();\nconsole.log(3);",
+      "answer": "1, 3, 2",
+      "hint": "async/await is syntactic sugar over Promises",
+      "difficulty": "hard",
+      "steps": [
+        {"tag": "sync", "label": "synchronously", "desc": "test() called, log(1)"},
+        {"tag": "micro", "label": "microtask", "desc": "await pauses, returns Promise"},
+        {"tag": "sync", "label": "synchronously", "desc": "log(3) → outputs 3"},
+        {"tag": "micro", "label": "microtask", "desc": "Promise resolves, continue after await → log(2)"}
+      ],
+      "explanation": "async/await is syntactic sugar over Promises. await pauses execution and schedules the rest as a microtask. When the Promise resolves, execution continues."
+    }
+  ]
+}

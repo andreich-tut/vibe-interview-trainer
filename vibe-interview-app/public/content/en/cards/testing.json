@@ -1,0 +1,76 @@
+{
+  "cards": [
+    {
+      "id": "1",
+      "category": "Testing Types",
+      "question": "What types of tests exist and what does each verify?",
+      "answer": "Unit tests verify individual functions or components in isolation. Integration tests verify that multiple units work correctly together. End-to-end tests verify complete user workflows in a real browser. Static analysis (TypeScript, ESLint) catches errors at compile time.",
+      "keyPoints": [
+        "Unit: fast, isolated, test one function or component at a time",
+        "Integration: real interactions between components, services, DB",
+        "E2E: full user journeys in a real browser — highest confidence, slowest",
+        "Testing pyramid: most unit, some integration, few E2E"
+      ]
+    },
+    {
+      "id": "2",
+      "category": "Jest",
+      "question": "What are the core Jest APIs?",
+      "answer": "describe groups related tests. test/it defines a single test case. expect creates an assertion. Lifecycle hooks (beforeEach, afterEach, beforeAll, afterAll) handle setup and teardown. jest.fn() creates mock functions, jest.mock() replaces entire modules.",
+      "keyPoints": [
+        "toBe for primitive equality (===), toEqual for deep object equality",
+        "jest.fn() mocks functions, tracks calls and arguments",
+        "jest.mock('./module') replaces module with auto-mocked version",
+        "beforeEach/afterEach run around each test for setup/cleanup"
+      ]
+    },
+    {
+      "id": "3",
+      "category": "React Testing Library",
+      "question": "What query priority does React Testing Library recommend?",
+      "answer": "Queries should match how users find elements. Prefer accessible queries: getByRole, getByLabelText, getByPlaceholderText, getByText. Fall back to getByTestId only as last resort when no semantic query is possible.",
+      "keyPoints": [
+        "getByRole is most preferred — mirrors assistive technology",
+        "getByLabelText for form inputs",
+        "getByText for static visible content",
+        "getByTestId only as last resort — tests implementation detail"
+      ]
+    },
+    {
+      "id": "4",
+      "category": "Mocking",
+      "question": "What is the difference between stubs, mocks, and spies?",
+      "answer": "A stub replaces a function with a simple fixed response (no behavior verification). A mock replaces a function and also verifies it was called with expected arguments. A spy wraps the real function, tracking calls without replacing behavior. In Jest, jest.fn() can act as all three.",
+      "keyPoints": [
+        "Stub: fixed return value, no call verification",
+        "Mock: fixed return + verify how it was called",
+        "Spy: wraps real function, observe calls without replacing it",
+        "jest.spyOn(obj, 'method') creates a spy on an existing method"
+      ]
+    },
+    {
+      "id": "5",
+      "category": "Async Testing",
+      "question": "How do you test asynchronous behavior?",
+      "answer": "Use async/await in tests to handle Promises. React Testing Library's findBy queries wait for elements to appear. Use waitFor for arbitrary async assertions. Avoid arbitrary delays — always wait on a specific condition.",
+      "keyPoints": [
+        "async/await for Promise-based assertions",
+        "findByX = waitFor + getByX shorthand — prefer for async UI",
+        "waitFor retries until assertion passes or times out",
+        "Never use arbitrary wait times — tests become slow and brittle"
+      ]
+    },
+    {
+      "id": "6",
+      "category": "E2E Testing",
+      "question": "How do you write maintainable Playwright tests?",
+      "answer": "Use the Page Object Model (POM) to encapsulate page interactions in dedicated classes, separating test logic from page implementation details. Use data-testid attributes for stable selectors. Record failures with screenshots and traces. Test only critical user journeys.",
+      "keyPoints": [
+        "Page Object Model: each page/component gets a class with interaction methods",
+        "Stable selectors: prefer data-testid or ARIA roles over CSS selectors",
+        "Record screenshots and traces on failure for debugging",
+        "Keep E2E tests focused on critical paths — they are expensive to maintain"
+      ]
+    }
+  ]
+}
