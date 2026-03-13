@@ -13,22 +13,15 @@ import "./app.css";
 import { resolveLanguage, getThemeCookie } from "~/lib/cookies";
 import { LanguageProvider } from "~/contexts/LanguageContext";
 import type { TranslationMap } from "~/contexts/LanguageContext";
+import ruUI from "../public/content/ru/ui.json";
+import enUI from "../public/content/en/ui.json";
 
-export const loader = async ({ request }: Route.LoaderArgs) => {
+export const loader = ({ request }: Route.LoaderArgs) => {
   const lang = resolveLanguage(request);
   const theme = getThemeCookie(request) ?? "dark";
 
-  let translations: TranslationMap = {};
-  try {
-    const url = new URL(`/content/${lang}/ui.json`, request.url);
-    const res = await fetch(url.toString());
-    if (res.ok) {
-      const dict = (await res.json()) as Record<string, unknown>;
-      translations = { ui: dict };
-    }
-  } catch {
-    // Non-fatal: components will fall back to translation keys.
-  }
+  const uiDicts: Record<string, Record<string, unknown>> = { ru: ruUI, en: enUI };
+  const translations: TranslationMap = { ui: uiDicts[lang] ?? ruUI };
 
   return { lang, translations, theme };
 };

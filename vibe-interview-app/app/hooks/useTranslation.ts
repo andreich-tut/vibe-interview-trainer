@@ -52,15 +52,15 @@ export function useTranslation(
 
   // Keep a ref so the effect cleanup can compare against current key
   const cacheKeyRef = useRef(cacheKey);
-  cacheKeyRef.current = cacheKey;
 
   useEffect(() => {
+    cacheKeyRef.current = cacheKey;
     const currentKey = cacheKey;
 
-    // If already in cache as a resolved value, update state immediately
+    // If already in cache as a resolved value, no need to update state synchronously here.
     const existing = cache.get(currentKey);
     if (existing !== undefined && !(existing instanceof Promise)) {
-      setDict(existing);
+      // State is already initialized from cache in useState's initializer.
       return;
     }
 
