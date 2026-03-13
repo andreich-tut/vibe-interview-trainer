@@ -1,4 +1,5 @@
 import { Layout } from "~/components/Layout";
+import { TopicIcon } from "~/components/TopicIcon";
 import { TopicCard } from "~/components/TopicCard";
 import { useProgress } from "~/hooks/useProgress";
 import { Link } from "react-router";
@@ -76,7 +77,6 @@ export default function Home() {
             <TopicCard
               key={topic.id}
               id={topic.id}
-              icon={topic.icon}
               title={topic.title}
               description={topic.description}
               progress={progress.total > 0 ? { mastered: progress.mastered, total: progress.total } : undefined}
@@ -87,7 +87,7 @@ export default function Home() {
 
       {/* Event Loop Trainer */}
       <div className="bg-gradient-to-br from-card to-secondary border border-primary/30 rounded-lg p-6 text-center">
-        <div className="text-4xl mb-3">🔄</div>
+        <TopicIcon id="event-loop" className="w-10 h-10 text-primary mx-auto mb-3" />
         <h3 className="font-display font-bold text-lg mb-2">{t("home.eventLoopTitle")}</h3>
         <p className="text-xs text-muted-foreground mb-4">
           {t("home.eventLoopDesc")}
