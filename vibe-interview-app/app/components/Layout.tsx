@@ -3,7 +3,6 @@ import { Link } from "react-router";
 import { Moon, Sun } from "lucide-react";
 import { useTheme } from "~/hooks/useTheme";
 import { LanguageSwitcher } from "./LanguageSwitcher";
-import { useLanguage } from "~/contexts/LanguageContext";
 import { Button } from "~/components/ui/button";
 
 interface LayoutProps {
@@ -15,7 +14,6 @@ interface LayoutProps {
 
 export function Layout({ children, showBack = false, backTo = "/", wide = false }: LayoutProps) {
   const { resolvedTheme, setTheme } = useTheme();
-  const { t } = useLanguage();
 
   return (
     <div className="min-h-screen bg-background">
@@ -37,14 +35,6 @@ export function Layout({ children, showBack = false, backTo = "/", wide = false 
           >
             {resolvedTheme === "dark" ? <Sun size={14} /> : <Moon size={14} />}
           </Button>
-          {showBack && (
-            <Link
-              to={backTo}
-              className="text-xs text-muted-foreground hover:text-foreground transition"
-            >
-              {t("layout.goBack")}
-            </Link>
-          )}
         </div>
       </header>
       <main className={`${wide ? "max-w-screen-2xl" : "max-w-4xl"} mx-auto px-6 py-8 lg:px-10`}>{children}</main>

@@ -165,11 +165,19 @@ export default function TopicTheory({ params }: Route.ComponentProps) {
     <Layout wide showBack backTo="/">
       <div className="pb-20">
         {/* Header */}
-        <div className="text-center mb-8">
-          <div className="text-4xl mb-3">{topic.icon}</div>
-          <h1 className="font-display text-2xl font-bold text-primary mb-2">
-            {topic.title} {t("theory.pageTitleSuffix")}
-          </h1>
+        <div className="mb-8">
+          <Link
+            to="/"
+            className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition mb-4"
+          >
+            {t("layout.goBack")}
+          </Link>
+          <div className="text-center">
+            <div className="text-4xl mb-3">{topic.icon}</div>
+            <h1 className="font-display text-2xl font-bold text-primary mb-2">
+              {topic.title} {t("theory.pageTitleSuffix")}
+            </h1>
+          </div>
         </div>
 
         {/* Two-column layout on desktop */}
