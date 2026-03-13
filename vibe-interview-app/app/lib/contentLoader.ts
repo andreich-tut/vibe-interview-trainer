@@ -168,17 +168,3 @@ export async function loadContent<T extends ContentType>(
   cache.set(cacheKey, data);
   return data;
 }
-
-// ---------------------------------------------------------------------------
-// Cache utilities (useful for testing and SSR cache invalidation)
-// ---------------------------------------------------------------------------
-
-/** Clears all cached entries. Useful in tests or to force a content refresh. */
-export function clearContentCache(): void {
-  cache.clear();
-}
-
-/** Returns the number of entries currently held in the cache. */
-export function getContentCacheSize(): number {
-  return cache.size;
-}

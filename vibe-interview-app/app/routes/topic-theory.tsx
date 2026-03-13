@@ -5,11 +5,7 @@ import { Layout } from "~/components/Layout";
 import { TheoryCard } from "~/components/TheoryCard";
 import { loadContent, type TopicsFile, type TheoryFile } from "~/lib/contentLoader";
 import { useLanguage } from "~/contexts/LanguageContext";
-
-interface TheorySection {
-  title: string;
-  content: string;
-}
+import { TopicIcon } from "~/components/TopicIcon";
 
 /* eslint-disable no-control-regex -- \x01 placeholders prevent double-replacement in regex chain */
 function highlightCode(escaped: string): string {
@@ -204,9 +200,9 @@ export default function TopicTheory({ params }: Route.ComponentProps) {
 
       <div className="pb-20">
         {/* Header */}
-        <div className="mb-8 text-center">
-          <div className="text-4xl mb-3">{topic.icon}</div>
-          <h1 className="font-display text-2xl font-bold text-primary mb-2">
+        <div className="mb-6 flex items-center gap-3">
+          <TopicIcon id={topic.id} className="w-7 h-7 text-(--color-accent2) shrink-0" />
+          <h1 className="font-display text-xl font-bold text-primary leading-tight">
             {topic.title} {t("theory.pageTitleSuffix")}
           </h1>
         </div>

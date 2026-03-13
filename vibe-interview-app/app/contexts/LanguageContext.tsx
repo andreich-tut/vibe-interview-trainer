@@ -60,5 +60,3 @@ export function useLanguage(): LanguageContextValue {
   }
   return ctx;
 }
-
-export { LanguageContext };

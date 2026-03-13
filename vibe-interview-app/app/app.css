@@ -107,7 +107,7 @@
   h4,
   h5,
   h6 {
-    font-family: "Unbounded", sans-serif;
+    font-family: "JetBrains Mono", monospace;
   }
 
   a {
@@ -164,13 +164,12 @@
 @layer base {
   /* Theory prose content */
   .prose-dark h3 {
-    font-family: "Unbounded", sans-serif;
+    font-family: "JetBrains Mono", monospace;
     color: var(--color-accent2);
-    font-size: 1.125rem;
+    font-size: 1.25rem;
     font-weight: 700;
-    margin: 2.5rem 0 1rem;
-    padding-left: 1rem;
-    border-left: 3px solid var(--color-accent2);
+    margin: 2.5rem 0 0.875rem;
+    letter-spacing: -0.01em;
   }
 
   .prose-dark h3:first-child {
@@ -178,12 +177,13 @@
   }
 
   .prose-dark h3:not(:first-child) {
-    padding-top: 2rem;
+    margin-top: 2.5rem;
+    padding-top: 1.5rem;
     border-top: 1px solid var(--border);
   }
 
   .prose-dark h4 {
-    font-family: "Unbounded", sans-serif;
+    font-family: "JetBrains Mono", monospace;
     color: var(--primary);
     font-size: 0.875rem;
     font-weight: 600;
@@ -194,7 +194,7 @@
 
   .prose-dark p {
     margin-bottom: 1.125rem;
-    line-height: 1.85;
+    line-height: 1.65;
     color: var(--foreground);
   }
 
@@ -214,7 +214,7 @@
   }
 
   .prose-dark li {
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.25rem;
     line-height: 1.85;
     color: var(--foreground);
   }
