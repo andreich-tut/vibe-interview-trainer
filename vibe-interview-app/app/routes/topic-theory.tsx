@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { Route } from "./+types/topic-theory";
 import { Link } from "react-router";
 import { Layout } from "~/components/Layout";
@@ -93,6 +93,8 @@ export default function TopicTheory({ params }: Route.ComponentProps) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [activeSection, setActiveSection] = useState(0);
+  const [tocOpen, setTocOpen] = useState(false);
+  const tocRef = useRef<HTMLDivElement>(null);
 
   // Load topics and theory
   useEffect(() => {
@@ -113,6 +115,18 @@ export default function TopicTheory({ params }: Route.ComponentProps) {
         setLoading(false);
       });
   }, [params.topicId, lang]);
+
+  // Close mobile TOC on outside click
+  useEffect(() => {
+    if (!tocOpen) return;
+    const handler = (e: MouseEvent) => {
+      if (tocRef.current && !tocRef.current.contains(e.target as Node)) {
+        setTocOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, [tocOpen]);
 
   // Observer for active section highlighting
   useEffect(() => {
@@ -163,28 +177,51 @@ export default function TopicTheory({ params }: Route.ComponentProps) {
 
   return (
     <Layout wide showBack backTo="/">
-      <div className="pb-20">
-        {/* Header */}
-        <div className="mb-8">
+      {/* Mobile sticky nav bar — back link + TOC dropdown */}
+      <div ref={tocRef} className="lg:hidden sticky top-0 z-40 bg-background/95 backdrop-blur-sm border-b border-border -mx-6 px-6 mb-6">
+        <div className="flex items-center justify-between py-3">
           <Link
             to="/"
-            className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition mb-4"
+            className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
           >
             {t("layout.goBack")}
           </Link>
-          <div className="text-center">
-            <div className="text-4xl mb-3">{topic.icon}</div>
-            <h1 className="font-display text-2xl font-bold text-primary mb-2">
-              {topic.title} {t("theory.pageTitleSuffix")}
-            </h1>
-          </div>
+          {theory.length > 2 && (
+            <button
+              onClick={() => setTocOpen((o) => !o)}
+              className="text-xs font-semibold text-primary cursor-pointer"
+            >
+              {t("theory.sidebarTitle")} {tocOpen ? "↑" : "↓"}
+            </button>
+          )}
+        </div>
+        {tocOpen && theory.length > 2 && (
+          <ol className="space-y-1.5 list-none p-0 m-0 pb-3" onClick={() => setTocOpen(false)}>
+            {tocItems}
+          </ol>
+        )}
+      </div>
+
+      <div className="pb-20">
+        {/* Header */}
+        <div className="mb-8 text-center">
+          <div className="text-4xl mb-3">{topic.icon}</div>
+          <h1 className="font-display text-2xl font-bold text-primary mb-2">
+            {topic.title} {t("theory.pageTitleSuffix")}
+          </h1>
         </div>
 
         {/* Two-column layout on desktop */}
         <div className="lg:grid lg:grid-cols-[280px_1fr] lg:gap-10 lg:items-start">
           {/* Sticky sidebar TOC — desktop only */}
           {theory.length > 2 && (
-            <aside className="hidden lg:block lg:sticky lg:top-8 lg:self-start">
+            <aside className="hidden lg:flex lg:flex-col lg:gap-3 lg:sticky lg:top-8 lg:self-start">
+              <Link
+                to="/"
+                className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
+              >
+                {t("layout.goBack")}
+              </Link>
               <nav className="bg-card border border-border rounded-xl p-6">
                 <div className="text-[0.625rem] font-bold text-muted-foreground uppercase tracking-widest mb-4">
                   {t("theory.sidebarTitle")}
@@ -198,17 +235,6 @@ export default function TopicTheory({ params }: Route.ComponentProps) {
 
           {/* Main content column */}
           <div className="min-w-0 space-y-6">
-            {/* Mobile TOC — collapsible */}
-            {theory.length > 2 && (
-              <details className="lg:hidden bg-card border border-border rounded-xl">
-                <summary className="px-5 py-4 cursor-pointer text-sm font-semibold text-primary">
-                  {t("theory.sidebarTitle")} ({theory.length})
-                </summary>
-                <ol className="space-y-1.5 list-none p-0 m-0 px-5 pb-4">
-                  {tocItems}
-                </ol>
-              </details>
-            )}
 
             {/* Theory section cards */}
             {theory.map((section, idx) => (

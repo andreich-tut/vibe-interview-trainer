@@ -1,4 +1,5 @@
 import { useState, useMemo, useEffect } from "react";
+import { Link } from "react-router";
 import { Layout } from "~/components/Layout";
 import { CodeBlock } from "~/components/CodeBlock";
 import { StepVisualizer } from "~/components/StepVisualizer";
@@ -140,6 +141,10 @@ export default function EventLoop() {
   if (screen === "splash") {
     return (
       <Layout showBack>
+        <div className="space-y-8">
+        <Link to="/" className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors">
+          {t("layout.goBack")}
+        </Link>
         <div className="text-center space-y-8">
           <div className="text-5xl mb-4">🔄</div>
           <div>
@@ -183,6 +188,7 @@ export default function EventLoop() {
             {t("eventLoop.start")}
           </button>
         </div>
+        </div>
       </Layout>
     );
   }
@@ -193,6 +199,9 @@ export default function EventLoop() {
     return (
       <Layout showBack backTo="/">
         <div className="space-y-6">
+          <Link to="/" className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors">
+            {t("layout.goBack")}
+          </Link>
           {/* Progress bar */}
           <div className="h-1 bg-border rounded-full overflow-hidden">
             <div
@@ -340,7 +349,11 @@ export default function EventLoop() {
 
   return (
     <Layout showBack backTo="/">
-      <div className="text-center space-y-6">
+      <div className="space-y-6">
+        <Link to="/" className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors">
+          {t("layout.goBack")}
+        </Link>
+        <div className="text-center space-y-6">
         <div className="text-6xl">{emoji}</div>
         <div>
           <h2 className="font-display text-2xl font-bold text-primary mb-1">
@@ -379,6 +392,7 @@ export default function EventLoop() {
           >
             {t("eventLoop.changeLevel")}
           </button>
+        </div>
         </div>
       </div>
     </Layout>

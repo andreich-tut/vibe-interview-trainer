@@ -182,6 +182,9 @@ export default function TopicPractice({ params }: Route.ComponentProps) {
     return (
       <Layout wide showBack backTo="/">
         <div className="space-y-8">
+          <Link to="/" className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors">
+            {t("layout.goBack")}
+          </Link>
           <div className="text-center mb-8">
             <div className="text-4xl mb-3">{topic.icon}</div>
             <h1 className="font-display text-2xl font-bold text-primary">
@@ -227,6 +230,9 @@ export default function TopicPractice({ params }: Route.ComponentProps) {
     return (
       <Layout wide showBack backTo="/">
         <div className="max-w-3xl mx-auto space-y-8">
+          <Link to="/" className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors">
+            {t("layout.goBack")}
+          </Link>
           <div className="text-center mb-4">
             <div className="text-4xl mb-3">{topic.icon}</div>
             <h1 className="font-display text-2xl font-bold text-primary">
@@ -283,7 +289,11 @@ export default function TopicPractice({ params }: Route.ComponentProps) {
 
   return (
     <Layout wide showBack backTo="/">
-      <div className="text-center space-y-8 pt-12 max-w-3xl mx-auto">
+      <div className="space-y-8 pt-12 max-w-3xl mx-auto">
+        <Link to="/" className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors">
+          {t("layout.goBack")}
+        </Link>
+        <div className="text-center space-y-8">
         <div className="text-6xl mb-4">
           {pct === 100 ? "🏆" : pct >= 80 ? "🎉" : pct >= 50 ? "👍" : "📚"}
         </div>
@@ -360,6 +370,7 @@ export default function TopicPractice({ params }: Route.ComponentProps) {
           >
             {t("practice.goHome")}
           </Link>
+        </div>
         </div>
       </div>
     </Layout>
