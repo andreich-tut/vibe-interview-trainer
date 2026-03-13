@@ -3,6 +3,9 @@ import { checkAnswer, type LLMResult } from "~/lib/llm";
 import { useSpeechRecognition } from "~/hooks/useSpeechRecognition";
 import { StarRating } from "~/components/StarRating";
 import { useLanguage } from "~/contexts/LanguageContext";
+import { Textarea } from "~/components/ui/textarea";
+import { Badge } from "~/components/ui/badge";
+import { Button } from "~/components/ui/button";
 
 export interface Card {
   id: string;
@@ -25,7 +28,7 @@ const SCORE_STYLES: Record<Score, { color: string; bg: string; border: string }>
   3: { color: "var(--color-green)", bg: "rgba(52,211,153,0.12)", border: "rgba(52,211,153,0.25)" },
   2: { color: "var(--color-accent2)", bg: "rgba(34,211,238,0.12)", border: "rgba(34,211,238,0.25)" },
   1: { color: "#f59e0b", bg: "rgba(245,158,11,0.12)", border: "rgba(245,158,11,0.25)" },
-  0: { color: "var(--color-red)", bg: "rgba(248,113,113,0.12)", border: "rgba(248,113,113,0.25)" },
+  0: { color: "var(--destructive)", bg: "rgba(248,113,113,0.12)", border: "rgba(248,113,113,0.25)" },
 };
 
 export function FlashCard({ card, onScore, current, total }: FlashCardProps) {
@@ -138,27 +141,27 @@ export function FlashCard({ card, onScore, current, total }: FlashCardProps) {
   return (
     <div className="space-y-6">
       {/* Progress */}
-      <div className="text-xs text-[var(--color-muted)]">
+      <div className="text-xs text-muted-foreground">
         Карточка {current + 1} из {total}
       </div>
 
       {/* Progress bar */}
-      <div className="h-1 bg-[var(--color-border)] rounded-full overflow-hidden">
+      <div className="h-1 bg-border rounded-full overflow-hidden">
         <div
-          className="h-full bg-gradient-to-r from-[var(--color-accent)] to-[var(--color-accent2)] transition-all duration-300"
+          className="h-full bg-gradient-to-r from-primary to-[var(--color-accent2)] transition-all duration-300"
           style={{ width: `${((current + 1) / total) * 100}%` }}
         />
       </div>
 
       {/* Category badge */}
-      <div className="inline-block text-[0.625rem] font-bold tracking-wide uppercase px-2 py-0.5 rounded bg-[rgba(124,106,255,0.15)] text-[var(--color-accent)]">
+      <Badge variant="outline" className="text-[0.625rem] tracking-wide uppercase">
         {card.category}
-      </div>
+      </Badge>
 
       {/* Card */}
-      <div className="min-h-72 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg p-6 flex flex-col">
+      <div className="min-h-72 bg-card border border-border rounded-lg p-6 flex flex-col">
         {/* Question */}
-        <div className="text-lg font-semibold text-[var(--color-text)] leading-relaxed text-center mb-4">
+        <div className="text-lg font-semibold text-foreground leading-relaxed text-center mb-4">
           {card.question}
         </div>
 
@@ -166,15 +169,15 @@ export function FlashCard({ card, onScore, current, total }: FlashCardProps) {
           /* Input phase */
           <div className="flex flex-col flex-1 space-y-4">
             <div className="relative">
-              <textarea
+              <Textarea
                 ref={textareaRef}
                 value={userAnswer}
                 onChange={(e) => setUserAnswer(e.target.value)}
                 placeholder={speech.isListening ? t("flashCard.listening") : t("flashCard.placeholder")}
                 rows={4}
-                className="w-full px-4 py-3 pr-12 bg-[var(--color-bg)] border rounded-lg text-sm text-[var(--color-text)] placeholder:text-[var(--color-muted)] focus:border-[var(--color-accent)] focus:outline-none resize-y transition-colors"
+                className="pr-12"
                 style={{
-                  borderColor: speech.isListening ? "var(--color-red)" : "var(--color-border)",
+                  borderColor: speech.isListening ? "var(--destructive)" : undefined,
                 }}
                 onKeyDown={(e) => {
                   if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) {
@@ -191,7 +194,7 @@ export function FlashCard({ card, onScore, current, total }: FlashCardProps) {
                   className="absolute right-2 top-2 w-8 h-8 flex items-center justify-center rounded-full transition-colors"
                   style={{
                     backgroundColor: speech.isListening ? "rgba(248,113,113,0.2)" : "transparent",
-                    color: speech.isListening ? "var(--color-red)" : "var(--color-muted)",
+                    color: speech.isListening ? "var(--destructive)" : "var(--muted-foreground)",
                   }}
                 >
                   {speech.isListening ? (
@@ -209,15 +212,15 @@ export function FlashCard({ card, onScore, current, total }: FlashCardProps) {
               )}
             </div>
             {speech.error && (
-              <div className="text-xs text-[var(--color-red)]">{speech.error}</div>
+              <div className="text-xs text-destructive">{speech.error}</div>
             )}
             {speech.isListening && (
-              <div className="flex items-center gap-2 text-xs text-[var(--color-red)]">
-                <span className="inline-block w-2 h-2 rounded-full bg-[var(--color-red)] animate-pulse" />
+              <div className="flex items-center gap-2 text-xs text-destructive">
+                <span className="inline-block w-2 h-2 rounded-full bg-destructive animate-pulse" />
                 {t("flashCard.recording")}
               </div>
             )}
-            <div className="text-[0.625rem] text-[var(--color-muted)] text-center">
+            <div className="text-[0.625rem] text-muted-foreground text-center">
               {t("flashCard.ctrlEnterHint")}
             </div>
           </div>
@@ -226,11 +229,11 @@ export function FlashCard({ card, onScore, current, total }: FlashCardProps) {
           <div className="space-y-4 animate-in fade-in">
             {/* Block 1 — User answer (gray border) */}
             {userAnswer.trim() && (
-              <div className="px-4 py-3 bg-[var(--color-bg)] border border-[var(--color-border)] rounded-lg">
-                <div className="text-[0.625rem] font-bold uppercase tracking-wider text-[var(--color-muted)] mb-1.5">
+              <div className="px-4 py-3 bg-background border border-border rounded-lg">
+                <div className="text-[0.625rem] font-bold uppercase tracking-wider text-muted-foreground mb-1.5">
                   {t("flashCard.yourAnswer")}
                 </div>
-                <div className="text-sm text-[var(--color-text)] whitespace-pre-line">
+                <div className="text-sm text-foreground whitespace-pre-line">
                   {userAnswer}
                 </div>
               </div>
@@ -247,27 +250,27 @@ export function FlashCard({ card, onScore, current, total }: FlashCardProps) {
               <div className="text-[0.625rem] font-bold uppercase tracking-wider text-[var(--color-green)] mb-1.5">
                 {t("flashCard.correctAnswer")}
               </div>
-              <div className="text-sm text-[var(--color-text)] leading-relaxed whitespace-pre-line">
+              <div className="text-sm text-foreground leading-relaxed whitespace-pre-line">
                 {card.answer}
               </div>
               {/* Key points checklist */}
               {aiResult &&
                 ((aiResult.matchedPoints.length > 0) || (aiResult.missedPoints.length > 0)) && (
                 <div className="mt-3 pt-3 border-t border-[rgba(115,176,10,0.15)]">
-                  <div className="text-[0.625rem] font-bold uppercase tracking-wider text-[var(--color-muted)] mb-1.5">
+                  <div className="text-[0.625rem] font-bold uppercase tracking-wider text-muted-foreground mb-1.5">
                     {t("flashCard.keyPoints")}
                   </div>
                   <ul className="space-y-1 text-xs">
                     {aiResult.matchedPoints.map((point, i) => (
                       <li key={`m-${i}`} className="flex items-start gap-1.5">
                         <span className="text-[var(--color-green)] font-bold shrink-0">{"\u2713"}</span>
-                        <span className="text-[var(--color-text)]">{point}</span>
+                        <span className="text-foreground">{point}</span>
                       </li>
                     ))}
                     {aiResult.missedPoints.map((point, i) => (
                       <li key={`x-${i}`} className="flex items-start gap-1.5">
-                        <span className="text-[var(--color-red)] font-bold shrink-0">{"\u2717"}</span>
-                        <span className="text-[var(--color-muted)]">{point}</span>
+                        <span className="text-destructive font-bold shrink-0">{"\u2717"}</span>
+                        <span className="text-muted-foreground">{point}</span>
                       </li>
                     ))}
                   </ul>
@@ -277,8 +280,8 @@ export function FlashCard({ card, onScore, current, total }: FlashCardProps) {
 
             {/* Block 3 — Score (score-colored border) */}
             {aiLoading && (
-              <div className="text-xs text-[var(--color-muted)] flex items-center gap-2">
-                <span className="inline-block w-3 h-3 border-2 border-[var(--color-accent)] border-t-transparent rounded-full animate-spin" />
+              <div className="text-xs text-muted-foreground flex items-center gap-2">
+                <span className="inline-block w-3 h-3 border-2 border-primary border-t-transparent rounded-full animate-spin" />
                 {t("flashCard.aiChecking")}
               </div>
             )}
@@ -293,13 +296,13 @@ export function FlashCard({ card, onScore, current, total }: FlashCardProps) {
                     {scoreLabels[aiResult.score]}
                   </span>
                 </div>
-                <div className="text-xs text-[var(--color-text)] opacity-80 leading-relaxed">
+                <div className="text-xs text-foreground opacity-80 leading-relaxed">
                   {aiResult.feedback}
                 </div>
               </div>
             )}
             {aiError && (
-              <div className="text-xs text-[var(--color-red)]">
+              <div className="text-xs text-destructive">
                 {t("flashCard.checkError")}{aiError === "RATE_LIMITED" ? t("flashCard.rateLimited") : aiError === "NO_API_KEY" ? t("flashCard.noApiKey") : ""}
               </div>
             )}
@@ -310,43 +313,31 @@ export function FlashCard({ card, onScore, current, total }: FlashCardProps) {
       {/* Bottom actions */}
       {aiResult ? (
         <div className="space-y-2">
-          <button
-            onClick={handleNext}
-            className="w-full py-2.5 px-4 bg-[var(--color-accent)] text-white text-sm font-semibold rounded hover:bg-[#6a56f0] transition"
-          >
+          <Button onClick={handleNext} className="w-full">
             {t("flashCard.next")}
-          </button>
-          <div className="text-[0.625rem] text-[var(--color-muted)] text-center">
+          </Button>
+          <div className="text-[0.625rem] text-muted-foreground text-center">
             {t("flashCard.enterHint")}
           </div>
         </div>
       ) : aiError ? (
         <div className="flex gap-2">
-          <button
-            onClick={handleCheck}
-            className="flex-1 py-2.5 px-4 bg-[var(--color-accent)] text-white text-sm font-semibold rounded hover:bg-[#6a56f0] transition"
-          >
+          <Button onClick={handleCheck} className="flex-1">
             {t("flashCard.retryCheck")}
-          </button>
-          <button
-            onClick={handleSkip}
-            className="py-2.5 px-4 bg-[var(--color-surface)] border border-[var(--color-border)] text-[var(--color-muted)] text-sm font-semibold rounded hover:border-[var(--color-accent)] transition"
-          >
+          </Button>
+          <Button variant="outline" onClick={handleSkip}>
             {t("flashCard.skip")}
-          </button>
+          </Button>
         </div>
       ) : (
-        <button
+        <Button
           onClick={handleCheck}
           disabled={!userAnswer.trim() || aiLoading}
-          className="w-full py-2.5 px-4 text-sm font-semibold rounded transition disabled:opacity-40 disabled:cursor-default"
-          style={{
-            backgroundColor: userAnswer.trim() ? "var(--color-accent)" : "#1a1a30",
-            color: userAnswer.trim() ? "white" : "var(--color-muted)",
-          }}
+          className="w-full"
+          variant={userAnswer.trim() ? "default" : "ghost"}
         >
           {aiLoading ? t("flashCard.aiChecking") : t("flashCard.submit")}
-        </button>
+        </Button>
       )}
     </div>
   );

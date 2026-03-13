@@ -15,13 +15,13 @@ export function CodeBlock({ code }: CodeBlockProps) {
     .replace(/\/\/.*$/gm, '<span class="cm">$&</span>');
 
   return (
-    <div className="bg-[#07070f] border border-[var(--color-border)] rounded-xl overflow-hidden">
+    <div className="bg-[#07070f] border border-border rounded-xl overflow-hidden">
       {/* Title bar */}
-      <div className="bg-[var(--color-surface2)] px-4 py-2 border-b border-[var(--color-border)] flex items-center gap-2">
+      <div className="bg-secondary px-4 py-2 border-b border-border flex items-center gap-2">
         <div className="w-2 h-2 rounded-full bg-red-500" />
         <div className="w-2 h-2 rounded-full bg-yellow-500" />
         <div className="w-2 h-2 rounded-full bg-green-500" />
-        <span className="ml-2 text-xs text-[var(--color-muted)]">script.js</span>
+        <span className="ml-2 text-xs text-muted-foreground">script.js</span>
       </div>
 
       {/* Code */}

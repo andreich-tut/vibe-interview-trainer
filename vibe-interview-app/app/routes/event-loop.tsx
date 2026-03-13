@@ -121,7 +121,7 @@ export default function EventLoop() {
     return (
       <Layout showBack>
         <div className="text-center py-12">
-          <p className="text-(--color-muted)">{t("common.loading")}</p>
+          <p className="text-muted-foreground">{t("common.loading")}</p>
         </div>
       </Layout>
     );
@@ -143,13 +143,13 @@ export default function EventLoop() {
         <div className="text-center space-y-8">
           <div className="text-5xl mb-4">🔄</div>
           <div>
-            <h1 className="font-display text-3xl font-black mb-3 bg-gradient-to-r from-[var(--color-accent)] to-[var(--color-accent2)] bg-clip-text text-transparent">
+            <h1 className="font-display text-3xl font-black mb-3 bg-gradient-to-r from-primary to-[var(--color-accent2)] bg-clip-text text-transparent">
               {t("eventLoop.pageTitle")}
             </h1>
             <h2 className="font-display text-2xl font-black mb-4 text-[var(--color-accent2)]">
               {t("eventLoop.subtitle")}
             </h2>
-            <p className="text-sm text-[var(--color-muted)] max-w-sm mx-auto mb-8">
+            <p className="text-sm text-muted-foreground max-w-sm mx-auto mb-8">
               {t("eventLoop.description")}
             </p>
           </div>
@@ -162,8 +162,8 @@ export default function EventLoop() {
                 onClick={() => setLevel(lv)}
                 className={`p-4 rounded-lg cursor-pointer transition ${
                   level === lv
-                    ? "bg-[var(--color-accent)] bg-opacity-20 border border-[var(--color-accent)]"
-                    : "bg-[var(--color-surface)] border border-[var(--color-border)]"
+                    ? "bg-primary/20 border border-primary"
+                    : "bg-card border border-border"
                 }`}
               >
                 <div className="text-2xl mb-2">
@@ -178,7 +178,7 @@ export default function EventLoop() {
 
           <button
             onClick={() => handleStartGame(level)}
-            className="inline-block py-2 px-8 bg-[var(--color-accent)] text-white font-semibold rounded hover:bg-opacity-90 transition"
+            className="inline-block py-2 px-8 bg-primary text-white font-semibold rounded hover:bg-opacity-90 transition"
           >
             {t("eventLoop.start")}
           </button>
@@ -194,16 +194,16 @@ export default function EventLoop() {
       <Layout showBack backTo="/">
         <div className="space-y-6">
           {/* Progress bar */}
-          <div className="h-1 bg-[var(--color-border)] rounded-full overflow-hidden">
+          <div className="h-1 bg-border rounded-full overflow-hidden">
             <div
-              className="h-full bg-gradient-to-r from-[var(--color-accent)] to-[var(--color-accent2)] transition-all duration-300"
+              className="h-full bg-gradient-to-r from-primary to-[var(--color-accent2)] transition-all duration-300"
               style={{ width: `${progress}%` }}
             />
           </div>
 
           {/* Question header */}
           <div className="flex items-center justify-between text-xs">
-            <div className="text-[var(--color-muted)]">
+            <div className="text-muted-foreground">
               {t("eventLoop.taskLabel")} {currentIndex + 1} / {questions.length}
             </div>
             <div
@@ -228,7 +228,7 @@ export default function EventLoop() {
 
           {/* Input */}
           <div className="space-y-2">
-            <label className="text-xs text-[var(--color-muted)] block">
+            <label className="text-xs text-muted-foreground block">
               {t("eventLoop.consolePrompt")}
             </label>
             <input
@@ -240,15 +240,15 @@ export default function EventLoop() {
               }}
               disabled={answered}
               placeholder={t("eventLoop.placeholder")}
-              className={`w-full py-2 px-3 bg-[var(--color-surface)] border rounded text-sm ${
+              className={`w-full py-2 px-3 bg-card border rounded text-sm ${
                 answered
                   ? feedback?.isCorrect
                     ? "border-[var(--color-green)] bg-opacity-10"
-                    : "border-[var(--color-red)] bg-opacity-10"
-                  : "border-[var(--color-border)]"
+                    : "border-destructive bg-opacity-10"
+                  : "border-border"
               } outline-none`}
             />
-            <div className="text-xs text-[var(--color-muted)]">💡 {currentQuestion.hint}</div>
+            <div className="text-xs text-muted-foreground">💡 {currentQuestion.hint}</div>
           </div>
 
           {/* Buttons */}
@@ -257,7 +257,7 @@ export default function EventLoop() {
               <>
                 <button
                   onClick={handleCheckAnswer}
-                  className="flex-1 py-2 px-4 bg-[var(--color-accent)] text-white text-sm font-semibold rounded hover:bg-opacity-90 transition"
+                  className="flex-1 py-2 px-4 bg-primary text-white text-sm font-semibold rounded hover:bg-opacity-90 transition"
                 >
                   {t("eventLoop.check")}
                 </button>
@@ -270,7 +270,7 @@ export default function EventLoop() {
                       message: `${t("eventLoop.correctAnswerPrefix")}${currentQuestion.answer}`,
                     });
                   }}
-                  className="flex-1 py-2 px-4 border border-[var(--color-border)] text-[var(--color-muted)] text-sm font-semibold rounded hover:border-[var(--color-accent)] transition"
+                  className="flex-1 py-2 px-4 border border-border text-muted-foreground text-sm font-semibold rounded hover:border-primary transition"
                 >
                   {t("eventLoop.skip")}
                 </button>
@@ -291,17 +291,17 @@ export default function EventLoop() {
               className={`p-4 rounded-lg border text-sm space-y-3 ${
                 feedback.isCorrect
                   ? "bg-[rgba(52,211,153,0.08)] border-[rgba(52,211,153,0.2)] text-[var(--color-green)]"
-                  : "bg-[rgba(248,113,113,0.08)] border-[rgba(248,113,113,0.2)] text-[var(--color-red)]"
+                  : "bg-[rgba(248,113,113,0.08)] border-[rgba(248,113,113,0.2)] text-destructive"
               }`}
             >
               <div className="font-bold">{feedback.message}</div>
               {!feedback.isCorrect && (
-                <div className="text-xs text-[var(--color-text)] opacity-80">
+                <div className="text-xs text-foreground opacity-80">
                   {currentQuestion.explanation}
                 </div>
               )}
               {feedback.isCorrect && (
-                <div className="text-xs text-[var(--color-text)] opacity-80">
+                <div className="text-xs text-foreground opacity-80">
                   {currentQuestion.explanation}
                 </div>
               )}
@@ -343,25 +343,25 @@ export default function EventLoop() {
       <div className="text-center space-y-6">
         <div className="text-6xl">{emoji}</div>
         <div>
-          <h2 className="font-display text-2xl font-bold text-[var(--color-accent)] mb-1">
+          <h2 className="font-display text-2xl font-bold text-primary mb-1">
             {title}
           </h2>
-          <p className="text-sm text-[var(--color-muted)]">{subtitle}</p>
+          <p className="text-sm text-muted-foreground">{subtitle}</p>
         </div>
 
         {/* Score grid */}
         <div className="grid grid-cols-3 gap-3 max-w-sm mx-auto">
-          <div className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg p-4">
+          <div className="bg-card border border-border rounded-lg p-4">
             <div className="font-black text-2xl text-[var(--color-green)] mb-1">{correct}</div>
-            <div className="text-xs text-[var(--color-muted)]">{t("eventLoop.scoreCorrect")}</div>
+            <div className="text-xs text-muted-foreground">{t("eventLoop.scoreCorrect")}</div>
           </div>
-          <div className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg p-4">
+          <div className="bg-card border border-border rounded-lg p-4">
             <div className="font-black text-2xl text-[var(--color-accent2)] mb-1">{total}</div>
-            <div className="text-xs text-[var(--color-muted)]">{t("eventLoop.scoreTotal")}</div>
+            <div className="text-xs text-muted-foreground">{t("eventLoop.scoreTotal")}</div>
           </div>
-          <div className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg p-4">
-            <div className="font-black text-2xl text-[var(--color-accent)] mb-1">{percentage}%</div>
-            <div className="text-xs text-[var(--color-muted)]">{t("eventLoop.scoreAccuracy")}</div>
+          <div className="bg-card border border-border rounded-lg p-4">
+            <div className="font-black text-2xl text-primary mb-1">{percentage}%</div>
+            <div className="text-xs text-muted-foreground">{t("eventLoop.scoreAccuracy")}</div>
           </div>
         </div>
 
@@ -369,13 +369,13 @@ export default function EventLoop() {
         <div className="flex gap-2 max-w-sm mx-auto">
           <button
             onClick={handleRestart}
-            className="flex-1 py-2 px-4 bg-[var(--color-accent)] text-white font-semibold rounded hover:bg-opacity-90 transition"
+            className="flex-1 py-2 px-4 bg-primary text-white font-semibold rounded hover:bg-opacity-90 transition"
           >
             {t("eventLoop.playAgain")}
           </button>
           <button
             onClick={handleBackToSplash}
-            className="flex-1 py-2 px-4 border border-[var(--color-border)] text-[var(--color-text)] font-semibold rounded hover:border-[var(--color-accent)] transition"
+            className="flex-1 py-2 px-4 border border-border text-foreground font-semibold rounded hover:border-primary transition"
           >
             {t("eventLoop.changeLevel")}
           </button>

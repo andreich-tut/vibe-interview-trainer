@@ -80,7 +80,7 @@ export default function TopicPractice({ params }: Route.ComponentProps) {
   if (loading) {
     return (
       <Layout showBack>
-        <p className="text-center text-[var(--color-muted)]">{t("common.loading")}</p>
+        <p className="text-center text-muted-foreground">{t("common.loading")}</p>
       </Layout>
     );
   }
@@ -184,17 +184,17 @@ export default function TopicPractice({ params }: Route.ComponentProps) {
         <div className="space-y-8">
           <div className="text-center mb-8">
             <div className="text-4xl mb-3">{topic.icon}</div>
-            <h1 className="font-display text-2xl font-bold text-[var(--color-accent)]">
+            <h1 className="font-display text-2xl font-bold text-primary">
               {topic.title} {t("practice.pageTitleSuffix")}
             </h1>
-            <p className="text-xs text-[var(--color-muted)] mt-2">
+            <p className="text-xs text-muted-foreground mt-2">
               {allCards.length} {t("practice.cardCounterLabel")}
             </p>
           </div>
 
           <div className="max-w-md mx-auto space-y-4">
             {/* API key */}
-            <div className="p-4 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg">
+            <div className="p-4 bg-card border border-border rounded-lg">
               <ApiKeyInput onDone={() => setApiKeyReady(true)} />
             </div>
 
@@ -203,8 +203,8 @@ export default function TopicPractice({ params }: Route.ComponentProps) {
               disabled={!apiKeyReady}
               className="w-full py-3 px-6 rounded-lg font-semibold transition text-sm disabled:opacity-40 disabled:cursor-default"
               style={{
-                backgroundColor: apiKeyReady ? "var(--color-accent)" : "#1a1a30",
-                color: apiKeyReady ? "white" : "var(--color-muted)",
+                backgroundColor: apiKeyReady ? "var(--primary)" : "#1a1a30",
+                color: apiKeyReady ? "white" : "var(--muted-foreground)",
               }}
             >
               {apiKeyReady ? t("practice.start") : t("practice.enterApiKey")}
@@ -229,7 +229,7 @@ export default function TopicPractice({ params }: Route.ComponentProps) {
         <div className="max-w-3xl mx-auto space-y-8">
           <div className="text-center mb-4">
             <div className="text-4xl mb-3">{topic.icon}</div>
-            <h1 className="font-display text-2xl font-bold text-[var(--color-accent)]">
+            <h1 className="font-display text-2xl font-bold text-primary">
               {topic.title} {t("practice.pageTitleSuffix")}
             </h1>
             {round > 1 && (
@@ -250,7 +250,7 @@ export default function TopicPractice({ params }: Route.ComponentProps) {
           <div className="text-center">
             <Link
               to={`/${topic.id}/theory`}
-              className="text-xs text-[var(--color-muted)] hover:text-[var(--color-accent)] transition-colors"
+              className="text-xs text-muted-foreground hover:text-primary transition-colors"
             >
               {t("practice.backToTheory")}
             </Link>
@@ -296,39 +296,39 @@ export default function TopicPractice({ params }: Route.ComponentProps) {
                 ? t("practice.results.good")
                 : t("practice.results.needsWork")}
         </h2>
-        <p className="text-sm text-[var(--color-text)]">
+        <p className="text-sm text-foreground">
           {topic.title} · {totalCards}
         </p>
 
         <div className="grid grid-cols-5 gap-3 max-w-md mx-auto">
-          <div className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg p-3 flex flex-col items-center">
+          <div className="bg-card border border-border rounded-lg p-3 flex flex-col items-center">
             <StarRating score={3} size="sm" />
             <div className="text-xl font-bold text-[var(--color-green)] mt-1">{scoreCount[3]}</div>
-            <div className="text-[0.5rem] text-[var(--color-muted)] uppercase tracking-wider mt-1">{t("practice.score.exact")}</div>
+            <div className="text-[0.5rem] text-muted-foreground uppercase tracking-wider mt-1">{t("practice.score.exact")}</div>
           </div>
-          <div className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg p-3 flex flex-col items-center">
+          <div className="bg-card border border-border rounded-lg p-3 flex flex-col items-center">
             <StarRating score={2} size="sm" />
             <div className="text-xl font-bold text-[var(--color-accent2)] mt-1">{scoreCount[2]}</div>
-            <div className="text-[0.5rem] text-[var(--color-muted)] uppercase tracking-wider mt-1">{t("practice.score.close")}</div>
+            <div className="text-[0.5rem] text-muted-foreground uppercase tracking-wider mt-1">{t("practice.score.close")}</div>
           </div>
-          <div className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg p-3 flex flex-col items-center">
+          <div className="bg-card border border-border rounded-lg p-3 flex flex-col items-center">
             <StarRating score={1} size="sm" />
             <div className="text-xl font-bold text-[#f59e0b] mt-1">{scoreCount[1]}</div>
-            <div className="text-[0.5rem] text-[var(--color-muted)] uppercase tracking-wider mt-1">{t("practice.score.hard")}</div>
+            <div className="text-[0.5rem] text-muted-foreground uppercase tracking-wider mt-1">{t("practice.score.hard")}</div>
           </div>
-          <div className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg p-3 flex flex-col items-center">
+          <div className="bg-card border border-border rounded-lg p-3 flex flex-col items-center">
             <StarRating score={0} size="sm" />
-            <div className="text-xl font-bold text-[var(--color-red)] mt-1">{scoreCount[0]}</div>
-            <div className="text-[0.5rem] text-[var(--color-muted)] uppercase tracking-wider mt-1">{t("practice.score.unknown")}</div>
+            <div className="text-xl font-bold text-destructive mt-1">{scoreCount[0]}</div>
+            <div className="text-[0.5rem] text-muted-foreground uppercase tracking-wider mt-1">{t("practice.score.unknown")}</div>
           </div>
-          <div className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg p-3 flex flex-col items-center">
-            <div className="text-xl font-bold text-[var(--color-accent)]">{pct}%</div>
-            <div className="text-[0.5rem] text-[var(--color-muted)] uppercase tracking-wider mt-1">{t("practice.score.total")}</div>
+          <div className="bg-card border border-border rounded-lg p-3 flex flex-col items-center">
+            <div className="text-xl font-bold text-primary">{pct}%</div>
+            <div className="text-[0.5rem] text-muted-foreground uppercase tracking-wider mt-1">{t("practice.score.total")}</div>
           </div>
         </div>
 
         {replayedCount > 0 && (
-          <p className="text-xs text-[var(--color-muted)]">
+          <p className="text-xs text-muted-foreground">
             {t("practice.replayed")} {replayedCount}
           </p>
         )}
@@ -344,19 +344,19 @@ export default function TopicPractice({ params }: Route.ComponentProps) {
           )}
           <button
             onClick={handleRestart}
-            className="py-2 px-6 bg-[var(--color-accent)] text-white rounded font-semibold hover:bg-[#6a56f0] transition text-sm"
+            className="py-2 px-6 bg-primary text-white rounded font-semibold hover:bg-[#6a56f0] transition text-sm"
           >
             {t("practice.restart")}
           </button>
           <Link
             to={`/${topic.id}/theory`}
-            className="py-2 px-6 bg-[var(--color-surface)] border border-[var(--color-border)] text-[var(--color-text)] rounded font-semibold hover:border-[var(--color-accent)] transition text-sm"
+            className="py-2 px-6 bg-card border border-border text-foreground rounded font-semibold hover:border-primary transition text-sm"
           >
             {t("practice.goToTheory")}
           </Link>
           <Link
             to="/"
-            className="py-2 px-6 bg-[var(--color-surface)] border border-[var(--color-border)] text-[var(--color-text)] rounded font-semibold hover:border-[var(--color-accent)] transition text-sm"
+            className="py-2 px-6 bg-card border border-border text-foreground rounded font-semibold hover:border-primary transition text-sm"
           >
             {t("practice.goHome")}
           </Link>

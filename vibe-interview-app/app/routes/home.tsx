@@ -39,7 +39,7 @@ export default function Home() {
     return (
       <Layout wide>
         <div className="text-center py-12">
-          <p className="text-[var(--color-muted)]">{t("common.loading")}</p>
+          <p className="text-muted-foreground">{t("common.loading")}</p>
         </div>
       </Layout>
     );
@@ -60,10 +60,10 @@ export default function Home() {
   return (
     <Layout wide>
       <div className="text-center mb-12">
-        <h1 className="font-display text-3xl font-black mb-3 bg-gradient-to-r from-[var(--color-accent)] to-[var(--color-accent2)] bg-clip-text text-transparent">
+        <h1 className="font-display text-3xl font-black mb-3 bg-gradient-to-r from-primary to-[var(--color-accent2)] bg-clip-text text-transparent">
           {t("home.pageTitle")}
         </h1>
-        <p className="text-sm text-[var(--color-muted)]">
+        <p className="text-sm text-muted-foreground">
           {t("home.subtitle")}
         </p>
       </div>
@@ -86,10 +86,10 @@ export default function Home() {
       </div>
 
       {/* Event Loop Trainer */}
-      <div className="bg-gradient-to-br from-[var(--color-surface)] to-[var(--color-surface2)] border border-[var(--color-accent)] border-opacity-30 rounded-lg p-6 text-center">
+      <div className="bg-gradient-to-br from-card to-secondary border border-primary/30 rounded-lg p-6 text-center">
         <div className="text-4xl mb-3">🔄</div>
         <h3 className="font-display font-bold text-lg mb-2">{t("home.eventLoopTitle")}</h3>
-        <p className="text-xs text-[var(--color-muted)] mb-4">
+        <p className="text-xs text-muted-foreground mb-4">
           {t("home.eventLoopDesc")}
         </p>
         <Link

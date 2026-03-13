@@ -70,14 +70,14 @@ function TocLink({
         className={`text-[0.8125rem] leading-snug transition-colors flex items-baseline gap-2.5 py-0.5 ${
           active
             ? "text-[var(--color-accent2)] font-semibold"
-            : "text-[var(--color-accent)] hover:text-[var(--color-accent2)]"
+            : "text-primary hover:text-[var(--color-accent2)]"
         }`}
         onClick={(e) => {
           e.preventDefault();
           document.getElementById(`section-${idx}`)?.scrollIntoView({ behavior: "smooth" });
         }}
       >
-        <span className="text-[var(--color-muted)] text-xs">
+        <span className="text-muted-foreground text-xs">
           {String(idx + 1).padStart(2, "0")}
         </span>
         {title}
@@ -144,7 +144,7 @@ export default function TopicTheory({ params }: Route.ComponentProps) {
   if (loading) {
     return (
       <Layout showBack>
-        <p className="text-center text-(--color-muted)">{t("common.loading")}</p>
+        <p className="text-center text-muted-foreground">{t("common.loading")}</p>
       </Layout>
     );
   }
@@ -167,7 +167,7 @@ export default function TopicTheory({ params }: Route.ComponentProps) {
         {/* Header */}
         <div className="text-center mb-8">
           <div className="text-4xl mb-3">{topic.icon}</div>
-          <h1 className="font-display text-2xl font-bold text-[var(--color-accent)] mb-2">
+          <h1 className="font-display text-2xl font-bold text-primary mb-2">
             {topic.title} {t("theory.pageTitleSuffix")}
           </h1>
         </div>
@@ -177,8 +177,8 @@ export default function TopicTheory({ params }: Route.ComponentProps) {
           {/* Sticky sidebar TOC — desktop only */}
           {theory.length > 2 && (
             <aside className="hidden lg:block lg:sticky lg:top-8 lg:self-start">
-              <nav className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-xl p-6">
-                <div className="text-[0.625rem] font-bold text-[var(--color-muted)] uppercase tracking-widest mb-4">
+              <nav className="bg-card border border-border rounded-xl p-6">
+                <div className="text-[0.625rem] font-bold text-muted-foreground uppercase tracking-widest mb-4">
                   {t("theory.sidebarTitle")}
                 </div>
                 <ol className="space-y-2 list-none p-0 m-0">
@@ -192,8 +192,8 @@ export default function TopicTheory({ params }: Route.ComponentProps) {
           <div className="min-w-0 space-y-6">
             {/* Mobile TOC — collapsible */}
             {theory.length > 2 && (
-              <details className="lg:hidden bg-[var(--color-surface)] border border-[var(--color-border)] rounded-xl">
-                <summary className="px-5 py-4 cursor-pointer text-sm font-semibold text-[var(--color-accent)]">
+              <details className="lg:hidden bg-card border border-border rounded-xl">
+                <summary className="px-5 py-4 cursor-pointer text-sm font-semibold text-primary">
                   {t("theory.sidebarTitle")} ({theory.length})
                 </summary>
                 <ol className="space-y-1.5 list-none p-0 m-0 px-5 pb-4">
@@ -217,9 +217,9 @@ export default function TopicTheory({ params }: Route.ComponentProps) {
       </div>
 
       {/* Sticky bottom CTA */}
-      <div className="fixed bottom-0 left-0 right-0 bg-[var(--color-bg)]/95 backdrop-blur-sm border-t border-[var(--color-border)] py-3 px-5 z-50">
+      <div className="fixed bottom-0 left-0 right-0 bg-background/95 backdrop-blur-sm border-t border-border py-3 px-5 z-50">
         <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
-          <span className="text-xs text-[var(--color-muted)] hidden sm:block">
+          <span className="text-xs text-muted-foreground hidden sm:block">
             {t("theory.readyToPractice")}
           </span>
           <Link

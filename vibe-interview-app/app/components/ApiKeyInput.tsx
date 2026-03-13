@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { hasApiKey, setApiKey, removeApiKey, getApiKey } from "~/lib/llm";
 import { useLanguage } from "~/contexts/LanguageContext";
+import { Button } from "~/components/ui/button";
+import { Input } from "~/components/ui/input";
 
 function maskKey(key: string): string {
   if (key.length <= 8) return "****";
@@ -30,48 +32,42 @@ export function ApiKeyInput({ onDone }: { onDone?: () => void }) {
     const key = getApiKey() ?? "";
     return (
       <div className="flex items-center gap-3 text-xs">
-        <span className="text-[var(--color-muted)]">
-          Groq API: <code className="text-[var(--color-accent)]">{maskKey(key)}</code>
+        <span className="text-muted-foreground">
+          Groq API: <code className="text-primary">{maskKey(key)}</code>
         </span>
-        <button
-          onClick={handleRemove}
-          className="text-[var(--color-red)] hover:underline"
-        >
+        <Button variant="ghost" size="sm" onClick={handleRemove} className="h-auto py-0.5 px-2 text-destructive">
           {t("apiKeyInput.clear")}
-        </button>
+        </Button>
       </div>
     );
   }
 
   return (
     <div className="space-y-2">
-      <p className="text-xs text-[var(--color-muted)]">
+      <p className="text-xs text-muted-foreground">
         {t("apiKeyInput.hint")}{" "}
         <a
           href="https://console.groq.com/keys"
           target="_blank"
           rel="noopener noreferrer"
-          className="text-[var(--color-accent)] hover:underline"
+          className="text-primary hover:underline"
         >
           {t("apiKeyInput.hintLink")}
         </a>{" "}
         {t("apiKeyInput.hintSuffix")}
       </p>
       <div className="flex gap-2">
-        <input
+        <Input
           type="password"
           value={value}
           onChange={(e) => setValue(e.target.value)}
           placeholder={t("apiKeyInput.placeholder")}
-          className="flex-1 px-3 py-1.5 bg-[var(--color-surface)] border border-[var(--color-border)] rounded text-sm text-[var(--color-text)] placeholder:text-[var(--color-muted)] focus:border-[var(--color-accent)] focus:outline-none"
+          className="flex-1"
           onKeyDown={(e) => e.key === "Enter" && handleSave()}
         />
-        <button
-          onClick={handleSave}
-          className="px-4 py-1.5 bg-[var(--color-accent)] text-white text-sm rounded hover:bg-[#6a56f0] transition"
-        >
+        <Button size="sm" onClick={handleSave}>
           {t("apiKeyInput.submit")}
-        </button>
+        </Button>
       </div>
     </div>
   );

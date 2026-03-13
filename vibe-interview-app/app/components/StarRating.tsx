@@ -15,7 +15,7 @@ const COLOR_MAP: Record<Score, string> = {
   3: "var(--color-green)",
   2: "var(--color-accent2)",
   1: "var(--color-warning)",
-  0: "var(--color-muted)",
+  0: "var(--muted-foreground)",
 };
 
 const TOTAL_STARS = 3;
