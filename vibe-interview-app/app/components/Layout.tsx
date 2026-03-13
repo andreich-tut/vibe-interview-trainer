@@ -1,23 +1,10 @@
 import type { ReactNode } from "react";
 import { Link } from "react-router";
-import { Moon, Sun, Monitor } from "lucide-react";
+import { Moon, Sun } from "lucide-react";
 import { useTheme } from "~/hooks/useTheme";
-import type { ThemeMode } from "~/hooks/useTheme";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { useLanguage } from "~/contexts/LanguageContext";
 import { Button } from "~/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "~/components/ui/dropdown-menu";
-
-const themeIcons: Record<ThemeMode, ReactNode> = {
-  light: <Sun size={14} />,
-  dark: <Moon size={14} />,
-  system: <Monitor size={14} />,
-};
 
 interface LayoutProps {
   children: ReactNode;
@@ -27,7 +14,7 @@ interface LayoutProps {
 }
 
 export function Layout({ children, showBack = false, backTo = "/", wide = false }: LayoutProps) {
-  const { theme, setTheme } = useTheme();
+  const { resolvedTheme, setTheme } = useTheme();
   const { t } = useLanguage();
 
   return (
@@ -41,31 +28,15 @@ export function Layout({ children, showBack = false, backTo = "/", wide = false 
         </Link>
         <div className="ml-auto flex items-center gap-4">
           <LanguageSwitcher />
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="h-8 w-8 text-muted-foreground hover:text-foreground"
-              >
-                {themeIcons[theme]}
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuItem onClick={() => setTheme("dark")} className={theme === "dark" ? "text-primary" : ""}>
-                <Moon size={14} />
-                {t("layout.themeDark")}
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setTheme("light")} className={theme === "light" ? "text-primary" : ""}>
-                <Sun size={14} />
-                {t("layout.themeLight")}
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setTheme("system")} className={theme === "system" ? "text-primary" : ""}>
-                <Monitor size={14} />
-                {t("layout.themeSystem")}
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-8 w-8 text-muted-foreground hover:text-foreground"
+            onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
+            aria-label="Toggle theme"
+          >
+            {resolvedTheme === "dark" ? <Sun size={14} /> : <Moon size={14} />}
+          </Button>
           {showBack && (
             <Link
               to={backTo}
