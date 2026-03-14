@@ -1,6 +1,6 @@
 import { StarRating } from "~/components/StarRating";
 import type { LLMResult } from "~/lib/llm";
-import type { Card, Score } from "../FlashCard";
+import type { Card } from "../FlashCard";
 import { useLanguage } from "~/contexts/LanguageContext";
 
 interface CardResultProps {
@@ -10,7 +10,6 @@ interface CardResultProps {
   aiLoading: boolean;
   aiError: string | null;
   style: { color: string; bg: string; border: string } | null;
-  scoreLabels: Record<Score, string>;
 }
 
 export function CardResult({
@@ -20,7 +19,6 @@ export function CardResult({
   aiLoading,
   aiError,
   style,
-  scoreLabels,
 }: CardResultProps) {
   const { t } = useLanguage();
   return (
@@ -90,9 +88,6 @@ export function CardResult({
         >
           <div className="flex items-center gap-2 mb-1.5">
             <StarRating score={aiResult.score} size="md" />
-            <span className="text-sm font-semibold" style={{ color: style.color }}>
-              {scoreLabels[aiResult.score]}
-            </span>
           </div>
           <div className="text-xs text-foreground opacity-80 leading-relaxed">
             {aiResult.feedback}

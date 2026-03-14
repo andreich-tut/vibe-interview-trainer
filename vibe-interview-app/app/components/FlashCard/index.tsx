@@ -1,4 +1,3 @@
-import { useLanguage } from "~/contexts/LanguageContext";
 import { useSpeechRecognition } from "~/hooks/useSpeechRecognition";
 import { useSpeechAnswer } from "./useSpeechAnswer";
 import { useAnswerCheck } from "./useAnswerCheck";
@@ -27,14 +26,6 @@ interface FlashCardProps {
 }
 
 export function FlashCard({ card, onScore, current, total }: FlashCardProps) {
-  const { t } = useLanguage();
-  const scoreLabels: Record<Score, string> = {
-    3: t("flashCard.exact"),
-    2: t("flashCard.close"),
-    1: t("flashCard.hard"),
-    0: t("flashCard.unknown"),
-  };
-
   const speech = useSpeechRecognition();
   const { userAnswer, setUserAnswer, toggleMic } = useSpeechAnswer(speech, card.id);
   const { aiResult, aiLoading, aiError, handleCheck, handleNext, handleSkip, style } =
@@ -74,7 +65,6 @@ export function FlashCard({ card, onScore, current, total }: FlashCardProps) {
             aiLoading={aiLoading}
             aiError={aiError}
             style={style}
-            scoreLabels={scoreLabels}
           />
         )}
       </div>
