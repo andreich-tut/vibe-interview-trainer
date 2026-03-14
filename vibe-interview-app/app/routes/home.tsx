@@ -40,7 +40,9 @@ export default function Home() {
     return (
       <Layout wide>
         <div className="text-center py-12">
-          <p className="text-muted-foreground">{t("common.loading")}</p>
+          <p className="text-muted-foreground">
+            {t("common.loading")}
+          </p>
         </div>
       </Layout>
     );
@@ -50,7 +52,9 @@ export default function Home() {
     return (
       <Layout wide>
         <div className="text-center py-12">
-          <p className="text-red-500">{error || t("common.failedToLoadContent")}</p>
+          <p className="text-red-500">
+            {error || t("common.failedToLoadContent")}
+          </p>
         </div>
       </Layout>
     );
@@ -61,7 +65,7 @@ export default function Home() {
   return (
     <Layout wide>
       <div className="text-center mb-12">
-        <h1 className="font-display text-3xl font-black mb-3 bg-gradient-to-r from-primary to-[var(--color-accent2)] bg-clip-text text-transparent">
+        <h1 className="font-display text-3xl font-black mb-3 bg-linear-to-r from-primary to-(--color-accent2) bg-clip-text text-transparent">
           {t("home.pageTitle")}
         </h1>
         <p className="text-sm text-muted-foreground">
@@ -86,15 +90,17 @@ export default function Home() {
       </div>
 
       {/* Event Loop Trainer */}
-      <div className="bg-gradient-to-br from-card to-secondary border border-primary/30 rounded-lg p-6 text-center">
+      <div className="bg-linear-to-br from-card to-secondary border border-primary/30 rounded-lg p-6 text-center">
         <TopicIcon id="event-loop" className="w-10 h-10 text-primary mx-auto mb-3" />
-        <h3 className="font-display font-bold text-lg mb-2">{t("home.eventLoopTitle")}</h3>
+        <h3 className="font-display font-bold text-lg mb-2">
+          {t("home.eventLoopTitle")}
+        </h3>
         <p className="text-xs text-muted-foreground mb-4">
           {t("home.eventLoopDesc")}
         </p>
         <Link
           to="/event-loop"
-          className="inline-block py-2 px-6 bg-[var(--color-accent2)] text-white rounded text-sm font-semibold hover:bg-cyan-500 transition"
+          className="inline-block py-2 px-6 bg-(--color-accent2) text-white rounded text-sm font-semibold hover:bg-cyan-500 transition"
         >
           {t("home.eventLoopCta")}
         </Link>

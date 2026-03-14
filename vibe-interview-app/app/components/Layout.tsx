@@ -22,7 +22,7 @@ export function Layout({ children, wide = false }: LayoutProps) {
           className="flex items-center gap-2 font-display text-base font-black text-primary tracking-tight"
         >
           <LogoBrainIcon />
-          interview<span className="text-[var(--color-accent2)]">trainer</span>
+          interview<span className="text-(--color-accent2)">trainer</span>
         </Link>
         <div className="ml-auto flex items-center gap-4">
           <LanguageSwitcher />

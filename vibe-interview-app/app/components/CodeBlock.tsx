@@ -91,7 +91,9 @@ export function CodeBlock({ code, language = 'js' }: CodeBlockProps) {
         <div className="w-2 h-2 rounded-full bg-red-500" />
         <div className="w-2 h-2 rounded-full bg-yellow-500" />
         <div className="w-2 h-2 rounded-full bg-green-500" />
-        <span className="ml-2 text-xs text-muted-foreground">{filename}</span>
+        <span className="ml-2 text-xs text-muted-foreground">
+          {filename}
+        </span>
       </div>
 
       {/* Code */}

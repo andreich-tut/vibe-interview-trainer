@@ -122,7 +122,9 @@ export default function EventLoop() {
     return (
       <Layout>
         <div className="text-center py-12">
-          <p className="text-muted-foreground">{t("common.loading")}</p>
+          <p className="text-muted-foreground">
+            {t("common.loading")}
+          </p>
         </div>
       </Layout>
     );
@@ -132,7 +134,9 @@ export default function EventLoop() {
     return (
       <Layout>
         <div className="text-center py-12">
-          <p className="text-red-500">{error || t("common.failedToLoadContent")}</p>
+          <p className="text-red-500">
+            {error || t("common.failedToLoadContent")}
+          </p>
         </div>
       </Layout>
     );
@@ -148,10 +152,10 @@ export default function EventLoop() {
         <div className="text-center space-y-8">
           <div className="text-5xl mb-4">🔄</div>
           <div>
-            <h1 className="font-display text-3xl font-black mb-3 bg-gradient-to-r from-primary to-[var(--color-accent2)] bg-clip-text text-transparent">
+            <h1 className="font-display text-3xl font-black mb-3 bg-linear-to-r from-primary to-(--color-accent2) bg-clip-text text-transparent">
               {t("eventLoop.pageTitle")}
             </h1>
-            <h2 className="font-display text-2xl font-black mb-4 text-[var(--color-accent2)]">
+            <h2 className="font-display text-2xl font-black mb-4 text-(--color-accent2)">
               {t("eventLoop.subtitle")}
             </h2>
             <p className="text-sm text-muted-foreground max-w-sm mx-auto mb-8">
@@ -205,7 +209,7 @@ export default function EventLoop() {
           {/* Progress bar */}
           <div className="h-1 bg-border rounded-full overflow-hidden">
             <div
-              className="h-full bg-gradient-to-r from-primary to-[var(--color-accent2)] transition-all duration-300"
+              className="h-full bg-linear-to-r from-primary to-(--color-accent2) transition-all duration-300"
               style={{ width: `${progress}%` }}
             />
           </div>
@@ -252,7 +256,7 @@ export default function EventLoop() {
               className={`w-full py-2 px-3 bg-card border rounded text-sm ${
                 answered
                   ? feedback?.isCorrect
-                    ? "border-[var(--color-green)] bg-opacity-10"
+                    ? "border-(--color-green) bg-opacity-10"
                     : "border-destructive bg-opacity-10"
                   : "border-border"
               } outline-none`}
@@ -287,7 +291,7 @@ export default function EventLoop() {
             ) : (
               <button
                 onClick={handleNextQuestion}
-                className="flex-1 py-2 px-4 bg-[var(--color-accent2)] text-white text-sm font-semibold rounded hover:bg-opacity-90 transition"
+                className="flex-1 py-2 px-4 bg-(--color-accent2) text-white text-sm font-semibold rounded hover:bg-opacity-90 transition"
               >
                 {t("eventLoop.next")}
               </button>
@@ -299,11 +303,13 @@ export default function EventLoop() {
             <div
               className={`p-4 rounded-lg border text-sm space-y-3 ${
                 feedback.isCorrect
-                  ? "bg-[rgba(52,211,153,0.08)] border-[rgba(52,211,153,0.2)] text-[var(--color-green)]"
+                  ? "bg-[rgba(52,211,153,0.08)] border-[rgba(52,211,153,0.2)] text-(--color-green)"
                   : "bg-[rgba(248,113,113,0.08)] border-[rgba(248,113,113,0.2)] text-destructive"
               }`}
             >
-              <div className="font-bold">{feedback.message}</div>
+              <div className="font-bold">
+                {feedback.message}
+              </div>
               {!feedback.isCorrect && (
                 <div className="text-xs text-foreground opacity-80">
                   {currentQuestion.explanation}
@@ -317,7 +323,9 @@ export default function EventLoop() {
 
               {/* Steps */}
               <div className="mt-4 pt-4 border-t border-current border-opacity-20">
-                <div className="text-xs font-bold mb-3 opacity-70">{t("eventLoop.stepsLabel")}</div>
+                <div className="text-xs font-bold mb-3 opacity-70">
+                  {t("eventLoop.stepsLabel")}
+                </div>
                 <StepVisualizer steps={currentQuestion.steps} />
               </div>
             </div>
@@ -359,22 +367,30 @@ export default function EventLoop() {
           <h2 className="font-display text-2xl font-bold text-primary mb-1">
             {title}
           </h2>
-          <p className="text-sm text-muted-foreground">{subtitle}</p>
+          <p className="text-sm text-muted-foreground">
+            {subtitle}
+          </p>
         </div>
 
         {/* Score grid */}
         <div className="grid grid-cols-3 gap-3 max-w-sm mx-auto">
           <div className="bg-card border border-border rounded-lg p-4">
-            <div className="font-black text-2xl text-[var(--color-green)] mb-1">{correct}</div>
-            <div className="text-xs text-muted-foreground">{t("eventLoop.scoreCorrect")}</div>
+            <div className="font-black text-2xl text-(--color-green) mb-1">{correct}</div>
+            <div className="text-xs text-muted-foreground">
+              {t("eventLoop.scoreCorrect")}
+            </div>
           </div>
           <div className="bg-card border border-border rounded-lg p-4">
-            <div className="font-black text-2xl text-[var(--color-accent2)] mb-1">{total}</div>
-            <div className="text-xs text-muted-foreground">{t("eventLoop.scoreTotal")}</div>
+            <div className="font-black text-2xl text-(--color-accent2) mb-1">{total}</div>
+            <div className="text-xs text-muted-foreground">
+              {t("eventLoop.scoreTotal")}
+            </div>
           </div>
           <div className="bg-card border border-border rounded-lg p-4">
             <div className="font-black text-2xl text-primary mb-1">{percentage}%</div>
-            <div className="text-xs text-muted-foreground">{t("eventLoop.scoreAccuracy")}</div>
+            <div className="text-xs text-muted-foreground">
+              {t("eventLoop.scoreAccuracy")}
+            </div>
           </div>
         </div>
 

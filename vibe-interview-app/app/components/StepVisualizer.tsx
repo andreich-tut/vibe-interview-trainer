@@ -30,11 +30,15 @@ export function StepVisualizer({ steps }: StepVisualizerProps) {
           key={i}
           className="flex items-center gap-3 text-xs py-1 border-b border-border last:border-b-0"
         >
-          <span className="text-muted-foreground min-w-6">{i + 1}</span>
+          <span className="text-muted-foreground min-w-6">
+            {i + 1}
+          </span>
           <Badge variant={tagVariant[step.tag]} className="min-w-20 justify-center">
             {tagLabel[step.tag]}
           </Badge>
-          <span className="text-foreground opacity-70">{step.desc}</span>
+          <span className="text-foreground opacity-70">
+            {step.desc}
+          </span>
         </div>
       ))}
     </div>

@@ -21,8 +21,12 @@ export const TopicCard = memo(function TopicCard({ id, title, description, progr
     <Card className="hover:border-primary transition">
       <CardContent className="pt-5">
         <TopicIcon id={id} className="w-8 h-8 text-primary mb-3" />
-        <h3 className="font-display font-bold text-lg mb-2">{title}</h3>
-        <p className="text-xs text-muted-foreground mb-4">{description}</p>
+        <h3 className="font-display font-bold text-lg mb-2">
+          {title}
+        </h3>
+        <p className="text-xs text-muted-foreground mb-4">
+          {description}
+        </p>
 
         {progress && progress.total > 0 && (
           <div className="mb-4 space-y-1">

@@ -8,7 +8,9 @@ export function CardUserAnswer({ answer }: { answer: string }) {
       <div className="text-[0.625rem] font-bold uppercase tracking-wider text-muted-foreground mb-1.5">
         {t("flashCard.yourAnswer")}
       </div>
-      <div className="text-sm text-foreground whitespace-pre-line">{answer}</div>
+      <div className="text-sm text-foreground whitespace-pre-line">
+        {answer}
+      </div>
     </div>
   );
 }

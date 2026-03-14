@@ -29,13 +29,17 @@ export function CardReferenceAnswer({
             {aiResult.matchedPoints.map((point, i) => (
               <li key={`m-${i}`} className="flex items-start gap-1.5">
                 <span className="text-green font-bold shrink-0">{"\u2713"}</span>
-                <span className="text-foreground">{point}</span>
+                <span className="text-foreground">
+                  {point}
+                </span>
               </li>
             ))}
             {aiResult.missedPoints.map((point, i) => (
               <li key={`x-${i}`} className="flex items-start gap-1.5">
                 <span className="text-destructive font-bold shrink-0">{"\u2717"}</span>
-                <span className="text-muted-foreground">{point}</span>
+                <span className="text-muted-foreground">
+                  {point}
+                </span>
               </li>
             ))}
           </ul>

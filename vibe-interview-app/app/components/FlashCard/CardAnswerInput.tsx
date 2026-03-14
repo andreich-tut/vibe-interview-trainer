@@ -62,7 +62,9 @@ export function CardAnswerInput({
         )}
       </div>
       {speech.error && (
-        <div className="text-xs text-destructive">{speech.error}</div>
+        <div className="text-xs text-destructive">
+          {speech.error}
+        </div>
       )}
       {speech.isListening && (
         <div className="flex items-center gap-2 text-xs text-destructive">
