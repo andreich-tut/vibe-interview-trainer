@@ -71,6 +71,54 @@
         "Record screenshots and traces on failure for debugging",
         "Keep E2E tests focused on critical paths — they are expensive to maintain"
       ]
+    },
+    {
+      "id": "7",
+      "category": "Test Coverage",
+      "question": "What does code coverage measure and what are its limits?",
+      "answer": "Coverage measures what percentage of lines, branches, functions, and statements are executed during tests. 100% coverage does not mean bug-free — it only shows that code was executed, not that behavior is correct. Branch coverage is the most valuable metric as it catches untested conditional logic.",
+      "keyPoints": [
+        "Four metrics: lines, branches, functions, statements",
+        "Branch coverage most valuable — catches missing else/default paths",
+        "100% coverage doesn't mean correct behavior",
+        "Set thresholds in Jest config to enforce minimums in CI"
+      ]
+    },
+    {
+      "id": "8",
+      "category": "MSW",
+      "question": "What is MSW and why is it preferred over manual fetch mocking?",
+      "answer": "Mock Service Worker (MSW) intercepts actual HTTP requests at the network level using a Service Worker (browser) or Node interceptors. Unlike jest.mock('fetch'), MSW lets components make real fetch calls that are intercepted transparently, making tests more realistic and decoupled from implementation details.",
+      "keyPoints": [
+        "Intercepts at network level — components use real fetch/axios unchanged",
+        "Same mock handlers work in tests and browser development",
+        "server.use() overrides specific handlers per test for error scenarios",
+        "Avoids brittle import-level mocks that break on refactoring"
+      ]
+    },
+    {
+      "id": "9",
+      "category": "React Testing Library",
+      "question": "What is the difference between userEvent and fireEvent?",
+      "answer": "userEvent simulates real browser events including all intermediate events — focus, keydown, keypress, keyup, input, change, blur. fireEvent dispatches a single synthetic event directly. userEvent is preferred because it more closely matches real user behavior and catches bugs that fireEvent misses.",
+      "keyPoints": [
+        "userEvent.type() fires keydown + keypress + input + keyup per character",
+        "fireEvent.change() fires only a single change event",
+        "userEvent reveals bugs from event sequence expectations",
+        "Always use userEvent.setup() in modern RTL for proper async handling"
+      ]
+    },
+    {
+      "id": "10",
+      "category": "Best Practices",
+      "question": "What makes a test brittle and how do you avoid it?",
+      "answer": "A brittle test breaks when implementation changes without behavior changing. Common causes: testing internal state, relying on CSS classes, using snapshot tests for large components, coupling to specific HTML structure. Fix by querying by role/label/text, testing observable output, and keeping snapshots small and focused.",
+      "keyPoints": [
+        "Don't test internal state (useState value) — test visible output",
+        "Avoid CSS class selectors — they break on styling refactors",
+        "Snapshot tests for large trees catch everything, verify nothing",
+        "The test should survive any refactor that preserves behavior"
+      ]
     }
   ]
 }

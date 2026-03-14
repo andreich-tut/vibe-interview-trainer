@@ -3,51 +3,44 @@
     {
       "id": "javascript",
       "title": "JavaScript",
-      "description": "Core language: closures, prototypes, event loop, async/await, and modern ES6+ features",
-      "icon": "⚡",
-      "cardsCount": 7
+      "icon": "📜",
+      "description": "Core language, async model, closures, event loop"
     },
     {
       "id": "react",
       "title": "React",
-      "description": "Components, hooks, state management, rendering lifecycle, and React ecosystem best practices",
       "icon": "⚛️",
-      "cardsCount": 8
+      "description": "Components, hooks, state management, optimization"
     },
     {
-      "id": "typescript",
-      "title": "TypeScript",
-      "description": "Static typing, generics, utility types, decorators, and TypeScript project configuration",
-      "icon": "🔷",
-      "cardsCount": 6
-    },
-    {
-      "id": "css",
-      "title": "CSS",
-      "description": "Box model, Flexbox, CSS Grid, animations, responsive design, and CSS methodologies",
-      "icon": "🎨",
-      "cardsCount": 5
+      "id": "nextjs",
+      "title": "Next.js",
+      "icon": "▲",
+      "description": "SSR, SSG, ISR, routing, and performance"
     },
     {
       "id": "nodejs",
       "title": "Node.js",
-      "description": "Server-side JavaScript: module system, streams, buffers, event emitter, and Express",
       "icon": "🟢",
-      "cardsCount": 5
+      "description": "Modules, async model, servers, streams"
+    },
+    {
+      "id": "css",
+      "title": "CSS",
+      "icon": "🎨",
+      "description": "Selectors, Flexbox, Grid, animations"
+    },
+    {
+      "id": "cicd",
+      "title": "CI/CD",
+      "icon": "🔄",
+      "description": "Automation, deployment, monitoring"
     },
     {
       "id": "testing",
       "title": "Testing",
-      "description": "Unit, integration, and E2E testing with Jest, React Testing Library, and Playwright",
-      "icon": "🧪",
-      "cardsCount": 4
-    },
-    {
-      "id": "algorithms",
-      "title": "Algorithms",
-      "description": "Data structures, sorting, searching, Big-O complexity analysis, and common coding patterns",
-      "icon": "🧠",
-      "cardsCount": 6
+      "icon": "✅",
+      "description": "Unit tests, components, E2E"
     }
   ]
 }

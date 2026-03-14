@@ -71,6 +71,54 @@
         "Path filtering: only run deploy job when src/ changes",
         "Fail fast: run fastest checks (lint, typecheck) before slow tests"
       ]
+    },
+    {
+      "id": "7",
+      "category": "Security",
+      "question": "How do you handle secrets and security scanning in CI/CD?",
+      "answer": "Store secrets in the platform's secret store (GitHub Secrets, Vault, AWS Secrets Manager) — never commit them to code. Use OIDC-based authentication to cloud providers instead of long-lived keys. Run dependency scanning (npm audit, Snyk) and SAST tools in the pipeline as mandatory gates.",
+      "keyPoints": [
+        "Never commit secrets — use platform secret stores",
+        "OIDC short-lived tokens vs long-lived service account keys",
+        "Dependency scanning: npm audit, Snyk, Dependabot in CI",
+        "SAST/DAST tools scan code and running app for vulnerabilities"
+      ]
+    },
+    {
+      "id": "8",
+      "category": "GitHub Actions",
+      "question": "How do you reuse logic across multiple GitHub Actions workflows?",
+      "answer": "Composite actions bundle multiple steps into a reusable action defined in action.yml. Reusable workflows allow calling an entire workflow from another workflow using the workflow_call trigger. Both reduce duplication and keep pipelines DRY across repositories.",
+      "keyPoints": [
+        "Composite action: reusable steps, lives in .github/actions/ or separate repo",
+        "Reusable workflow: triggered via workflow_call, can pass inputs and secrets",
+        "Public actions from Marketplace: uses: actions/checkout@v4",
+        "Pin actions to SHA for security: uses: actions/checkout@abc123"
+      ]
+    },
+    {
+      "id": "9",
+      "category": "Deployments",
+      "question": "What is a rollback strategy and when should you use it?",
+      "answer": "A rollback restores a previous stable version when a deployment causes errors. Strategies: redeploy previous image tag (container), revert the commit and redeploy, use blue-green's instant traffic switch. Trigger rollbacks automatically based on error rate thresholds. Database migrations must be backward-compatible to allow rollback.",
+      "keyPoints": [
+        "Immutable images: previous tag can be redeployed instantly",
+        "Blue-Green: rollback = switch load balancer back to blue",
+        "Automated rollback: error rate > threshold triggers revert",
+        "DB migrations must be backward-compatible to allow safe rollback"
+      ]
+    },
+    {
+      "id": "10",
+      "category": "Environments",
+      "question": "What is environment parity and why does it matter?",
+      "answer": "Environment parity means dev, staging, and production use the same OS, runtime version, dependencies, and configuration structure. Differences between environments cause 'works on my machine' bugs. Docker and infrastructure-as-code (Terraform) enforce parity. The 12-factor app principle states: config in environment variables, not code.",
+      "keyPoints": [
+        "Same Docker image runs in CI, staging, and production",
+        "Config via environment variables — never hardcoded",
+        ".env.example committed; .env gitignored",
+        "Infrastructure-as-code (Terraform, CDK) provisions identical environments"
+      ]
     }
   ]
 }
