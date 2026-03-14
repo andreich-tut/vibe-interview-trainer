@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { type Score, type Card } from "~/components/FlashCard";
-import { useProgress } from "~/hooks/useProgress";
+import { useProgress } from "~/hooks/shared/useProgress";
 import { hasApiKey } from "~/lib/llm";
-import { useCardDeck, type CardScore } from "~/hooks/useCardDeck";
-import { useSessionStats } from "~/hooks/useSessionStats";
+import { useCardDeck, type CardScore } from "~/hooks/practice/useCardDeck";
+import { useSessionStats } from "~/hooks/practice/useSessionStats";
 
 type Phase = "setup" | "playing" | "finished";
 

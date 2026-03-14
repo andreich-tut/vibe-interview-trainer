@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { useSpeechRecognition } from "~/hooks/useSpeechRecognition";
+import { useSpeechRecognition } from "~/hooks/shared/useSpeechRecognition";
 import { useSpeechAnswer } from "./useSpeechAnswer";
 import { useAnswerCheck } from "./useAnswerCheck";
 import { useFlashCardKeyboard } from "./useFlashCardKeyboard";

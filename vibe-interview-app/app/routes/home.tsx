@@ -1,7 +1,7 @@
 import { Layout } from "~/components/Layout";
 import { TopicIcon } from "~/components/TopicIcon";
 import { TopicCard } from "~/components/TopicCard";
-import { useProgress } from "~/hooks/useProgress";
+import { useProgress } from "~/hooks/shared/useProgress";
 import { Link } from "react-router";
 import { useEffect, useState } from "react";
 import { loadContent, type TopicsFile } from "~/lib/contentLoader";

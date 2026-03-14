@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from "react";
-import type { UseSpeechRecognitionReturn } from "~/hooks/useSpeechRecognition";
+import type { UseSpeechRecognitionReturn } from "~/hooks/shared/useSpeechRecognition";
 
 export function useSpeechAnswer(
   speech: UseSpeechRecognitionReturn,

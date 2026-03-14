@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { type Score } from "~/components/FlashCard";
-import { type CardScore } from "~/hooks/useCardDeck";
+import { type CardScore } from "~/hooks/practice/useCardDeck";
 
 export interface SessionStats {
   scoreCount: Record<Score, number>;

@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import { Textarea } from "~/components/ui/textarea";
-import type { UseSpeechRecognitionReturn } from "~/hooks/useSpeechRecognition";
+import type { UseSpeechRecognitionReturn } from "~/hooks/shared/useSpeechRecognition";
 import { useLanguage } from "~/contexts/useLanguage";
 import MicStopIcon from "~/assets/icons/mic-stop.svg?react";
 import MicIcon from "~/assets/icons/mic.svg?react";
