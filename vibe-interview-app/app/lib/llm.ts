@@ -91,10 +91,12 @@ export async function checkAnswer(
 const STORAGE_KEY = "groq-api-key";
 
 export function hasApiKey(): boolean {
+  if (typeof localStorage === "undefined") return false;
   return !!localStorage.getItem(STORAGE_KEY);
 }
 
 export function getApiKey(): string | null {
+  if (typeof localStorage === "undefined") return null;
   return localStorage.getItem(STORAGE_KEY);
 }
 

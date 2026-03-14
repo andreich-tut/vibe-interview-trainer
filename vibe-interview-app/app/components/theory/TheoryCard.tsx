@@ -1,5 +1,5 @@
 import { memo } from "react";
-import { Card, CardHeader, CardContent } from "~/components/ui/card";
+import { Card, CardHeader, CardContent } from "~/components/shared/ui/card";
 
 interface TheoryCardProps {
   id: string;

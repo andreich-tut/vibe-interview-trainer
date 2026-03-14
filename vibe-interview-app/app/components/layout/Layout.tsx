@@ -3,7 +3,7 @@ import { Link } from "react-router";
 import { Moon, Sun } from "lucide-react";
 import { useTheme } from "~/hooks/shared/useTheme";
 import { LanguageSwitcher } from "./LanguageSwitcher";
-import { Button } from "~/components/ui/button";
+import { Button } from "~/components/shared/ui/button";
 import LogoBrainIcon from "~/assets/icons/logo-brain.svg?react";
 
 interface LayoutProps {

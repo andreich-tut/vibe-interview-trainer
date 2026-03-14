@@ -1,6 +1,6 @@
 import { Link } from "react-router";
-import { ApiKeyInput } from "~/components/ApiKeyInput";
-import { useLanguage } from "~/contexts/useLanguage";
+import { ApiKeyInput } from "~/components/practice/ApiKeyInput";
+import { useLanguage } from "~/contexts/LanguageContext";
 import type { TopicsFile } from "~/lib/contentLoader";
 
 interface PracticeSetupProps {

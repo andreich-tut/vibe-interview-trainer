@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useLanguage } from "~/contexts/useLanguage";
+import { useLanguage } from "~/contexts/LanguageContext";
 import { loadContent, type CardsFile, type TopicsFile } from "~/lib/contentLoader";
 
 interface TopicContent {

@@ -1,5 +1,5 @@
-import { useLanguage } from "~/contexts/useLanguage";
-import { Button } from "~/components/ui/button";
+import { useLanguage } from "~/contexts/LanguageContext";
+import { Button } from "~/components/shared/ui/button";
 import type { CardState } from "./types";
 
 interface CardActionsProps {

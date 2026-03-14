@@ -62,3 +62,42 @@ The `.claude/agents/` directory contains subagent configurations for a structure
 ### Agent Communication — Transparency About Tool Use
 
 During task implementation, always communicate which agent you are using for each phase of work. If no specialized agent is available for the current task, explicitly state that. Transparency helps the user understand your approach and decision-making process.
+
+### Component Structure — Feature-Based Grouping
+
+All components must be grouped by feature. No flat files at the `components/` root.
+
+```
+app/components/
+  shared/
+    ui/        # Pure primitives: generic props only, no domain type imports
+               # (badge, button, card, input, progress, textarea, StarRating)
+    <name>.tsx # Cross-feature non-primitive components (TopicIcon, CodeBlock)
+  layout/      # Shell components: Layout, LanguageSwitcher
+  home/        # Components owned by the home route
+  theory/      # Components owned by the theory route
+  practice/    # Components owned by the practice route
+    FlashCard/ # Belongs to practice feature
+  event-loop/  # Components owned by the event-loop route
+```
+
+Rules:
+- `shared/ui/` = pure primitives only. Must not import from feature/domain code. Use generic types (`number`, not `Score`).
+- `shared/` (non-ui) = cross-feature components that have some logic or domain awareness.
+- Feature-specific components always go in their feature folder, even if complex.
+- No floating component files at the `components/` root.
+
+### Context Structure — FlashCard Folder Pattern
+
+Contexts follow the same folder pattern as `FlashCard/`: one folder with an `index.ts` barrel plus split files.
+
+```
+app/contexts/
+  LanguageContext/
+    index.ts            # barrel: re-exports everything
+    LanguageProvider.tsx
+    languageContext.ts  # createContext + types
+    useLanguage.ts      # hook
+```
+
+Apply this pattern to any new context added to the project.

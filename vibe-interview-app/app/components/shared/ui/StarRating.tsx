@@ -1,8 +1,7 @@
 import { memo, useMemo } from "react";
-import type { Score } from "~/components/FlashCard";
 
 interface StarRatingProps {
-  score: Score;
+  score: number;
   size?: "sm" | "md" | "lg";
 }
 
@@ -12,7 +11,7 @@ const SIZE_MAP: Record<NonNullable<StarRatingProps["size"]>, number> = {
   lg: 24,
 };
 
-const COLOR_MAP: Record<Score, string> = {
+const COLOR_MAP: Record<number, string> = {
   3: "var(--color-green)",
   2: "var(--color-accent2)",
   1: "var(--color-warning)",

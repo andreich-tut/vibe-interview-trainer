@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { type Score, type Card } from "~/components/FlashCard";
+import { type Score, type Card } from "~/components/practice/FlashCard";
 
 const MAX_ROUND = 3;
 
@@ -24,7 +24,7 @@ export type DeckAdvanceResult =
   | { type: "done" };
 
 export function useCardDeck(cards: Card[]) {
-  const [allCards] = useState(() => shuffle(cards));
+  const [allCards, setAllCards] = useState<Card[]>([]);
   const [round, setRound] = useState(1);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [replayQueue, setReplayQueue] = useState<Card[]>([]);
@@ -63,6 +63,8 @@ export function useCardDeck(cards: Card[]) {
   }
 
   function reset() {
+    const shuffled = shuffle(cards);
+    setAllCards(shuffled);
     setRound(1);
     setCurrentIndex(0);
     setReplayQueue([]);
@@ -76,5 +78,5 @@ export function useCardDeck(cards: Card[]) {
     setCurrentIndex(0);
   }
 
-  return { allCards, currentCard, currentIndex, currentDeck, round, advance, reset, startRetry };
+  return { allCards: cards, currentCard, currentIndex, currentDeck, round, advance, reset, startRetry };
 }

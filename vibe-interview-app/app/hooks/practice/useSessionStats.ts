@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { type Score } from "~/components/FlashCard";
+import { type Score } from "~/components/practice/FlashCard";
 import { type CardScore } from "~/hooks/practice/useCardDeck";
 
 export interface SessionStats {

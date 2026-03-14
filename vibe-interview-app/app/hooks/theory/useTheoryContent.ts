@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from "react";
-import { useLanguage } from "~/contexts/useLanguage";
+import { useLanguage } from "~/contexts/LanguageContext";
 import { loadContent, type TopicsFile, type TheoryFile } from "~/lib/contentLoader";
 import { processContent } from "~/lib/codeHighlight";
 

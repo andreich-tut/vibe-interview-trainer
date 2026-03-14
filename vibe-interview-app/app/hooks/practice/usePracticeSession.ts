@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { type Score, type Card } from "~/components/FlashCard";
+import { useState, useEffect } from "react";
+import { type Score, type Card } from "~/components/practice/FlashCard";
 import { useProgress } from "~/hooks/shared/useProgress";
 import { hasApiKey } from "~/lib/llm";
 import { useCardDeck, type CardScore } from "~/hooks/practice/useCardDeck";
@@ -12,7 +12,11 @@ export function usePracticeSession(topicId: string, cards: Card[]) {
 
   const [phase, setPhase] = useState<Phase>("setup");
   const [scores, setScores] = useState<CardScore[]>([]);
-  const [apiKeyReady, setApiKeyReady] = useState(hasApiKey);
+  const [apiKeyReady, setApiKeyReady] = useState(false);
+
+  useEffect(() => {
+    setApiKeyReady(hasApiKey());
+  }, []);
 
   // useCardDeck shuffles cards internally
   const deck = useCardDeck(cards);

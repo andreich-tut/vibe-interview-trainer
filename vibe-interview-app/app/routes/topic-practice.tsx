@@ -1,6 +1,6 @@
 import type { Route } from "./+types/topic-practice";
-import { Layout } from "~/components/Layout";
-import { useLanguage } from "~/contexts/useLanguage";
+import { Layout } from "~/components/layout/Layout";
+import { useLanguage } from "~/contexts/LanguageContext";
 import { useTopicContent } from "~/hooks/shared/useTopicContent";
 import { usePracticeSession } from "~/hooks/practice/usePracticeSession";
 import { PracticeSetup } from "~/components/practice/PracticeSetup";

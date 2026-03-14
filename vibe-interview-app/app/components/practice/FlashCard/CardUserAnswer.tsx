@@ -1,4 +1,4 @@
-import { useLanguage } from "~/contexts/useLanguage";
+import { useLanguage } from "~/contexts/LanguageContext";
 
 export function CardUserAnswer({ answer }: { answer: string }) {
   const { t } = useLanguage();

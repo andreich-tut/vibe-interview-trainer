@@ -1,5 +1,5 @@
 import { Link } from "react-router";
-import { useLanguage } from "~/contexts/useLanguage";
+import { useLanguage } from "~/contexts/LanguageContext";
 
 interface TocLinkProps {
   idx: number;

@@ -1,12 +1,11 @@
 import { memo } from "react";
 import { Link } from "react-router";
-import { StarRating } from "~/components/StarRating";
-import type { Score } from "~/components/FlashCard";
-import { useLanguage } from "~/contexts/useLanguage";
-import { Card, CardContent, CardFooter } from "~/components/ui/card";
-import { Progress } from "~/components/ui/progress";
-import { Button } from "~/components/ui/button";
-import { TopicIcon } from "~/components/TopicIcon";
+import { StarRating } from "~/components/shared/ui/StarRating";
+import { useLanguage } from "~/contexts/LanguageContext";
+import { Card, CardContent, CardFooter } from "~/components/shared/ui/card";
+import { Progress } from "~/components/shared/ui/progress";
+import { Button } from "~/components/shared/ui/button";
+import { TopicIcon } from "~/components/shared/TopicIcon";
 
 interface TopicCardProps {
   id: string;
@@ -32,7 +31,7 @@ export const TopicCard = memo(function TopicCard({ id, title, description, progr
           <div className="mb-4 space-y-1">
             <Progress value={Math.round((progress.mastered / progress.total) * 100)} />
             <div className="flex items-center justify-end gap-1.5">
-              <StarRating score={Math.round((progress.mastered / progress.total) * 3) as Score} size="sm" />
+              <StarRating score={Math.round((progress.mastered / progress.total) * 3)} size="sm" />
               <span className="text-[0.5rem] text-muted-foreground">
                 {progress.mastered}/{progress.total}
               </span>

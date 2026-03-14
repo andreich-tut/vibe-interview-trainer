@@ -1,7 +1,7 @@
 import { Link } from "react-router";
-import { StarRating } from "~/components/StarRating";
-import { useLanguage } from "~/contexts/useLanguage";
-import type { Score } from "~/components/FlashCard";
+import { StarRating } from "~/components/shared/ui/StarRating";
+import { useLanguage } from "~/contexts/LanguageContext";
+import type { Score } from "~/components/practice/FlashCard";
 import type { TopicsFile } from "~/lib/contentLoader";
 
 interface FinishedStats {

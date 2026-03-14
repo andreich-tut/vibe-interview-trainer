@@ -1,5 +1,5 @@
-import { TopicIcon } from "~/components/TopicIcon";
-import { useLanguage } from "~/contexts/useLanguage";
+import { TopicIcon } from "~/components/shared/TopicIcon";
+import { useLanguage } from "~/contexts/LanguageContext";
 import type { TopicsFile } from "~/lib/contentLoader";
 
 interface TheoryPageHeaderProps {

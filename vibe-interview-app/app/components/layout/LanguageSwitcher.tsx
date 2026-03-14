@@ -1,4 +1,4 @@
-import { useLanguage } from "~/contexts/useLanguage";
+import { useLanguage } from "~/contexts/LanguageContext";
 import { setLanguageCookie } from "~/lib/cookies";
 import type { Language } from "~/lib/i18n";
 

@@ -1,6 +1,6 @@
 import { Link } from "react-router";
-import { FlashCard, type Card, type Score } from "~/components/FlashCard";
-import { useLanguage } from "~/contexts/useLanguage";
+import { FlashCard, type Card, type Score } from "~/components/practice/FlashCard";
+import { useLanguage } from "~/contexts/LanguageContext";
 import type { TopicsFile } from "~/lib/contentLoader";
 
 const MAX_REPLAY_ROUNDS = 2;

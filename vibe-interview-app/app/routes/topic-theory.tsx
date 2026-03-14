@@ -1,8 +1,8 @@
 
 import type { Route } from "./+types/topic-theory";
-import { Layout } from "~/components/Layout";
-import { TheoryCard } from "~/components/TheoryCard";
-import { useLanguage } from "~/contexts/useLanguage";
+import { Layout } from "~/components/layout/Layout";
+import { TheoryCard } from "~/components/theory/TheoryCard";
+import { useLanguage } from "~/contexts/LanguageContext";
 import { TheoryTocMobile, TheoryTocDesktop } from "~/components/theory/TheoryToc";
 import { TheoryPageHeader } from "~/components/theory/TheoryPageHeader";
 import { TheoryPracticeCta } from "~/components/theory/TheoryPracticeCta";

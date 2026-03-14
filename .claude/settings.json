@@ -8,7 +8,17 @@
       "Bash(mkdir -p practice theory shared)",
       "Bash(mv useCardDeck.ts usePracticeSession.ts useSessionStats.ts practice/)",
       "Bash(mv useTheoryContent.ts useActiveSection.ts useTocOutsideClick.ts theory/)",
-      "Bash(mv useProgress.ts useTopicContent.ts useTheme.ts useSpeechRecognition.ts shared/)"
+      "Bash(mv useProgress.ts useTopicContent.ts useTheme.ts useSpeechRecognition.ts shared/)",
+      "Bash(find /home/ilya/dev/ai/interview-cloude/vibe-interview-app/app/hooks -type f -name *.ts -o -name *.tsx)",
+      "Bash(find /home/ilya/dev/ai/interview-cloude/vibe-interview-app/app -type f \\\\\\(-name *Context* \\\\\\))",
+      "Bash(mkdir -p LanguageContext)",
+      "Bash(mv languageContext.ts LanguageContext/)",
+      "Bash(mv useLanguage.ts LanguageContext/)",
+      "Bash(mv LanguageContext.tsx LanguageContext/LanguageProvider.tsx)",
+      "Bash(npx tsc:*)",
+      "Bash(xargs sed:*)",
+      "Bash(mv app/components/ui app/components/shared/ui)",
+      "Bash(mv app/components/FlashCard app/components/practice/FlashCard)"
     ],
     "additionalDirectories": [
       "/home/ilya/dev/ai/interview-cloude/planning",

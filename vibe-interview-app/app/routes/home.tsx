@@ -1,11 +1,11 @@
-import { Layout } from "~/components/Layout";
-import { TopicIcon } from "~/components/TopicIcon";
-import { TopicCard } from "~/components/TopicCard";
+import { Layout } from "~/components/layout/Layout";
+import { TopicIcon } from "~/components/shared/TopicIcon";
+import { TopicCard } from "~/components/home/TopicCard";
 import { useProgress } from "~/hooks/shared/useProgress";
 import { Link } from "react-router";
 import { useEffect, useState } from "react";
 import { loadContent, type TopicsFile } from "~/lib/contentLoader";
-import { useLanguage } from "~/contexts/useLanguage";
+import { useLanguage } from "~/contexts/LanguageContext";
 
 export function meta() {
   return [

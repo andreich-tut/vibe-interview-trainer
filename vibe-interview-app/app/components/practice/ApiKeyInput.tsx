@@ -1,8 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { hasApiKey, setApiKey, removeApiKey, getApiKey } from "~/lib/llm";
-import { useLanguage } from "~/contexts/useLanguage";
-import { Button } from "~/components/ui/button";
-import { Input } from "~/components/ui/input";
+import { useLanguage } from "~/contexts/LanguageContext";
+import { Button } from "~/components/shared/ui/button";
+import { Input } from "~/components/shared/ui/input";
 
 function maskKey(key: string): string {
   if (key.length <= 8) return "****";
@@ -11,8 +11,12 @@ function maskKey(key: string): string {
 
 export function ApiKeyInput({ onDone }: { onDone?: () => void }) {
   const [value, setValue] = useState("");
-  const [saved, setSaved] = useState(hasApiKey);
+  const [saved, setSaved] = useState(false);
   const { t } = useLanguage();
+
+  useEffect(() => {
+    setSaved(hasApiKey());
+  }, []);
 
   const handleSave = () => {
     const trimmed = value.trim();

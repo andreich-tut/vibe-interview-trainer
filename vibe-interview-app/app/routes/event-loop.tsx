@@ -1,10 +1,10 @@
 import { useState, useMemo, useEffect } from "react";
 import { Link } from "react-router";
-import { Layout } from "~/components/Layout";
-import { CodeBlock } from "~/components/CodeBlock";
-import { StepVisualizer } from "~/components/StepVisualizer";
+import { Layout } from "~/components/layout/Layout";
+import { CodeBlock } from "~/components/shared/CodeBlock";
+import { StepVisualizer } from "~/components/event-loop/StepVisualizer";
 import { loadContent, type EventLoopFile } from "~/lib/contentLoader";
-import { useLanguage } from "~/contexts/useLanguage";
+import { useLanguage } from "~/contexts/LanguageContext";
 
 type Screen = "splash" | "quiz" | "results";
 type Level = "easy" | "medium" | "hard";
