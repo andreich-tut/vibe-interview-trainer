@@ -32,7 +32,7 @@ export function PracticeFinished({ topic, stats, onRetryWrong, onRestart }: Prac
         <div className="text-6xl mb-4">
           {pct === 100 ? "🏆" : pct >= 80 ? "🎉" : pct >= 50 ? "👍" : "📚"}
         </div>
-        <h2 className="font-display text-2xl font-bold text-[var(--color-accent2)]">
+        <h2 className="font-display text-2xl font-bold text-(--color-accent2)">
           {pct === 100
             ? t("practice.results.perfect")
             : pct >= 80
@@ -48,14 +48,14 @@ export function PracticeFinished({ topic, stats, onRetryWrong, onRestart }: Prac
         <div className="grid grid-cols-5 gap-3 max-w-md mx-auto">
           <div className="bg-card border border-border rounded-lg p-3 flex flex-col items-center">
             <StarRating score={3} size="sm" />
-            <div className="text-xl font-bold text-[var(--color-green)] mt-1">{scoreCount[3]}</div>
+            <div className="text-xl font-bold text-(--color-green) mt-1">{scoreCount[3]}</div>
             <div className="text-[0.5rem] text-muted-foreground uppercase tracking-wider mt-1">
               {t("practice.score.exact")}
             </div>
           </div>
           <div className="bg-card border border-border rounded-lg p-3 flex flex-col items-center">
             <StarRating score={2} size="sm" />
-            <div className="text-xl font-bold text-[var(--color-accent2)] mt-1">{scoreCount[2]}</div>
+            <div className="text-xl font-bold text-(--color-accent2) mt-1">{scoreCount[2]}</div>
             <div className="text-[0.5rem] text-muted-foreground uppercase tracking-wider mt-1">
               {t("practice.score.close")}
             </div>
