@@ -63,33 +63,64 @@ The `.claude/agents/` directory contains subagent configurations for a structure
 
 During task implementation, always communicate which agent you are using for each phase of work. If no specialized agent is available for the current task, explicitly state that. Transparency helps the user understand your approach and decision-making process.
 
-### Component Structure — Feature-Based Grouping
+### Architecture — FSD-lite (pages + shared)
 
-All components must be grouped by feature. No flat files at the `components/` root.
+The app uses a feature-sliced design lite structure. `components/` and `hooks/` directories no longer exist.
 
 ```
-app/components/
-  shared/
-    ui/        # Pure primitives: generic props only, no domain type imports
-               # (badge, button, card, input, progress, textarea, StarRating)
-    <name>.tsx # Cross-feature non-primitive components (TopicIcon, CodeBlock)
-  layout/      # Shell components: Layout, LanguageSwitcher
-  home/        # Components owned by the home route
-  theory/      # Components owned by the theory route
-  practice/    # Components owned by the practice route
-    FlashCard/ # Belongs to practice feature
-  event-loop/  # Components owned by the event-loop route
+app/
+├── routes/          # THIN — only re-exports from pages/: export { default, meta } from "~/pages/X/index"
+├── pages/           # One folder per route; owns layout, UI sub-components, and hooks
+│   ├── Home/
+│   │   ├── index.tsx
+│   │   ├── ui/TopicCard.tsx
+│   │   └── model/useProgress.ts
+│   ├── Theory/
+│   │   ├── index.tsx
+│   │   ├── ui/          # TheoryCard, TheoryPageHeader, TheoryPracticeCta, TheoryToc
+│   │   └── model/       # useActiveSection, useTheoryContent, useTocOutsideClick
+│   ├── Practice/
+│   │   ├── index.tsx
+│   │   ├── ui/
+│   │   │   ├── ApiKeyInput.tsx, PracticePlaying.tsx, PracticeSetup.tsx, PracticeFinished.tsx
+│   │   │   └── FlashCard/       # index.tsx, types.ts, ui/, model/
+│   │   └── model/       # useCardDeck, usePracticeSession, useSessionStats, useTopicContent
+│   └── EventLoop/
+│       ├── index.tsx
+│       └── ui/StepVisualizer.tsx
+├── shared/          # Cross-route only; replaces old components/
+│   ├── ui/          # Pure primitives + shared cross-feature components
+│   │   └── (badge, button, card, input, progress, textarea, StarRating, CodeBlock, TopicIcon)
+│   └── layout/
+│       ├── Layout.tsx
+│       ├── LanguageSwitcher.tsx
+│       └── model/useTheme.ts
+├── contexts/        # LanguageContext/ (unchanged)
+└── lib/             # Pure functions only, no hooks
 ```
 
-Rules:
-- `shared/ui/` = pure primitives only. Must not import from feature/domain code. Use generic types (`number`, not `Score`).
-- `shared/` (non-ui) = cross-feature components that have some logic or domain awareness.
-- Feature-specific components always go in their feature folder, even if complex.
-- No floating component files at the `components/` root.
+#### Component folder pattern (recursive)
 
-### Context Structure — FlashCard Folder Pattern
+Any component complex enough to warrant it gets its own folder:
+```
+ComponentName/
+├── index.tsx        # public API
+├── types.ts         # (if needed)
+├── ui/              # sub-components, only imported by this index.tsx
+└── model/           # hooks owned by this component
+```
 
-Contexts follow the same folder pattern as `FlashCard/`: one folder with an `index.ts` barrel plus split files.
+#### Rules
+- Routes are thin: only `export { default, meta } from "~/pages/X/index"`. No logic in routes.
+- A hook lives in `model/` of the component that **calls** it first.
+- `shared/ui/` = pure primitives + shared cross-feature components. Must not import from pages/.
+- `shared/layout/` = Layout, LanguageSwitcher, and `model/useTheme.ts`.
+- `lib/` = pure functions only, no hooks.
+- No `components/` or `hooks/` directories — these are deleted.
+
+### Context Structure — Folder Pattern
+
+Contexts use the folder pattern: one folder with an `index.ts` barrel plus split files.
 
 ```
 app/contexts/
