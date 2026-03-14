@@ -274,18 +274,18 @@
     color: var(--muted-foreground);
   }
 
-  /* Syntax highlight token colors — Islands Dark */
-  .hl-kw { color: #cf8e6d; }
-  .hl-str { color: #6aab73; }
-  .hl-num { color: #2aacb8; }
-  .hl-cm { color: #7a7e85; font-style: italic; }
-  .hl-builtin { color: #56a8f5; }
+  /* Syntax highlight token colors — dark (VS Code Dark+) */
+  .hl-kw    { color: #c586c0; }   /* keywords / CSS values → magenta */
+  .hl-str   { color: #ce9178; }   /* strings / hex colors  → orange-tan */
+  .hl-num   { color: #b5cea8; }   /* numbers / units       → light green */
+  .hl-cm    { color: #6a9955; font-style: italic; }  /* comments → green */
+  .hl-builtin { color: #9cdcfe; } /* properties / builtins → light blue */
 
   /* Islands Light syntax overrides */
-  [data-theme="light"] .hl-kw { color: #0033b3; }
-  [data-theme="light"] .hl-str { color: #067d17; }
-  [data-theme="light"] .hl-num { color: #1750eb; }
-  [data-theme="light"] .hl-cm { color: #8c8c8c; font-style: italic; }
-  [data-theme="light"] .hl-builtin { color: #00627a; }
-  [data-theme="light"] .theory-code pre { color: #5f6367; }
+  [data-theme="light"] .hl-kw { color: #7c3aed; }
+  [data-theme="light"] .hl-str { color: #16a34a; }
+  [data-theme="light"] .hl-num { color: #0369a1; }
+  [data-theme="light"] .hl-cm { color: #9ca3af; font-style: italic; }
+  [data-theme="light"] .hl-builtin { color: #b45309; }
+  [data-theme="light"] .theory-code pre { color: #1e293b; }
 }

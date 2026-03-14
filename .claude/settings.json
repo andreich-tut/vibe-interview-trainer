@@ -3,7 +3,12 @@
     "allow": [
       "Bash(curl -s http://localhost:5173)",
       "Bash(find /home/ilya/dev/ai/interview-cloude -path */content/* -name *.json)",
-      "Bash(grep -l loadContent /home/ilya/dev/ai/interview-cloude/vibe-interview-app/app/routes/*.tsx)"
+      "Bash(grep -l loadContent /home/ilya/dev/ai/interview-cloude/vibe-interview-app/app/routes/*.tsx)",
+      "mcp__playwright__browser_install"
+    ],
+    "additionalDirectories": [
+      "/home/ilya/dev/ai/interview-cloude/planning",
+      "/home/ilya/dev/ai/interview-cloude/test-screenshots"
     ]
   }
 }
