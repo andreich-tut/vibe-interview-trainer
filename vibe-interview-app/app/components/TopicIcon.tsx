@@ -14,17 +14,15 @@ interface TopicIconProps {
 }
 
 export function TopicIcon({ id, className = "w-8 h-8" }: TopicIconProps) {
-  const props = { className };
-
   switch (id) {
-    case "javascript":  return <JavascriptIcon {...props} />;
-    case "react":       return <ReactIcon {...props} />;
-    case "typescript":  return <TypescriptIcon {...props} />;
-    case "css":         return <CssIcon {...props} />;
-    case "nodejs":      return <NodejsIcon {...props} />;
-    case "testing":     return <TestingIcon {...props} />;
-    case "algorithms":  return <AlgorithmsIcon {...props} />;
-    case "event-loop":  return <EventLoopIcon {...props} />;
-    default:            return <DefaultIcon {...props} />;
+    case "javascript":  return <JavascriptIcon className={className} />;
+    case "react":       return <ReactIcon className={className} />;
+    case "typescript":  return <TypescriptIcon className={className} />;
+    case "css":         return <CssIcon className={className} />;
+    case "nodejs":      return <NodejsIcon className={className} />;
+    case "testing":     return <TestingIcon className={className} />;
+    case "algorithms":  return <AlgorithmsIcon className={className} />;
+    case "event-loop":  return <EventLoopIcon className={className} />;
+    default:            return <DefaultIcon className={className} />;
   }
 }

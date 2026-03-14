@@ -1,3 +1,4 @@
+import { memo } from "react";
 import { Link } from "react-router";
 import { StarRating } from "~/components/StarRating";
 import type { Score } from "~/components/FlashCard";
@@ -14,7 +15,7 @@ interface TopicCardProps {
   progress?: { mastered: number; total: number };
 }
 
-export function TopicCard({ id, title, description, progress }: TopicCardProps) {
+export const TopicCard = memo(function TopicCard({ id, title, description, progress }: TopicCardProps) {
   const { t } = useLanguage();
   return (
     <Card className="hover:border-primary transition">
@@ -45,4 +46,4 @@ export function TopicCard({ id, title, description, progress }: TopicCardProps) 
       </CardFooter>
     </Card>
   );
-}
+});

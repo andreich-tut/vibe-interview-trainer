@@ -120,7 +120,7 @@ export default function EventLoop() {
 
   if (loading) {
     return (
-      <Layout showBack>
+      <Layout>
         <div className="text-center py-12">
           <p className="text-muted-foreground">{t("common.loading")}</p>
         </div>
@@ -130,7 +130,7 @@ export default function EventLoop() {
 
   if (error || !eventLoopData) {
     return (
-      <Layout showBack>
+      <Layout>
         <div className="text-center py-12">
           <p className="text-red-500">{error || t("common.failedToLoadContent")}</p>
         </div>
@@ -140,7 +140,7 @@ export default function EventLoop() {
 
   if (screen === "splash") {
     return (
-      <Layout showBack>
+      <Layout>
         <div className="space-y-8">
         <Link to="/" className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors">
           {t("layout.goBack")}
@@ -197,7 +197,7 @@ export default function EventLoop() {
     const progress = (currentIndex / questions.length) * 100;
 
     return (
-      <Layout showBack backTo="/">
+      <Layout>
         <div className="space-y-6">
           <Link to="/" className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors">
             {t("layout.goBack")}
@@ -348,7 +348,7 @@ export default function EventLoop() {
   }
 
   return (
-    <Layout showBack backTo="/">
+    <Layout>
       <div className="space-y-6">
         <Link to="/" className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors">
           {t("layout.goBack")}

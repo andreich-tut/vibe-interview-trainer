@@ -1,3 +1,4 @@
+import { memo, useMemo } from "react";
 import type { Score } from "~/components/FlashCard";
 
 interface StarRatingProps {
@@ -20,9 +21,17 @@ const COLOR_MAP: Record<Score, string> = {
 
 const TOTAL_STARS = 3;
 
-export function StarRating({ score, size = "md" }: StarRatingProps) {
+export const StarRating = memo(function StarRating({ score, size = "md" }: StarRatingProps) {
   const px = SIZE_MAP[size];
   const color = COLOR_MAP[score];
+
+  const stars = useMemo(
+    () =>
+      Array.from({ length: TOTAL_STARS }, (_, i) => (
+        <span key={i}>{i < score ? "\u2605" : "\u2606"}</span>
+      )),
+    [score],
+  );
 
   return (
     <span
@@ -30,9 +39,7 @@ export function StarRating({ score, size = "md" }: StarRatingProps) {
       style={{ fontSize: `${px}px`, lineHeight: 1, color }}
       aria-label={`${score} из ${TOTAL_STARS}`}
     >
-      {Array.from({ length: TOTAL_STARS }, (_, i) => (
-        <span key={i}>{i < score ? "\u2605" : "\u2606"}</span>
-      ))}
+      {stars}
     </span>
   );
-}
+});

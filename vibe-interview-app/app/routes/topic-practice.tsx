@@ -79,7 +79,7 @@ export default function TopicPractice({ params }: Route.ComponentProps) {
 
   if (loading) {
     return (
-      <Layout showBack>
+      <Layout>
         <p className="text-center text-muted-foreground">{t("common.loading")}</p>
       </Layout>
     );
@@ -87,7 +87,7 @@ export default function TopicPractice({ params }: Route.ComponentProps) {
 
   if (error || !topic || !cardsData) {
     return (
-      <Layout showBack>
+      <Layout>
         <p className="text-center text-red-500">{error || t("common.failedToLoadContent")}</p>
       </Layout>
     );
@@ -180,7 +180,7 @@ export default function TopicPractice({ params }: Route.ComponentProps) {
   // --- SETUP PHASE ---
   if (phase === "setup") {
     return (
-      <Layout wide showBack backTo="/">
+      <Layout wide>
         <div className="space-y-8">
           <Link to="/" className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors">
             {t("layout.goBack")}
@@ -228,7 +228,7 @@ export default function TopicPractice({ params }: Route.ComponentProps) {
     }
 
     return (
-      <Layout wide showBack backTo="/">
+      <Layout wide>
         <div className="max-w-3xl mx-auto space-y-8">
           <Link to="/" className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors">
             {t("layout.goBack")}
@@ -267,89 +267,87 @@ export default function TopicPractice({ params }: Route.ComponentProps) {
   }
 
   // --- FINISHED PHASE ---
-  const bestScores = new Map<string, Score>();
-  for (const s of scores) {
-    const prev = bestScores.get(s.cardId);
-    if (prev === undefined || s.round > (scores.find((x) => x.cardId === s.cardId && x.score === prev)?.round ?? 0)) {
-      bestScores.set(s.cardId, s.score);
+  const finishedStats = useMemo(() => {
+    const bestScores = new Map<string, Score>();
+    for (const s of scores) {
+      const prev = bestScores.get(s.cardId);
+      if (prev === undefined || s.round > (scores.find((x) => x.cardId === s.cardId && x.score === prev)?.round ?? 0)) {
+        bestScores.set(s.cardId, s.score);
+      }
     }
-  }
-
-  const scoreCount = { 3: 0, 2: 0, 1: 0, 0: 0 };
-  for (const s of bestScores.values()) scoreCount[s]++;
-
-  const totalCards = bestScores.size;
-  const weightedSum = scoreCount[3] * 3 + scoreCount[2] * 2 + scoreCount[1] * 1;
-  const pct = totalCards > 0 ? Math.round((weightedSum / (totalCards * 3)) * 100) : 0;
-
-  const replayedCardIds = new Set(scores.filter((s) => s.round > 1).map((s) => s.cardId));
-  const replayedCount = replayedCardIds.size;
-
-  const wrongRemaining = [...bestScores.entries()].filter(([, s]) => s <= 1).length;
+    const scoreCount = { 3: 0, 2: 0, 1: 0, 0: 0 };
+    for (const s of bestScores.values()) scoreCount[s]++;
+    const totalCards = bestScores.size;
+    const weightedSum = scoreCount[3] * 3 + scoreCount[2] * 2 + scoreCount[1] * 1;
+    const pct = totalCards > 0 ? Math.round((weightedSum / (totalCards * 3)) * 100) : 0;
+    const replayedCount = new Set(scores.filter((s) => s.round > 1).map((s) => s.cardId)).size;
+    const wrongRemaining = [...bestScores.entries()].filter(([, s]) => s <= 1).length;
+    return { bestScores, scoreCount, totalCards, pct, replayedCount, wrongRemaining };
+  }, [scores]);
 
   return (
-    <Layout wide showBack backTo="/">
+    <Layout wide>
       <div className="space-y-8 pt-12 max-w-3xl mx-auto">
         <Link to="/" className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors">
           {t("layout.goBack")}
         </Link>
         <div className="text-center space-y-8">
         <div className="text-6xl mb-4">
-          {pct === 100 ? "🏆" : pct >= 80 ? "🎉" : pct >= 50 ? "👍" : "📚"}
+          {finishedStats.pct === 100 ? "🏆" : finishedStats.pct >= 80 ? "🎉" : finishedStats.pct >= 50 ? "👍" : "📚"}
         </div>
         <h2 className="font-display text-2xl font-bold text-[var(--color-accent2)]">
-          {pct === 100
+          {finishedStats.pct === 100
             ? t("practice.results.perfect")
-            : pct >= 80
+            : finishedStats.pct >= 80
               ? t("practice.results.excellent")
-              : pct >= 50
+              : finishedStats.pct >= 50
                 ? t("practice.results.good")
                 : t("practice.results.needsWork")}
         </h2>
         <p className="text-sm text-foreground">
-          {topic.title} · {totalCards}
+          {topic.title} · {finishedStats.totalCards}
         </p>
 
         <div className="grid grid-cols-5 gap-3 max-w-md mx-auto">
           <div className="bg-card border border-border rounded-lg p-3 flex flex-col items-center">
             <StarRating score={3} size="sm" />
-            <div className="text-xl font-bold text-[var(--color-green)] mt-1">{scoreCount[3]}</div>
+            <div className="text-xl font-bold text-[var(--color-green)] mt-1">{finishedStats.scoreCount[3]}</div>
             <div className="text-[0.5rem] text-muted-foreground uppercase tracking-wider mt-1">{t("practice.score.exact")}</div>
           </div>
           <div className="bg-card border border-border rounded-lg p-3 flex flex-col items-center">
             <StarRating score={2} size="sm" />
-            <div className="text-xl font-bold text-[var(--color-accent2)] mt-1">{scoreCount[2]}</div>
+            <div className="text-xl font-bold text-[var(--color-accent2)] mt-1">{finishedStats.scoreCount[2]}</div>
             <div className="text-[0.5rem] text-muted-foreground uppercase tracking-wider mt-1">{t("practice.score.close")}</div>
           </div>
           <div className="bg-card border border-border rounded-lg p-3 flex flex-col items-center">
             <StarRating score={1} size="sm" />
-            <div className="text-xl font-bold text-[#f59e0b] mt-1">{scoreCount[1]}</div>
+            <div className="text-xl font-bold text-[#f59e0b] mt-1">{finishedStats.scoreCount[1]}</div>
             <div className="text-[0.5rem] text-muted-foreground uppercase tracking-wider mt-1">{t("practice.score.hard")}</div>
           </div>
           <div className="bg-card border border-border rounded-lg p-3 flex flex-col items-center">
             <StarRating score={0} size="sm" />
-            <div className="text-xl font-bold text-destructive mt-1">{scoreCount[0]}</div>
+            <div className="text-xl font-bold text-destructive mt-1">{finishedStats.scoreCount[0]}</div>
             <div className="text-[0.5rem] text-muted-foreground uppercase tracking-wider mt-1">{t("practice.score.unknown")}</div>
           </div>
           <div className="bg-card border border-border rounded-lg p-3 flex flex-col items-center">
-            <div className="text-xl font-bold text-primary">{pct}%</div>
+            <div className="text-xl font-bold text-primary">{finishedStats.pct}%</div>
             <div className="text-[0.5rem] text-muted-foreground uppercase tracking-wider mt-1">{t("practice.score.total")}</div>
           </div>
         </div>
 
-        {replayedCount > 0 && (
+        {finishedStats.replayedCount > 0 && (
           <p className="text-xs text-muted-foreground">
-            {t("practice.replayed")} {replayedCount}
+            {t("practice.replayed")} {finishedStats.replayedCount}
           </p>
         )}
 
         <div className="flex flex-wrap gap-3 justify-center">
-          {wrongRemaining > 0 && (
+          {finishedStats.wrongRemaining > 0 && (
             <button
               onClick={handleRetryWrong}
               className="py-2 px-6 bg-[rgba(245,158,11,0.15)] text-[#f59e0b] border border-[rgba(245,158,11,0.25)] rounded font-semibold hover:bg-[rgba(245,158,11,0.25)] transition text-sm"
             >
-              {t("practice.repeatErrors")} ({wrongRemaining})
+              {t("practice.repeatErrors")} ({finishedStats.wrongRemaining})
             </button>
           )}
           <button

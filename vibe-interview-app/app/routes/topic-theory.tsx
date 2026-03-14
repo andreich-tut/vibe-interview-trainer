@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import type { Route } from "./+types/topic-theory";
 import { Link } from "react-router";
 import { Layout } from "~/components/Layout";
@@ -69,7 +69,7 @@ function processContent(html: string): string {
   });
 }
 
-export function meta({ params }: Route.MetaArgs) {
+export function meta() {
   return [
     { title: `Теория` },
     { name: "description", content: "Изучайте теорию" },
@@ -91,8 +91,8 @@ function TocLink({
         href={`#section-${idx}`}
         className={`text-[0.8125rem] leading-snug transition-colors flex items-baseline gap-2.5 py-0.5 ${
           active
-            ? "text-[var(--color-accent2)] font-semibold"
-            : "text-primary hover:text-[var(--color-accent2)]"
+            ? "text-(--color-accent2) font-semibold"
+            : "text-primary hover:text-(--color-accent2)"
         }`}
         onClick={(e) => {
           e.preventDefault();
@@ -176,10 +176,14 @@ export default function TopicTheory({ params }: Route.ComponentProps) {
 
   const topic = topicsData?.topics.find((t) => t.id === params.topicId);
   const theory = theoryData?.theory || [];
+  const processedSections = useMemo(
+    () => (theoryData?.theory ?? []).map((section) => ({ ...section, content: processContent(section.content) })),
+    [theoryData],
+  );
 
   if (loading) {
     return (
-      <Layout showBack>
+      <Layout>
         <p className="text-center text-muted-foreground">{t("common.loading")}</p>
       </Layout>
     );
@@ -187,7 +191,7 @@ export default function TopicTheory({ params }: Route.ComponentProps) {
 
   if (error || !topic || !theoryData) {
     return (
-      <Layout showBack>
+      <Layout>
         <p className="text-center text-red-500">{error || t("common.failedToLoadContent")}</p>
       </Layout>
     );
@@ -198,7 +202,7 @@ export default function TopicTheory({ params }: Route.ComponentProps) {
   ));
 
   return (
-    <Layout wide showBack backTo="/">
+    <Layout wide>
       {/* Mobile sticky nav bar — back link + TOC dropdown */}
       <div ref={tocRef} className="lg:hidden sticky top-0 z-40 bg-background/95 backdrop-blur-sm border-b border-border -mx-6 px-6 mb-6">
         <div className="flex items-center justify-between py-3">
@@ -259,13 +263,13 @@ export default function TopicTheory({ params }: Route.ComponentProps) {
           <div className="min-w-0 space-y-6">
 
             {/* Theory section cards */}
-            {theory.map((section, idx) => (
+            {processedSections.map((section, idx) => (
               <TheoryCard
                 key={idx}
                 id={`section-${idx}`}
                 index={idx}
                 title={section.title}
-                content={processContent(section.content)}
+                content={section.content}
               />
             ))}
           </div>

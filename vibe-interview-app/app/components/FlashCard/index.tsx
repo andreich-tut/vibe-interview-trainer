@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import { useSpeechRecognition } from "~/hooks/useSpeechRecognition";
 import { useSpeechAnswer } from "./useSpeechAnswer";
 import { useAnswerCheck } from "./useAnswerCheck";
@@ -34,13 +35,12 @@ export function FlashCard({ card, onScore, current, total }: FlashCardProps) {
     useAnswerCheck(card, userAnswer, onScore);
   useFlashCardKeyboard(aiResult, handleCheck, handleNext);
 
-  function deriveCardState(): CardState {
+  const cardState = useMemo<CardState>(() => {
     if (aiResult) return "result";
     if (aiLoading) return "loading";
     if (aiError) return "error";
     return "input";
-  }
-  const cardState = deriveCardState();
+  }, [aiResult, aiLoading, aiError]);
 
   return (
     <div className="space-y-6">

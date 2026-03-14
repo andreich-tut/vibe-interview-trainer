@@ -8,12 +8,10 @@ import LogoBrainIcon from "~/assets/icons/logo-brain.svg?react";
 
 interface LayoutProps {
   children: ReactNode;
-  showBack?: boolean;
-  backTo?: string;
   wide?: boolean;
 }
 
-export function Layout({ children, showBack = false, backTo = "/", wide = false }: LayoutProps) {
+export function Layout({ children, wide = false }: LayoutProps) {
   const { resolvedTheme, setTheme } = useTheme();
 
   return (

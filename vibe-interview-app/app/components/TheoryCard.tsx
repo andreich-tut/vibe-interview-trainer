@@ -1,3 +1,4 @@
+import { memo } from "react";
 import { Card, CardHeader, CardContent } from "~/components/ui/card";
 
 interface TheoryCardProps {
@@ -7,14 +8,14 @@ interface TheoryCardProps {
   content: string;
 }
 
-export function TheoryCard({ id, index, title, content }: TheoryCardProps) {
+export const TheoryCard = memo(function TheoryCard({ id, index, title, content }: TheoryCardProps) {
   return (
     <Card id={id} className="scroll-mt-20 rounded-xl overflow-hidden">
       <CardHeader className="bg-secondary border-b border-border px-4 py-3 md:px-8 md:py-5 flex-row items-baseline gap-3 space-y-0">
         <span className="text-sm text-muted-foreground font-mono shrink-0">
           {String(index + 1).padStart(2, "0")}
         </span>
-        <h2 className="font-display text-xl font-bold text-[var(--color-accent2)]">
+        <h2 className="font-display text-xl font-bold text-(--color-accent2)">
           {title}
         </h2>
       </CardHeader>
@@ -24,4 +25,4 @@ export function TheoryCard({ id, index, title, content }: TheoryCardProps) {
       />
     </Card>
   );
-}
+});

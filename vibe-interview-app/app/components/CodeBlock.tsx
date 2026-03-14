@@ -1,3 +1,5 @@
+import { useMemo } from "react";
+
 interface CodeBlockProps {
   code: string;
   language?: 'js' | 'css';
@@ -65,8 +67,21 @@ function highlightJS(code: string): string {
     .replace(/\/\/.*$/gm, '<span class="cm">$&</span>');
 }
 
+const HIGHLIGHT_STYLES = `
+  .kw { color: #7c6aff; }
+  .fn { color: #4fc3f7; }
+  .num { color: #fb923c; }
+  .str { color: #34d399; }
+  .cm { color: #333355; font-style: italic; }
+  .sel { color: #f472b6; }
+  .prop { color: #4fc3f7; }
+`;
+
 export function CodeBlock({ code, language = 'js' }: CodeBlockProps) {
-  const highlighted = language === 'css' ? highlightCSS(code) : highlightJS(code);
+  const highlighted = useMemo(
+    () => language === 'css' ? highlightCSS(code) : highlightJS(code),
+    [code, language],
+  );
   const filename = language === 'css' ? 'style.css' : 'script.js';
 
   return (
@@ -83,21 +98,11 @@ export function CodeBlock({ code, language = 'js' }: CodeBlockProps) {
       <pre className="p-5 font-mono text-sm leading-relaxed overflow-x-auto">
         <code
           className="text-[#8888aa]"
-          dangerouslySetInnerHTML={{
-            __html: highlighted,
-          }}
+          dangerouslySetInnerHTML={{ __html: highlighted }}
         />
       </pre>
 
-      <style>{`
-        .kw { color: #7c6aff; }
-        .fn { color: #4fc3f7; }
-        .num { color: #fb923c; }
-        .str { color: #34d399; }
-        .cm { color: #333355; font-style: italic; }
-        .sel { color: #f472b6; }
-        .prop { color: #4fc3f7; }
-      `}</style>
+      <style>{HIGHLIGHT_STYLES}</style>
     </div>
   );
 }
