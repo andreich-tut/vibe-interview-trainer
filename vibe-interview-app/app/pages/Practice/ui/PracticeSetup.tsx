@@ -1,6 +1,7 @@
 import { Link } from "react-router";
 import { ApiKeyInput } from "./ApiKeyInput";
 import { useLanguage } from "~/contexts/LanguageContext";
+import { TopicIcon } from "~/shared/ui/TopicIcon";
 import type { TopicsFile } from "~/lib/contentLoader";
 
 interface PracticeSetupProps {
@@ -20,7 +21,7 @@ export function PracticeSetup({ topic, cardCount, apiKeyReady, onApiKeyDone, onS
         {t("layout.goBack")}
       </Link>
       <div className="text-center mb-8">
-        <div className="text-4xl mb-3">{topic.icon}</div>
+        <div className="flex justify-center mb-3"><TopicIcon id={topic.id} className="w-10 h-10" /></div>
         <h1 className="font-display text-2xl font-bold text-primary">
           {topic.title} {t("practice.pageTitleSuffix")}
         </h1>

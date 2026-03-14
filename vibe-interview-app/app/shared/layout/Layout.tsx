@@ -9,14 +9,15 @@ import LogoBrainIcon from "~/assets/icons/logo-brain.svg?react";
 interface LayoutProps {
   children: ReactNode;
   wide?: boolean;
+  transparent?: boolean;
 }
 
-export function Layout({ children, wide = false }: LayoutProps) {
+export function Layout({ children, wide = false, transparent = false }: LayoutProps) {
   const { resolvedTheme, setTheme } = useTheme();
 
   return (
-    <div className="min-h-screen bg-background">
-      <header className="border-b border-border p-7 flex items-center gap-5">
+    <div className={`min-h-screen ${transparent ? "bg-transparent" : "bg-background"}`}>
+      <header className="relative z-10 border-b border-border p-7 flex items-center gap-5 backdrop-blur-sm bg-background/80">
         <Link
           to="/"
           className="flex items-center gap-2 font-display text-base font-black text-primary tracking-tight"

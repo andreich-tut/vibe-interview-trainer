@@ -35,7 +35,7 @@ export function ApiKeyInput({ onDone }: { onDone?: () => void }) {
   if (saved) {
     const key = getApiKey() ?? "";
     return (
-      <div className="flex items-center gap-3 text-xs">
+      <div className="flex items-center justify-between gap-3 text-xs">
         <span className="text-muted-foreground">
           Groq API: <code className="text-primary">{maskKey(key)}</code>
         </span>
