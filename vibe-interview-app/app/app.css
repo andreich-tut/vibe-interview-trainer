@@ -8,6 +8,21 @@
   --color-warning: initial;
 }
 
+@layer utilities {
+  .bg-green-subtle   { background-color: color-mix(in srgb, var(--color-green) 12%, transparent); }
+  .border-green-subtle { border: 1px solid color-mix(in srgb, var(--color-green) 25%, transparent); }
+  .border-t-green-subtle { border-top: 1px solid color-mix(in srgb, var(--color-green) 15%, transparent); }
+
+  .bg-accent2-subtle   { background-color: color-mix(in srgb, var(--color-accent2) 12%, transparent); }
+  .border-accent2-subtle { border: 1px solid color-mix(in srgb, var(--color-accent2) 25%, transparent); }
+
+  .bg-warning-subtle   { background-color: color-mix(in srgb, var(--color-warning) 12%, transparent); }
+  .border-warning-subtle { border: 1px solid color-mix(in srgb, var(--color-warning) 25%, transparent); }
+
+  .bg-destructive-subtle   { background-color: color-mix(in srgb, var(--color-destructive) 12%, transparent); }
+  .border-destructive-subtle { border: 1px solid color-mix(in srgb, var(--color-destructive) 25%, transparent); }
+}
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);

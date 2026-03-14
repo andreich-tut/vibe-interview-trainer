@@ -4,7 +4,9 @@ import { useAnswerCheck } from "./useAnswerCheck";
 import { useFlashCardKeyboard } from "./useFlashCardKeyboard";
 import { CardProgress } from "./CardProgress";
 import { CardAnswerInput } from "./CardAnswerInput";
-import { CardResult } from "./CardResult";
+import { CardUserAnswer } from "./CardUserAnswer";
+import { CardReferenceAnswer } from "./CardReferenceAnswer";
+import { CardScore } from "./CardScore";
 import { CardActions } from "./CardActions";
 import type { CardState } from "./types";
 
@@ -28,7 +30,7 @@ interface FlashCardProps {
 export function FlashCard({ card, onScore, current, total }: FlashCardProps) {
   const speech = useSpeechRecognition();
   const { userAnswer, setUserAnswer, toggleMic } = useSpeechAnswer(speech, card.id);
-  const { aiResult, aiLoading, aiError, handleCheck, handleNext, handleSkip, style } =
+  const { aiResult, aiLoading, aiError, handleCheck, handleNext, handleSkip } =
     useAnswerCheck(card, userAnswer, onScore);
   useFlashCardKeyboard(aiResult, handleCheck, handleNext);
 
@@ -58,14 +60,11 @@ export function FlashCard({ card, onScore, current, total }: FlashCardProps) {
             toggleMic={toggleMic}
           />
         ) : (
-          <CardResult
-            userAnswer={userAnswer}
-            card={card}
-            aiResult={aiResult}
-            aiLoading={aiLoading}
-            aiError={aiError}
-            style={style}
-          />
+          <div className="space-y-4 animate-in fade-in">
+            <CardUserAnswer answer={userAnswer} />
+            <CardReferenceAnswer answer={card.answer} aiResult={aiResult} />
+            <CardScore aiLoading={aiLoading} aiResult={aiResult} aiError={aiError} />
+          </div>
         )}
       </div>
 
