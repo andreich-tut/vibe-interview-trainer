@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { hasApiKey, setApiKey, removeApiKey, getApiKey } from "~/lib/llm";
-import { useLanguage } from "~/contexts/LanguageContext";
+import { useLanguage } from "~/contexts/useLanguage";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 

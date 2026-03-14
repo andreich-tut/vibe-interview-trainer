@@ -1,16 +1,10 @@
-import { createContext, useContext, useMemo } from 'react';
+import { useMemo } from 'react';
 import type { ReactElement, ReactNode } from 'react';
 import type { Language } from '~/lib/i18n';
+import { LanguageContext } from './languageContext';
+import type { TranslationMap, LanguageContextValue } from './languageContext';
 
-export type TranslationDict = Record<string, unknown>;
-export type TranslationMap = Record<string, Record<string, unknown>>;
-
-export interface LanguageContextValue {
-  lang: Language;
-  t: (key: string, namespace?: string) => string;
-}
-
-const LanguageContext = createContext<LanguageContextValue | null>(null);
+export type { TranslationDict, TranslationMap, LanguageContextValue } from './languageContext';
 
 export interface LanguageProviderProps {
   lang: Language;
@@ -51,12 +45,4 @@ export function LanguageProvider({
       {children}
     </LanguageContext.Provider>
   );
-}
-
-export function useLanguage(): LanguageContextValue {
-  const ctx = useContext(LanguageContext);
-  if (ctx === null) {
-    throw new Error('useLanguage must be used inside <LanguageProvider>');
-  }
-  return ctx;
 }

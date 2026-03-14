@@ -1,5 +1,5 @@
 import type React from "react";
-import { useLanguage } from "~/contexts/LanguageContext";
+import { useLanguage } from "~/contexts/useLanguage";
 import { Button } from "~/components/ui/button";
 import type { CardState } from "./types";
 

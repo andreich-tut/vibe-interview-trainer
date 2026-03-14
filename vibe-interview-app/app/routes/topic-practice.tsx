@@ -8,7 +8,7 @@ import { ApiKeyInput } from "~/components/ApiKeyInput";
 import { useProgress } from "~/hooks/useProgress";
 import { hasApiKey } from "~/lib/llm";
 import { loadContent, type CardsFile, type TopicsFile } from "~/lib/contentLoader";
-import { useLanguage } from "~/contexts/LanguageContext";
+import { useLanguage } from "~/contexts/useLanguage";
 
 type Phase = "setup" | "playing" | "finished";
 

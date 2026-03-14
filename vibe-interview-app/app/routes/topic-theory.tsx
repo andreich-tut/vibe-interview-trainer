@@ -4,7 +4,7 @@ import { Link } from "react-router";
 import { Layout } from "~/components/Layout";
 import { TheoryCard } from "~/components/TheoryCard";
 import { loadContent, type TopicsFile, type TheoryFile } from "~/lib/contentLoader";
-import { useLanguage } from "~/contexts/LanguageContext";
+import { useLanguage } from "~/contexts/useLanguage";
 import { TopicIcon } from "~/components/TopicIcon";
 
 /* eslint-disable no-control-regex -- \x01 and \x02 placeholders prevent double-replacement in regex chain */

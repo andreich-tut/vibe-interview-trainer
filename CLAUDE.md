@@ -53,11 +53,11 @@ When running Playwright tests or creating screenshots for development:
 - Group related screenshots (home page, theory page, etc.) in same folder
 - Use clear filenames: `home-full-page.png`, `theory-card-detail.png`, etc.
 
-### Specialist Subagents — ALWAYS USE
+### Specialist Subagents — Research Only
 
-The `.claude/agents/` directory contains subagent configurations for a structured frontend development workflow: planning-agent → project-setup-agent → design-system-agent → api-mock-agent → react-ui-builder / react-logic-builder → test-agent → reviewer-agent.
+The `.claude/agents/` directory contains subagent configurations for a structured frontend development workflow.
 
-**Rule: Always delegate implementation work to specialist subagents.** Never write component code, hooks, CSS, or logic directly in the main conversation. The main conversation is for planning, coordination, and user communication only. Use agents for all code changes.
+**Rule: Subagents do NOT write files to disk** — their writes go to an isolated environment and are lost. Use subagents only for research, exploration, and planning (reading files, searching code, fetching docs). All file writes (Edit, Write, Bash) must happen in the main conversation.
 
 ### Agent Communication — Transparency About Tool Use
 

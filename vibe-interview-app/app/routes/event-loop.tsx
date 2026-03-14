@@ -4,7 +4,7 @@ import { Layout } from "~/components/Layout";
 import { CodeBlock } from "~/components/CodeBlock";
 import { StepVisualizer } from "~/components/StepVisualizer";
 import { loadContent, type EventLoopFile } from "~/lib/contentLoader";
-import { useLanguage } from "~/contexts/LanguageContext";
+import { useLanguage } from "~/contexts/useLanguage";
 
 type Screen = "splash" | "quiz" | "results";
 type Level = "easy" | "medium" | "hard";

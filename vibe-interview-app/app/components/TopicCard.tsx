@@ -1,7 +1,7 @@
 import { Link } from "react-router";
 import { StarRating } from "~/components/StarRating";
 import type { Score } from "~/components/FlashCard";
-import { useLanguage } from "~/contexts/LanguageContext";
+import { useLanguage } from "~/contexts/useLanguage";
 import { Card, CardContent, CardFooter } from "~/components/ui/card";
 import { Progress } from "~/components/ui/progress";
 import { Button } from "~/components/ui/button";

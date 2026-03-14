@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { Textarea } from "~/components/ui/textarea";
 import type { UseSpeechRecognitionReturn } from "~/hooks/useSpeechRecognition";
-import { useLanguage } from "~/contexts/LanguageContext";
+import { useLanguage } from "~/contexts/useLanguage";
 
 interface CardAnswerInputProps {
   userAnswer: string;

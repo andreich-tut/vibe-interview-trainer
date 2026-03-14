@@ -5,7 +5,7 @@ import { useProgress } from "~/hooks/useProgress";
 import { Link } from "react-router";
 import { useEffect, useState } from "react";
 import { loadContent, type TopicsFile } from "~/lib/contentLoader";
-import { useLanguage } from "~/contexts/LanguageContext";
+import { useLanguage } from "~/contexts/useLanguage";
 
 export function meta() {
   return [

@@ -1,5 +1,5 @@
 import type { LLMResult } from "~/lib/llm";
-import { useLanguage } from "~/contexts/LanguageContext";
+import { useLanguage } from "~/contexts/useLanguage";
 
 export function CardReferenceAnswer({
   answer,

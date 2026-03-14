@@ -1,6 +1,6 @@
 import { StarRating } from "~/components/StarRating";
 import type { LLMResult } from "~/lib/llm";
-import { useLanguage } from "~/contexts/LanguageContext";
+import { useLanguage } from "~/contexts/useLanguage";
 import type { Score } from "../FlashCard";
 
 const SCORE_BOX_CLASS: Record<Score, string> = {
