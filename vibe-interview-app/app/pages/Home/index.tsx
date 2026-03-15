@@ -4,8 +4,6 @@ import { Layout } from "~/shared/layout/Layout";
 import { TopicIcon } from "~/shared/ui/TopicIcon";
 import { TopicCard } from "./ui/TopicCard";
 import { AnimatedBackground } from "./ui/AnimatedBackground";
-import { GameHud } from "./ui/GameHud";
-import { useGameState } from "./model/useGameState";
 import { loadContent, type TopicsFile } from "~/lib/contentLoader";
 import { useLanguage } from "~/contexts/LanguageContext";
 
@@ -18,7 +16,6 @@ export function meta() {
 
 export default function HomePage() {
   const { lang, t } = useLanguage();
-  const { game, start, restart, onEat } = useGameState();
   const [topicsData, setTopicsData] = useState<TopicsFile | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -68,13 +65,7 @@ export default function HomePage() {
 
   return (
     <>
-      <AnimatedBackground
-        onEat={onEat}
-        moodOverride={game.moodOverride}
-        speedTier={game.speedTier}
-        dying={game.phase === "dying"}
-      />
-      <GameHud game={game} onStart={start} onRestart={restart} />
+      <AnimatedBackground />
 
       <Layout wide>
         {/* Hero */}
